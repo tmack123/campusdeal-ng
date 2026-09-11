@@ -1,0 +1,27 @@
+{
+  "name": "CampusDeal — Buy & Sell on Campus",
+  "short_name": "CampusDeal",
+  "description": "Buy and sell anything on FUNAAB Campus. Post ads FREE!",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#006400",
+  "theme_color": "#006400",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://ui-avatars.com/api/?name=CD&background=006400&color=FFD700&size=192&font-size=0.4&bold=true&rounded=true",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://ui-avatars.com/api/?name=CD&background=006400&color=FFD700&size=512&font-size=0.4&bold=true&rounded=true",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["shopping", "lifestyle"],
+  "lang": "en",
+  "dir": "ltr"
+}

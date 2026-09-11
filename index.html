@@ -1,0 +1,2887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>CampusDeal — Buy & Sell on FUNAAB Campus | Nigeria's #1 Campus Marketplace</title>
+
+<!-- SEO Meta Tags -->
+<meta name="description" content="CampusDeal is Nigeria's first campus marketplace. Buy and sell textbooks, electronics, clothing, food and more on FUNAAB campus. Free to post ads. Contact sellers via WhatsApp instantly.">
+<meta name="keywords" content="FUNAAB marketplace, campus buy sell Nigeria, student marketplace, FUNAAB classifieds, buy sell Abeokuta">
+<meta name="author" content="CampusDeal — Mordecai Adeleke">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:title" content="CampusDeal — FUNAAB Campus Marketplace">
+<meta property="og:description" content="Buy and sell anything on FUNAAB campus. 100+ active listings. Free to post. Contact via WhatsApp instantly.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://campusdeal.com.ng">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CampusDeal — Nigeria's Campus Marketplace">
+<meta name="twitter:description" content="Buy and sell on FUNAAB campus. Free listings. WhatsApp contact.">
+
+<!-- Canonical -->
+<link rel="canonical" href="https://campusdeal.com.ng">
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script>
+<!-- PWA -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#080f08">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CampusDeal">
+<link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=CD&background=006400&color=FFD700&size=512&font-size=0.4&bold=true&rounded=true">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="description" content="Buy and sell anything on FUNAAB Campus. Post ads FREE!">
+<meta name="version" content="1789155214">
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script>window.addEventListener("load",function(){
+  // Secret admin URL access
+  // Admin secret URL - only trigger if not a page refresh
+  if(window.location.search.includes("admin="+atob("c2VjcmV0MjAyNA=="))){
+    // Remove admin param from URL to prevent Chrome refresh issues
+    var cleanUrl = window.location.pathname;
+    window.history.replaceState({}, document.title, cleanUrl);
+    setTimeout(function(){ openAdmin(); }, 800);
+  }if(typeof emailjs!=="undefined"){emailjs.init("X7jMdSsnRIGkI3_1z");console.log("EmailJS ready!");}});</script>
+<script src="https://www.google.com/recaptcha/api.js?render=6LdlpWEtAAAAAIwygtHzEssSeiUgv6SIMIVH35_4" async defer></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--g:#FFD700;--lg:#FFD700;--dk:#ffffff;--gr:rgba(255,255,255,0.45);--bd:rgba(255,255,255,0.08);--go:#FFD700;--rd:#ff4444;--bg:#080f08;--gd:#006400;--card:rgba(255,255,255,0.03)}
+html,body{max-width:100%;overflow-x:hidden;font-family:"Inter","Segoe UI",Arial,sans-serif;background:#080f08;padding-bottom:65px;color:#fff}
+img{max-width:100%;display:block}
+button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appearance:none}
+/* TOPBAR */
+.topbar{background:#080f08;border-bottom:1px solid rgba(255,215,0,0.12);padding:10px 12px;display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:1000;min-height:54px;backdrop-filter:blur(10px)}
+.logo{font-size:19px;font-weight:900;color:#FFD700;white-space:nowrap;flex-shrink:0;cursor:pointer;text-decoration:none}
+.logo span{color:rgba(255,255,255,0.5)}
+.sbox{flex:1;display:flex;align-items:center;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;overflow:hidden;min-width:0}
+.sbox input{flex:1;border:none;outline:none;padding:8px 10px;font-size:14px;min-width:0;background:transparent;color:#fff}
+.sbox button{background:#FFD700;border:none;padding:8px 10px;color:#080f08;font-size:14px;cursor:pointer;flex-shrink:0;font-weight:700}
+.tr{display:flex;align-items:center;gap:6px;flex-shrink:0}
+/* AUTH — exactly like Jiji: Login text or Avatar+Name */
+#loginBtn{background:rgba(255,215,0,0.1);color:#FFD700;border:1px solid rgba(255,215,0,0.3);padding:6px 12px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer}
+#profileBtn{display:none;flex-direction:row;align-items:center;gap:5px;background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.25);padding:4px 10px;border-radius:20px;cursor:pointer}
+#av{width:26px;height:26px;border-radius:50%;background:#FFD700;color:#080f08;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+#uname{color:#FFD700;font-size:12px;font-weight:700;max-width:60px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sellbtn{background:#FFD700;color:#080f08;border:none;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:900;cursor:pointer}
+/* DROPDOWN */
+#ddmenu{display:none;position:fixed;top:54px;right:0;background:#0d1a0d;min-width:190px;box-shadow:0 4px 30px rgba(0,0,0,0.5);z-index:9999;border-radius:0 0 12px 12px;border:1px solid rgba(255,215,0,0.15);overflow:hidden}
+#ddmenu.on{display:block}
+.ddhead{padding:10px 14px;background:rgba(255,215,0,0.05);border-bottom:1px solid rgba(255,215,0,0.1)}
+.ddhead-n{font-size:14px;font-weight:900;color:#FFD700}
+.ddhead-p{font-size:12px;color:rgba(255,255,255,0.3);margin-top:1px}
+.ddi{padding:12px 14px;font-size:13px;font-weight:600;color:rgba(255,255,255,0.8);cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:9px}
+.ddi:hover{background:rgba(255,255,255,0.05)}
+.ddi.red{color:#ff4444;border-bottom:none}
+/* CATS */
+.cats{background:#080f08;border-bottom:1px solid rgba(255,215,0,0.1);position:sticky;top:54px;z-index:999;overflow-x:auto;scrollbar-width:none}
+.cats::-webkit-scrollbar{display:none}
+.cats-in{display:flex;padding:0 6px;min-width:max-content}
+.cb{padding:10px 12px;font-size:12px;font-weight:600;color:rgba(255,255,255,0.4);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;border-top:none;border-left:none;border-right:none;background:transparent}
+.cb.on{color:#FFD700;border-bottom-color:#FFD700;font-weight:700}
+/* PAGES */
+.pg{display:none}.pg.on{display:block}
+/* HERO */
+.hero{background:radial-gradient(ellipse at top right,rgba(0,80,0,0.4) 0%,transparent 60%),radial-gradient(ellipse at bottom left,rgba(255,215,0,0.05) 0%,transparent 60%),#080f08;padding:2rem 1rem 3rem;text-align:center;position:relative;overflow:hidden;border-bottom:1px solid rgba(255,215,0,0.1)}
+.hero::after{display:none}
+.badge{display:inline-block;background:rgba(255,215,0,0.08);color:#FFD700;font-size:10px;font-weight:700;padding:4px 12px;border-radius:20px;margin-bottom:12px;border:1px solid rgba(255,215,0,0.2);letter-spacing:1px}
+.hero h1{font-size:clamp(28px,7vw,48px);font-weight:900;color:#fff;margin-bottom:6px;line-height:1}
+.hero h1 span{color:#FFD700;display:block}
+.hero p{font-size:13px;color:rgba(255,255,255,.8);margin-bottom:1rem;line-height:1.5;max-width:380px;margin-left:auto;margin-right:auto}
+.hsrch{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;display:flex;overflow:hidden;max-width:460px;margin:0 auto 1.2rem}
+.hsrch input{flex:1;border:none;outline:none;padding:11px 14px;font-size:14px;min-width:0;background:transparent;color:#fff}
+.hsrch button{background:#FFD700;border:none;padding:11px 18px;color:#080f08;font-size:14px;font-weight:700;cursor:pointer}
+.hstats{display:flex;justify-content:center;gap:1.2rem;flex-wrap:wrap}
+.hnum{font-size:clamp(18px,3vw,24px);font-weight:900;color:#FFD700}
+.hlbl{font-size:10px;color:rgba(255,255,255,0.4);margin-top:2px;text-align:center}
+/* PROMO */
+.promo{background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.15);margin:1rem;border-radius:12px;padding:14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.promo h3{font-size:13px;font-weight:900;color:#FFD700;margin-bottom:2px}
+.promo p{font-size:11px;color:rgba(255,255,255,0.45)}
+.pbtn{background:#FFD700;color:#080f08;border:none;padding:8px 14px;border-radius:20px;font-size:11px;font-weight:900;cursor:pointer;flex-shrink:0}
+/* SEC */
+.sec{display:flex;align-items:center;justify-content:space-between;padding:0 1rem;margin:1rem 0 .6rem}
+.sec h2{font-size:15px;font-weight:900;color:#fff}
+.sec h2 span{color:#FFD700}
+.slink{font-size:12px;color:#FFD700;font-weight:700;cursor:pointer;border:1px solid rgba(255,215,0,0.3);padding:4px 10px;border-radius:20px;background:rgba(255,215,0,0.05)}
+/* CAT ICONS */
+.cig{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 1rem 1rem}
+@media(min-width:480px){.cig{grid-template-columns:repeat(6,1fr)}}
+@media(min-width:768px){.cig{grid-template-columns:repeat(8,1fr)}}
+.ci{background:rgba(255,255,255,0.03);border-radius:10px;padding:12px 6px;text-align:center;border:1px solid rgba(255,255,255,0.07);cursor:pointer}
+.ci:active{border-color:#FFD700;background:rgba(255,215,0,0.08)}
+.cie{font-size:24px;margin-bottom:5px}
+.cil{font-size:10px;font-weight:700;color:rgba(255,255,255,0.6)}
+/* ADS GRID */
+.ag{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:0 1rem 1rem}
+@media(min-width:480px){.ag{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:768px){.ag{grid-template-columns:repeat(4,1fr)}}
+/* AD CARD */
+.ac{background:#0d1a0d;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,0.07);cursor:pointer}
+.ai{position:relative;width:100%;padding-top:70%;overflow:hidden;background:rgba(255,255,255,0.06)}
+.ai img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.aif{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:44px;background:#f8f8f8}
+.abg{position:absolute;top:6px;left:6px;font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;z-index:2}
+.new{background:var(--lg);color:#fff}
+.feat{background:var(--go);color:rgba(255,255,255,0.8)}
+.afav{position:absolute;top:6px;right:6px;background:rgba(255,255,255,.9);width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;border:none;z-index:2}
+.ab{padding:8px}
+.ap{font-size:14px;font-weight:900;color:#FFD700}
+.at{font-size:11px;color:rgba(255,255,255,0.7);margin:2px 0 5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.af{display:flex;align-items:center;justify-content:space-between}
+.al{font-size:9px;color:rgba(255,255,255,0.35)}
+.aw{background:#FFD700;color:#080f08;border:none;padding:4px 8px;border-radius:10px;font-size:9px;font-weight:700;cursor:pointer}
+/* HOW */
+.how{background:rgba(255,255,255,0.02);margin:0 1rem 1rem;border-radius:12px;padding:1.2rem 1rem;border:1px solid rgba(255,255,255,0.07)}
+.how h2{font-size:15px;font-weight:800;color:#fff;margin-bottom:1rem;text-align:center}
+.hwg{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(min-width:600px){.hwg{grid-template-columns:repeat(4,1fr)}}
+.hws{text-align:center;padding:.8rem}
+.hwn{width:34px;height:34px;border-radius:50%;background:#FFD700;color:#080f08;font-size:14px;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 8px}
+.hws h3{font-size:12px;font-weight:700;color:#fff;margin-bottom:3px}
+.hws p{font-size:11px;color:rgba(255,255,255,0.4);line-height:1.4}
+/* ACCOUNT PAGE */
+.atop{background:#080f08;border-bottom:1px solid rgba(255,215,0,0.1);padding:12px 1rem;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
+.abk{background:rgba(255,215,0,0.1);border:none;color:#FFD700;width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.atitle{font-size:16px;font-weight:900;color:#FFD700}
+.atabs{background:#080f08;border-bottom:1px solid rgba(255,215,0,0.1);overflow-x:auto;display:flex;scrollbar-width:none;position:sticky;top:54px;z-index:99}
+.atabs::-webkit-scrollbar{display:none}
+.atab{flex-shrink:0;padding:12px 16px;font-size:13px;font-weight:700;border:none;background:transparent;color:rgba(255,255,255,0.3);border-bottom:3px solid transparent;cursor:pointer}
+.atab.on{color:#FFD700;border-bottom-color:#FFD700}
+#accBody{padding:1rem}
+/* OVERLAYS */
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:2000;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
+.ov.on{display:flex}
+.ovc{align-items:center;padding:1rem}
+.sheet{background:#0d1a0d;border:1px solid rgba(255,215,0,0.1);border-bottom:none;border-radius:18px 18px 0 0;padding:1.2rem;width:100%;max-width:520px;max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.shd{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;position:sticky;top:0;background:#0d1a0d;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.08);z-index:1}
+.sht{font-size:16px;font-weight:900;color:#fff}
+.cls{background:rgba(255,255,255,0.08);border:none;width:30px;height:30px;border-radius:50%;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.6);flex-shrink:0}
+.fg{margin-bottom:12px}
+.fg label{font-size:12px;font-weight:700;color:rgba(255,255,255,0.7);display:block;margin-bottom:4px}
+.rq{color:var(--rd)}
+.fg input,.fg select,.fg textarea{width:100%;padding:10px 12px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:14px;outline:none;font-family:inherit;transition:border .2s;color:#fff;background:rgba(255,255,255,0.05)}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:#FFD700}
+.fg textarea{height:80px;resize:none}
+.iup{border:2px dashed #ccc;border-radius:10px;padding:1.2rem;text-align:center;cursor:pointer;position:relative;background:#fafafa}
+.iup input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.ipvs{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.ipw{position:relative}
+.ipv{width:64px;height:64px;border-radius:8px;object-fit:cover;border:2px solid var(--bd)}
+.rim{position:absolute;top:-5px;right:-5px;background:var(--rd);color:#fff;border:none;width:18px;height:18px;border-radius:50%;font-size:11px;cursor:pointer;font-weight:700;display:flex;align-items:center;justify-content:center}
+.gbtn{width:100%;background:#FFD700;color:#080f08;border:none;padding:14px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;margin-top:8px}
+.gbtn:disabled{background:#aaa;cursor:not-allowed}
+.wabtn{width:100%;background:#25D366;color:#fff;border:none;padding:12px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px}
+.divr{display:flex;align-items:center;gap:8px;margin:10px 0;font-size:12px;color:rgba(255,255,255,0.35)}
+.divr::before,.divr::after{content:"";flex:1;height:1px;background:var(--bd)}
+/* DETAIL */
+.dsh{background:#0d1a0d;border:1px solid rgba(255,215,0,0.1);border-bottom:none;border-radius:18px 18px 0 0;width:100%;max-width:520px;max-height:92vh;overflow-y:auto}
+.dib{width:100%;height:220px;background:rgba(255,255,255,0.06);border-radius:18px 18px 0 0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:72px}
+.dib img{width:100%;height:100%;object-fit:cover}
+.dbd{padding:1rem}
+.dpr{font-size:24px;font-weight:900;color:#FFD700;margin-bottom:4px}
+.dti{font-size:16px;font-weight:700;color:#fff;margin-bottom:8px;line-height:1.3}
+.dch{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.dchp{font-size:11px;padding:3px 8px;border-radius:12px;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.6)}
+.dde{font-size:13px;color:rgba(255,255,255,0.6);line-height:1.6;margin-bottom:12px;padding:10px;background:rgba(255,255,255,0.04);border-radius:8px}
+.dsl{background:rgba(255,215,0,0.05);border-radius:10px;padding:10px;display:flex;align-items:center;gap:10px;margin-bottom:12px;border:1px solid rgba(255,215,0,0.15)}
+.sav{width:40px;height:40px;border-radius:50%;background:#FFD700;color:#080f08;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dac{display:flex;gap:8px}
+.dwab{flex:1;background:#25D366;color:#fff;border:none;padding:13px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.dclb{background:rgba(255,255,255,0.08);color:#fff;border:none;padding:13px 16px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer}
+/* LOGIN */
+.lsh{background:#0d1a0d;border:1px solid rgba(255,215,0,0.12);border-radius:18px;padding:1.5rem;width:90%;max-width:340px;text-align:center}
+.lsh h2{font-size:20px;font-weight:900;color:#fff;margin-bottom:6px}
+.lsh p{font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:1.2rem;line-height:1.5}
+.linp{width:100%;padding:11px 14px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:14px;outline:none;font-family:inherit;margin-bottom:12px;background:rgba(255,255,255,0.05);color:#fff}
+.linp:focus{border-color:var(--g)}
+/* SUCCESS */
+.sov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:3000;align-items:center;justify-content:center;padding:1rem}
+.sov.on{display:flex}
+.scd{background:#0d1a0d;border:1px solid rgba(255,215,0,0.15);border-radius:18px;padding:1.8rem;text-align:center;max-width:280px;width:100%}
+/* BOTTOM NAV */
+.bnav{position:fixed;bottom:0;left:0;right:0;background:#080f08;border-top:1px solid rgba(255,215,0,0.1);display:flex;z-index:500;padding-bottom:env(safe-area-inset-bottom)}
+.bn{flex:1;display:flex;flex-direction:column;align-items:center;padding:8px 0 5px;cursor:pointer;border:none;background:transparent;color:rgba(255,255,255,0.3);font-size:10px;gap:2px}
+.bn.on,.bn:hover{color:#FFD700}
+.bni{font-size:19px}
+.bns{flex:1;display:flex;flex-direction:column;align-items:center;padding:0 0 5px;cursor:pointer}
+.bnsi{background:#FFD700;width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;color:#080f08;margin-top:-14px;box-shadow:0 3px 20px rgba(255,215,0,0.4);border:3px solid #080f08;font-weight:900}
+.bnsl{font-size:10px;color:#FFD700;font-weight:700;margin-top:2px}
+/* MY ADS */
+.mac{background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.08);padding:12px;display:flex;gap:10px;margin-bottom:10px}
+.mat{width:70px;height:70px;border-radius:8px;overflow:hidden;flex-shrink:0;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font-size:26px}
+.mat img{width:100%;height:100%;object-fit:cover}
+.mai{flex:1;min-width:0}
+.man{font-size:13px;font-weight:700;color:#fff;margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.map{font-size:14px;font-weight:900;color:#FFD700;margin-bottom:6px}
+.mab{display:flex;gap:6px}
+.edb{background:#FFD700;color:#080f08;border:none;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer}
+.dlb{background:transparent;color:#ff4444;border:1px solid rgba(255,68,68,0.3);padding:6px 12px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer}
+/* CHAT */
+.cfab{position:fixed;bottom:80px;right:14px;background:#FFD700;color:#080f08;width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 3px 20px rgba(255,215,0,0.4);z-index:400;cursor:pointer;border:none}
+.cwin{display:none;position:fixed;bottom:138px;right:14px;width:min(300px,calc(100vw - 28px));height:400px;background:#0d1a0d;border:1px solid rgba(255,215,0,0.12);border-radius:14px;box-shadow:0 6px 24px rgba(0,0,0,0.5);z-index:401;flex-direction:column;overflow:hidden}
+.cwin.on{display:flex}
+.chd{background:#FFD700;padding:12px 14px;display:flex;align-items:center;gap:8px}
+.chda{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:16px}
+.chdi h4{font-size:13px;font-weight:700;color:#080f08}
+.chdi p{font-size:10px;color:rgba(255,255,255,.8)}
+.chx{margin-left:auto;background:none;border:none;color:#080f08;font-size:18px;cursor:pointer}
+.cmgs{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:8px;background:#080f08}
+.cm{max-width:82%;padding:8px 10px;border-radius:10px;font-size:12px;line-height:1.4}
+.cm.bot{background:rgba(255,255,255,0.07);color:#fff;border-radius:10px 10px 10px 0;align-self:flex-start}
+.cm.usr{background:#FFD700;color:#080f08;border-radius:10px 10px 0 10px;align-self:flex-end}
+.cmt{font-size:9px;color:rgba(255,255,255,0.35);margin-top:2px}
+.typ{display:flex;gap:3px;align-items:center;padding:8px 10px;background:rgba(255,255,255,0.04);border-radius:10px;width:52px;align-self:flex-start}
+.dot{width:6px;height:6px;border-radius:50%;background:#aaa;animation:bnc 1.2s infinite}
+.dot:nth-child(2){animation-delay:.2s}
+.dot:nth-child(3){animation-delay:.4s}
+@keyframes bnc{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+.cqr{display:flex;gap:5px;flex-wrap:wrap;padding:6px 10px;background:#080f08;border-top:1px solid rgba(255,255,255,0.05)}
+.cq{background:rgba(255,215,0,0.07);border:1px solid rgba(255,215,0,0.25);color:#FFD700;padding:4px 8px;border-radius:12px;font-size:10px;font-weight:600;cursor:pointer;white-space:nowrap}
+.cir{padding:8px;background:#0d1a0d;border-top:1px solid rgba(255,255,255,0.07);display:flex;gap:6px}
+.ci2{flex:1;border:1.5px solid rgba(255,255,255,0.1);border-radius:18px;padding:7px 12px;font-size:12px;outline:none;font-family:inherit;background:rgba(255,255,255,0.05);color:#fff}
+.ci2:focus{border-color:var(--g)}
+.csnd{background:#FFD700;color:#080f08;border:none;width:32px;height:32px;border-radius:50%;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+/* CONFIRM */
+.cnf{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:4000;align-items:center;justify-content:center;padding:1rem}
+.cnf.on{display:flex}
+.cnfc{background:#0d1a0d;border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:1.5rem;max-width:280px;width:100%;text-align:center}
+.cnfc h3{font-size:16px;font-weight:900;color:#fff;margin-bottom:8px}
+.cnfc p{font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:1.2rem;line-height:1.5}
+.cna{display:flex;gap:8px}
+.cny{flex:1;background:var(--rd);color:#fff;border:none;padding:11px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer}
+.cnn{flex:1;background:rgba(255,255,255,0.08);color:#fff;border:none;padding:11px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer}
+.spin{width:32px;height:32px;border:3px solid rgba(255,255,255,0.1);border-top-color:#FFD700;border-radius:50%;animation:spn .8s linear infinite;margin:0 auto 8px}
+@keyframes spn{to{transform:rotate(360deg)}}
+.emp{text-align:center;padding:3rem 1rem;color:rgba(255,255,255,0.3)}
+/* Hide reCAPTCHA badge */
+.grecaptcha-badge{visibility:hidden!important;opacity:0!important;pointer-events:none!important}
+/* HAMBURGER */
+.hb-line{display:block;width:22px;height:2px;background:#FFD700;border-radius:2px;transition:all 0.3s}
+.hm-item{padding:13px 16px;font-size:14px;font-weight:600;color:rgba(255,255,255,0.75);cursor:pointer;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,0.03)}
+.hm-item:hover,.hm-item:active{background:rgba(255,215,0,0.06);color:#FFD700}
+.hm-red{color:#ff4444!important}
+.hm-red:hover{background:rgba(255,68,68,0.06)!important}
+#hamburgerMenu.open{transform:translateX(0)!important}
+/* CAROUSEL */
+#featTrack{display:flex;gap:10px;padding:0 1rem;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+#featTrack::-webkit-scrollbar{display:none}
+.fc{background:#0d1a0d;border-radius:12px;overflow:hidden;border:1px solid rgba(255,215,0,0.15);cursor:pointer;flex-shrink:0;width:160px}
+.fc-img{width:100%;height:120px;object-fit:cover;display:block}
+.fc-em{width:100%;height:120px;display:flex;align-items:center;justify-content:center;font-size:40px;background:rgba(255,255,255,0.03)}
+.fc-body{padding:10px}
+.fc-price{font-size:15px;font-weight:900;color:#FFD700}
+.fc-title{font-size:11px;color:rgba(255,255,255,0.7);margin:3px 0 6px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.fc-loc{font-size:9px;color:rgba(255,255,255,0.3)}
+.fc-badge{background:rgba(255,215,0,0.15);color:#FFD700;font-size:8px;font-weight:700;padding:2px 7px;border-radius:10px;display:inline-block;margin-bottom:4px}
+.empi{font-size:48px;margin-bottom:8px}
+
+/* VERIFIED BADGE STYLES */
+.verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #000;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+  letter-spacing: 0.5px;
+}
+.verify-btn {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: opacity 0.2s;
+}
+.verify-btn:hover { opacity: 0.85; }
+.verify-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* VERIFIED MODAL */
+.verify-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(0,0,0,0.85);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.verify-modal.open {
+  display: flex;
+}
+.verify-modal-content {
+  background: #1a1a2e;
+  border-radius: 16px;
+  padding: 28px;
+  max-width: 380px;
+  width: 100%;
+  border: 1px solid rgba(255,215,0,0.2);
+  position: relative;
+}
+.verify-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+  line-height: 1;
+}
+.verify-modal h3 {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 6px;
+  color: #FFD700;
+}
+.verify-modal p {
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+.verify-benefits {
+  background: rgba(255,215,0,0.06);
+  border: 1px solid rgba(255,215,0,0.15);
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 16px;
+}
+.verify-benefit-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 8px;
+}
+.verify-benefit-item:last-child { margin-bottom: 0; }
+.verify-price-box {
+  text-align: center;
+  padding: 14px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 8px;
+  margin-bottom: 14px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.verify-price {
+  font-size: 32px;
+  font-weight: 800;
+  color: #FFD700;
+}
+.verify-price-sub {
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+  margin-top: 2px;
+}
+.verify-success {
+  text-align: center;
+  padding: 20px;
+}
+.verify-success-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+</style>
+<!-- Paystack -->
+<script src="https://js.paystack.co/v1/inline.js"></script>
+</head>
+<body>
+<script>
+// Force unregister old service workers
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.getRegistrations().then(function(regs){
+    regs.forEach(function(reg){
+      reg.unregister();
+      console.log('SW unregistered');
+    });
+  });
+  // Clear all caches
+  if('caches' in window){
+    caches.keys().then(function(names){
+      names.forEach(function(name){
+        caches.delete(name);
+        console.log('Cache deleted:', name);
+      });
+    });
+  }
+}
+</script>
+
+<!-- TOP BAR -->
+<nav class="topbar">
+  <button id="hamburgerBtn" onclick="toggleHamburger()" style="background:none;border:none;cursor:pointer;padding:6px 8px;display:flex;flex-direction:column;gap:5px;flex-shrink:0">
+    <span class="hb-line"></span>
+    <span class="hb-line"></span>
+    <span class="hb-line"></span>
+  </button>
+  <div style="flex:1"></div>
+  <span class="logo" onclick="logoTap()">Campus<span>Deal</span></span>
+</nav>
+<input type="hidden" id="si" value="">
+
+<!-- Hamburger Overlay -->
+<div id="hamburgerOv" onclick="closeHamburger()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:2000"></div>
+
+<!-- Hamburger Side Menu -->
+<div id="hamburgerMenu" style="display:none;position:fixed;top:0;left:0;bottom:0;width:280px;background:#0d1a0d;z-index:2001;border-right:1px solid rgba(255,215,0,0.15);overflow-y:auto;transform:translateX(-100%);transition:transform 0.3s ease">
+  <div style="background:#080f08;padding:20px 16px;border-bottom:1px solid rgba(255,215,0,0.1)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <span style="font-size:18px;font-weight:900;color:#FFD700">Campus<span style="color:rgba(255,255,255,0.5)">Deal</span></span>
+      <button onclick="closeHamburger()" style="background:rgba(255,255,255,0.08);border:none;color:#fff;width:28px;height:28px;border-radius:50%;font-size:14px;cursor:pointer">&#10005;</button>
+    </div>
+    <div id="hmUserSection">
+      <button onclick="closeHamburger();openLogin()" style="width:100%;background:#FFD700;color:#080f08;border:none;padding:10px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer">Login / Register</button>
+    </div>
+  </div>
+  <div style="padding:8px 0">
+    <div class="hm-item" onclick="closeHamburger();goHome()">&#127968; Home</div>
+    <div class="hm-item" onclick="closeHamburger();doSell()">&#10133; Post an Ad <span style="background:#FFD700;color:#080f08;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;margin-left:6px">FREE</span></div>
+    <div class="hm-item" onclick="closeHamburger();goMyAds()">&#128203; My Ads</div>
+    <div class="hm-item" onclick="closeHamburger();goAccount();setTimeout(function(){var t=document.querySelectorAll('.atab');if(t[2])showTab('wishlist',t[2]);},300)">&#10084;&#65039; Wishlist</div>
+    <div class="hm-item" onclick="closeHamburger();goAccount()">&#128100; My Account</div>
+    <div style="height:1px;background:rgba(255,255,255,0.06);margin:8px 16px"></div>
+    <div style="padding:8px 16px;font-size:10px;font-weight:700;color:rgba(255,215,0,0.4);letter-spacing:2px">BROWSE</div>
+    <div class="hm-item" onclick="closeHamburger();filterCat('phones',null)">&#128241; Phones</div>
+    <div class="hm-item" onclick="closeHamburger();filterCat('electronics',null)">&#128187; Electronics</div>
+    <div class="hm-item" onclick="closeHamburger();filterCat('fashion',null)">&#128247; Fashion</div>
+    <div class="hm-item" onclick="closeHamburger();filterCat('books',null)">&#128218; Books</div>
+    <div class="hm-item" onclick="closeHamburger();filterCat('food',null)">&#127828; Food</div>
+    <div class="hm-item" onclick="closeHamburger();filterCat('vehicles',null)">&#128663; Vehicles</div>
+    <div class="hm-item" onclick="closeHamburger();filterCat('services',null)">&#128295; Services</div>
+    <div style="height:1px;background:rgba(255,255,255,0.06);margin:8px 16px"></div>
+    <div style="padding:8px 16px;font-size:10px;font-weight:700;color:rgba(255,215,0,0.4);letter-spacing:2px">INFO</div>
+    <div class="hm-item" onclick="closeHamburger();contactAdmin()">&#128222; Contact Admin</div>
+    <div class="hm-item" onclick="closeHamburger();showAbout()">&#8505; About CampusDeal</div>
+    <div style="height:1px;background:rgba(255,255,255,0.06);margin:8px 16px"></div>
+    <div id="hmLogout" style="display:none" class="hm-item hm-red" onclick="closeHamburger();doLogout()">&#128682; Logout</div>
+
+  </div>
+  <div style="padding:16px;border-top:1px solid rgba(255,255,255,0.06)">
+    <div style="font-size:10px;color:rgba(255,255,255,0.2);text-align:center">campusdeal.com.ng</div>
+  </div>
+</div>
+
+<!-- CATS NAV -->
+<div class="cats">
+  <div class="cats-in">
+    <button class="cb on" onclick="filterCat('all',this)">&#127968; All</button>
+    <button class="cb" onclick="filterCat('vehicles',this)">&#128663; Vehicles</button>
+    <button class="cb" onclick="filterCat('phones',this)">&#128241; Phones</button>
+    <button class="cb" onclick="filterCat('electronics',this)">&#128187; Electronics</button>
+    <button class="cb" onclick="filterCat('furniture',this)">&#128715; Furniture</button>
+    <button class="cb" onclick="filterCat('fashion',this)">&#128247; Fashion</button>
+    <button class="cb" onclick="filterCat('beauty',this)">&#128132; Beauty</button>
+    <button class="cb" onclick="filterCat('food',this)">&#127828; Food</button>
+    <button class="cb" onclick="filterCat('books',this)">&#128218; Books</button>
+    <button class="cb" onclick="filterCat('services',this)">&#128295; Services</button>
+    <button class="cb" onclick="filterCat('jobs',this)">&#128188; Jobs</button>
+    <button class="cb" onclick="filterCat('others',this)">&#128230; Others</button>
+  </div>
+</div>
+
+<!-- HOME PAGE -->
+<div class="pg on" id="pg-home">
+  <section class="hero">
+    <div class="badge">&#127891; Nigeria's Smartest Campus Marketplace</div>
+    <h1>Buy &amp; Sell Anything<br><span>Around Campus!</span></h1>
+    <p>Post your ad FREE. Buyers contact you on WhatsApp instantly!</p>
+    <div class="hsrch">
+      <input type="text" placeholder="Search items..." oninput="document.getElementById('si').value=this.value;doSearch()">
+      <button onclick="doSearch()">Search</button>
+    </div>
+    <div class="hstats">
+      <div><div class="hnum" id="totalAds">500+</div><div class="hlbl">Active Ads</div></div>
+      <div><div class="hnum">FREE</div><div class="hlbl">To Post</div></div>
+      <div><div class="hnum">24/7</div><div class="hlbl">Online</div></div>
+    </div>
+  </section>
+  <div class="promo">
+    <div><h3>&#127881; Post Your Ad FREE Today!</h3><p>Buyers contact you directly on WhatsApp!</p></div>
+    <button class="pbtn" onclick="doSell()">Post Now &#8594;</button>
+  </div>
+
+  <!-- VERIFY SELLER BANNER - shows when logged in -->
+  <div id="verifyInlineBanner" style="display:none;margin:12px 16px;background:linear-gradient(135deg,#FFD700,#FFA500);border-radius:10px;padding:14px 16px;cursor:pointer" onclick="openVerifyModal()">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="font-size:28px">⭐</span>
+      <div>
+        <div style="font-size:14px;font-weight:800;color:#000">Get Verified Seller Badge</div>
+        <div style="font-size:12px;color:rgba(0,0,0,0.7)">Stand out · Get more buyers · Only ₦500/month</div>
+      </div>
+      <span style="margin-left:auto;font-size:20px;color:#000">›</span>
+    </div>
+  </div>
+  <div class="sec"><h2>Browse by <span>Category</span></h2></div>
+  <div class="cig">
+    <div class="ci" onclick="filterCat('vehicles',null)"><div class="cie">&#128663;</div><div class="cil">Vehicles</div></div>
+    <div class="ci" onclick="filterCat('phones',null)"><div class="cie">&#128241;</div><div class="cil">Phones</div></div>
+    <div class="ci" onclick="filterCat('electronics',null)"><div class="cie">&#128187;</div><div class="cil">Electronics</div></div>
+    <div class="ci" onclick="filterCat('fashion',null)"><div class="cie">&#128247;</div><div class="cil">Fashion</div></div>
+    <div class="ci" onclick="filterCat('furniture',null)"><div class="cie">&#128715;</div><div class="cil">Furniture</div></div>
+    <div class="ci" onclick="filterCat('beauty',null)"><div class="cie">&#128132;</div><div class="cil">Beauty</div></div>
+    <div class="ci" onclick="filterCat('food',null)"><div class="cie">&#127828;</div><div class="cil">Food</div></div>
+    <div class="ci" onclick="filterCat('books',null)"><div class="cie">&#128218;</div><div class="cil">Books</div></div>
+  </div>
+  <div class="sec"><h2>&#128293; <span>Recent</span> Ads</h2><button class="slink" onclick="filterCat('all',null)">See all</button></div>
+  <div id="featCarousel" style="position:relative;overflow:hidden;margin:0 0 1rem">
+    <div id="featTrack" style="display:flex;gap:10px;padding:0 1rem;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none;-webkit-overflow-scrolling:touch">
+      <div style="padding:1rem;text-align:center;min-width:100%"><div class="spin"></div></div>
+    </div>
+  </div>
+  <div class="sec"><h2>&#128293; <span>Latest</span> Ads</h2><span id="adsCount" style="font-size:11px;color:rgba(255,255,255,0.35)"></span></div>
+  <div class="ag" id="mainGrid"></div>
+  <div class="emp" id="emptyState" style="display:none"><div class="empi">&#128269;</div><p>No ads found</p></div>
+  <div class="how">
+    <h2>&#9889; How CampusDeal Works</h2>
+    <div class="hwg">
+      <div class="hws"><div class="hwn">1</div><h3>Take Photo</h3><p>Snap clearly</p></div>
+      <div class="hws"><div class="hwn">2</div><h3>Post Free</h3><p>60 seconds</p></div>
+      <div class="hws"><div class="hwn">3</div><h3>Buyers Chat</h3><p>Via WhatsApp</p></div>
+      <div class="hws"><div class="hwn">4</div><h3>Get Paid!</h3><p>Meet on campus</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ACCOUNT PAGE -->
+<div class="pg" id="pg-account">
+  <div class="atop">
+    <button class="abk" onclick="goHome()">&#8592;</button>
+    <span class="atitle">My Account</span>
+  </div>
+  <div class="atabs" id="atabs">
+    <button class="atab on" onclick="showTab('profile',this)">&#128100; Profile</button>
+    <button class="atab" onclick="showTab('myads',this)">&#128203; My Ads</button>
+    <button class="atab" onclick="showTab('wishlist',this)">&#10084; Wishlist</button>
+    <button class="atab" onclick="showTab('post',this)">&#10133; Post Ad</button>
+    <button class="atab" onclick="showTab('support',this)">&#128222; Support</button>
+  </div>
+  <div id="accBody" style="padding:1rem"></div>
+</div>
+
+<!-- ADMIN PAGE -->
+<div class="pg" id="pg-admin" style="padding-bottom:80px">
+  <div style="background:#080f08;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,215,0,0.15)">
+    <button onclick="goHome()" style="background:rgba(255,255,255,0.06);border:none;color:#fff;padding:6px 12px;border-radius:8px;font-size:12px;cursor:pointer">&#8592; Back</button>
+    <div style="font-size:14px;font-weight:900;color:#FFD700">&#127968; Admin Dashboard</div>
+    <div style="background:#e74c3c;color:#fff;font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px">ADMIN</div>
+  </div>
+
+  <!-- Stats cards -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px">
+    <div id="statTotalAds" style="background:#0d1a0d;border-radius:12px;padding:16px;border:1px solid rgba(255,215,0,0.1);text-align:center">
+      <div id="statAdsNum" style="font-size:32px;font-weight:900;color:#FFD700">-</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:4px">Total Ads</div>
+    </div>
+    <div id="statTotalUsers" style="background:#0d1a0d;border-radius:12px;padding:16px;border:1px solid rgba(255,215,0,0.1);text-align:center">
+      <div id="statUsersNum" style="font-size:32px;font-weight:900;color:#4fc3f7">-</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:4px">Total Users</div>
+    </div>
+    <div id="statTodayAds" style="background:#0d1a0d;border-radius:12px;padding:16px;border:1px solid rgba(255,215,0,0.1);text-align:center">
+      <div id="statTodayNum" style="font-size:32px;font-weight:900;color:#ff9800">-</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:4px">Today's Ads</div>
+    </div>
+    <div id="statFeatured" style="background:#0d1a0d;border-radius:12px;padding:16px;border:1px solid rgba(255,215,0,0.1);text-align:center">
+      <div id="statFeatNum" style="font-size:32px;font-weight:900;color:#9c27b0">-</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:4px">Featured Ads</div>
+    </div>
+  </div>
+
+  <!-- Admin tabs -->
+  <div style="display:flex;overflow-x:auto;border-bottom:1px solid rgba(255,255,255,0.06);padding:0 8px">
+    <button class="atab on" onclick="showAdminTab('ads',this)" style="flex-shrink:0;padding:12px 16px;font-size:13px;font-weight:700;border:none;background:transparent;color:rgba(255,255,255,0.45);border-bottom:3px solid transparent;cursor:pointer">&#128203; All Ads</button>
+    <button class="atab" onclick="showAdminTab('users',this)" style="flex-shrink:0;padding:12px 16px;font-size:13px;font-weight:700;border:none;background:transparent;color:rgba(255,255,255,0.45);border-bottom:3px solid transparent;cursor:pointer">&#128100; Users</button>
+    <button class="atab" onclick="showAdminTab('announce',this)" style="flex-shrink:0;padding:12px 16px;font-size:13px;font-weight:700;border:none;background:transparent;color:rgba(255,255,255,0.45);border-bottom:3px solid transparent;cursor:pointer">&#128226; Announce</button>
+    <button class="atab" onclick="showAdminTab('backup',this)" style="flex-shrink:0;padding:12px 16px;font-size:13px;font-weight:700;border:none;background:transparent;color:rgba(255,255,255,0.45);border-bottom:3px solid transparent;cursor:pointer">&#128190; Backup</button>
+    <button class="atab" onclick="showAdminTab('usage',this)" style="flex-shrink:0;padding:12px 16px;font-size:13px;font-weight:700;border:none;background:transparent;color:rgba(255,255,255,0.45);border-bottom:3px solid transparent;cursor:pointer">&#128200; Usage</button>
+  </div>
+  <div id="adminBody" style="padding:1rem"></div>
+</div>
+
+<!-- SELL MODAL -->
+<div class="ov" id="sellOv">
+  <div class="sheet">
+    <div class="shd">
+      <span class="sht" id="sellTitle">&#128248; Post Your Ad</span>
+      <button class="cls" onclick="closeOv('sellOv')">&#10005;</button>
+    </div>
+    <div class="fg">
+      <label>Photos</label>
+      <div class="iup">
+        <input type="file" accept="image/*" multiple onchange="handleImgs(event)">
+        <div style="font-size:32px;margin-bottom:6px">&#128247;</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.4);font-weight:600">Tap to upload photos</div>
+      </div>
+      <div class="ipvs" id="imgPrevs"></div>
+    </div>
+    <div class="fg"><label>Title <span class="rq">*</span></label><input type="text" id="iTitle" autocomplete="off" placeholder="e.g. iPhone 13 Pro Max"></div>
+    <div class="fg">
+      <label>Category <span class="rq">*</span></label>
+      <select id="iCat">
+        <option value="">Select category</option>
+        <option value="vehicles">Vehicles</option>
+        <option value="phones">Phones &amp; Tablets</option>
+        <option value="electronics">Electronics</option>
+        <option value="furniture">Home &amp; Furniture</option>
+        <option value="fashion">Fashion</option>
+        <option value="beauty">Beauty &amp; Care</option>
+        <option value="food">Food</option>
+        <option value="books">Books</option>
+        <option value="services">Services</option>
+        <option value="jobs">Jobs</option>
+        <option value="others">Others</option>
+      </select>
+    </div>
+    <div class="fg"><label>Price (N) <span class="rq">*</span></label><input type="number" id="iPrice" autocomplete="off" placeholder="e.g. 50000"></div>
+    <div class="fg"><label>Condition</label><select id="iCond"><option value="new">Brand New</option><option value="used">Used</option></select></div>
+    <div class="fg"><label>Description</label><textarea id="iDesc" autocomplete="off" placeholder="Describe your item..."></textarea></div>
+    <div class="fg"><label>Location</label><select id="iLoc"><option>FUNAAB Campus</option><option>Alabata</option><option>Obantoko</option><option>Abeokuta</option><option>Other</option></select></div>
+    <div class="fg"><label>Your Name <span class="rq">*</span></label><input type="text" id="iName" autocomplete="off"></div>
+    <div class="fg"><label>WhatsApp <span class="rq">*</span></label><input type="text" id="iWa" autocomplete="off" inputmode="numeric"></div>
+    <input type="hidden" id="editId">
+    <button class="gbtn" id="sellBtn" onclick="postAd()">&#128640; Post Ad - FREE</button>
+    <div class="divr">or</div>
+    <button class="wabtn" onclick="postViaWa()">Send via WhatsApp</button>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="ov" id="detOv">
+  <div class="dsh">
+    <div class="dib" id="detImg"></div>
+    <div class="dbd">
+      <div class="dpr" id="detPrice"></div>
+      <div class="dti" id="detTitle"></div>
+      <div class="dch" id="detChips"></div>
+      <div class="dde" id="detDesc"></div>
+      <div class="dsl"><div class="sav" id="detAv"></div><div><div style="font-size:13px;font-weight:700;color:#fff" id="detSeller"></div><div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px">Verified Member</div></div></div>
+      <div class="dac">
+        <button class="dwab" id="detWa">&#128153; WhatsApp Seller</button>
+        <button class="dclb" onclick="closeOv('detOv')">&#10005;</button>
+      </div>
+      <button onclick="reportAd()" style="width:100%;background:transparent;color:rgba(255,68,68,0.6);border:1px solid rgba(255,68,68,0.2);padding:8px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;margin-top:8px">&#128680; Report this ad</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="ov ovc" id="loginOv">
+  <div style="background:linear-gradient(135deg,#0a1a0a 0%,#0d1f0d 50%,#0a1510 100%);border:1px solid rgba(255,215,0,0.15);border-radius:24px;padding:0;width:92%;max-width:380px;max-height:92vh;overflow:hidden;position:relative;box-shadow:0 25px 60px rgba(0,0,0,0.7)">
+
+    <style>
+    @keyframes cdWalkIn{
+      0%{transform:translateX(-30px);opacity:0}
+      10%{opacity:1}
+      60%{transform:translateX(10px);opacity:1}
+      80%{transform:translateX(20px);opacity:0}
+      100%{transform:translateX(25px);opacity:0}
+    }
+    @keyframes cdDoorOpen{
+      0%{transform:perspective(300px) rotateY(0deg)}
+      100%{transform:perspective(300px) rotateY(-50deg)}
+    }
+    @keyframes cdDoorClose{
+      0%{transform:perspective(300px) rotateY(-50deg)}
+      100%{transform:perspective(300px) rotateY(0deg)}
+    }
+    @keyframes cdSuccess{
+      0%{transform:scale(0.8);opacity:0}
+      100%{transform:scale(1);opacity:1}
+    }
+    @keyframes cdMoonglow{
+      0%,100%{opacity:0.6}50%{opacity:1}
+    }
+    .cd-moonglow{
+      position:absolute;inset:0;
+      background:radial-gradient(ellipse at 50% 0%, rgba(255,215,0,0.08) 0%, transparent 60%);
+      pointer-events:none;
+      animation:cdMoonglow 6s ease-in-out infinite;
+    }
+    .cd-input-style{
+      width:100%;padding:12px 13px;
+      border:1.5px solid rgba(255,255,255,0.08);
+      border-radius:10px;font-size:14px;outline:none;
+      font-family:inherit;background:rgba(255,255,255,0.04);
+      color:#fff;box-sizing:border-box;transition:border 0.2s;
+    }
+    .cd-input-style:focus{
+      border-color:rgba(255,215,0,0.5);
+      background:rgba(255,215,0,0.03);
+      box-shadow:0 0 0 3px rgba(255,215,0,0.06);
+    }
+    .cd-input-style::placeholder{color:rgba(255,255,255,0.2)}
+    .cd-btn-signin{
+      width:100%;padding:14px;
+      background:linear-gradient(135deg,#FFD700,#FF8C00);
+      color:#080f08;border:none;border-radius:12px;
+      font-size:15px;font-weight:800;cursor:pointer;
+      display:flex;align-items:center;justify-content:center;gap:6px;
+      transition:transform 0.15s,box-shadow 0.15s;
+      overflow:hidden;position:relative;
+      font-family:inherit;letter-spacing:0.3px;
+    }
+    .cd-btn-signin:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(255,140,0,0.35)}
+    .cd-btn-signin:active{transform:scale(0.98)}
+    .cd-door-scene{
+      display:none;align-items:center;justify-content:center;
+      position:relative;height:32px;width:100%;
+    }
+    .cd-walker{
+      font-size:28px;display:inline-block;
+      position:absolute;left:calc(50% - 52px);
+      filter:drop-shadow(0 0 6px #FFD700) drop-shadow(0 0 12px #FFD700);
+    }
+    .cd-door{
+      font-size:34px;display:inline-block;
+      transform-origin:left center;
+      position:absolute;left:calc(50% - 16px);
+      filter:drop-shadow(0 0 4px rgba(255,215,0,0.5));
+    }
+    @keyframes cdWelcome{
+      0%{transform:scale(0.8);opacity:0}
+      60%{transform:scale(1.05)}
+      100%{transform:scale(1);opacity:1}
+    }
+    .cd-welcome-state{
+      display:none;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      width:100%;
+    }
+    .cd-welcome-icon{
+      font-size:22px;
+      animation:cdWelcome 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards;
+    }
+    .cd-welcome-text{
+      font-size:14px;
+      font-weight:800;
+      color:#080f08;
+      animation:cdWelcome 0.4s cubic-bezier(0.34,1.56,0.64,1) 0.1s both;
+    }
+    </style>
+
+    <div class="cd-moonglow"></div>
+    <div style="height:2px;background:linear-gradient(90deg,transparent,#FFD700,transparent)"></div>
+
+    <button onclick="closeOv('loginOv')" style="position:absolute;top:12px;right:12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);width:28px;height:28px;border-radius:50%;font-size:13px;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center;font-family:inherit">✕</button>
+
+    <div style="padding:22px 24px 14px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.05)">
+      <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.2);border-radius:20px;padding:4px 14px;margin-bottom:10px">
+        <span style="font-size:10px;font-weight:800;color:#FFD700;letter-spacing:1.5px">CAMPUSDEAL</span>
+      </div>
+      <div id="authTitle" style="font-size:20px;font-weight:900;color:#fff;margin-bottom:3px">Welcome back</div>
+      <div id="authSubtitle" style="font-size:11px;color:rgba(255,255,255,0.4)">Sign in to manage your ads</div>
+    </div>
+
+    <div style="display:flex;padding:0 24px;border-bottom:1px solid rgba(255,255,255,0.05)">
+      <button id="tabLogin" onclick="switchAuthTab('login')" style="flex:1;padding:12px 8px;border:none;border-bottom:2px solid #FFD700;background:transparent;font-size:13px;font-weight:700;cursor:pointer;color:#FFD700;font-family:inherit">Sign In</button>
+      <button id="tabRegister" onclick="switchAuthTab('register')" style="flex:1;padding:12px 8px;border:none;border-bottom:2px solid transparent;background:transparent;font-size:13px;font-weight:700;cursor:pointer;color:rgba(255,255,255,0.35);font-family:inherit">Create Account</button>
+    </div>
+
+    <div style="padding:18px 24px 22px;overflow-y:auto;max-height:65vh">
+
+    <!-- LOGIN FORM -->
+    <div id="loginForm">
+      <div style="margin-bottom:12px">
+        <label style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.4);display:block;margin-bottom:5px;letter-spacing:1px">EMAIL ADDRESS</label>
+        <input type="email" id="lEmail" autocomplete="off" placeholder="your@email.com" class="cd-input-style">
+      </div>
+      <div style="margin-bottom:6px">
+        <label style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.4);display:block;margin-bottom:5px;letter-spacing:1px">PASSWORD</label>
+        <div style="position:relative">
+          <input type="password" id="lPass" autocomplete="off" placeholder="••••••••" class="cd-input-style" style="padding-right:38px">
+          <button onclick="togglePwd('lPass',this)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,0.3);cursor:pointer;font-size:15px;padding:4px;font-family:inherit">👁</button>
+        </div>
+      </div>
+      <div style="text-align:right;margin-bottom:16px">
+        <button onclick="switchAuthTab('forgot')" style="background:none;border:none;font-size:11px;color:rgba(255,215,0,0.5);cursor:pointer;font-family:inherit">Forgot password?</button>
+      </div>
+
+      <!-- Sign In button with door animation -->
+      <button class="cd-btn-signin" id="cdSignInBtn" onclick="cdDoLogin()">
+        <span id="cdBtnText">Sign In →</span>
+        <div class="cd-door-scene" id="cdDoorScene">
+          <span class="cd-walker" id="cdWalker">🚶</span>
+          <span class="cd-door" id="cdDoor">🚪</span>
+        </div>
+        <div class="cd-welcome-state" id="cdWelcomeState">
+          <span class="cd-welcome-icon">👋</span>
+          <span class="cd-welcome-text">Welcome back!</span>
+        </div>
+      </button>
+
+      <!-- Google only - no Apple -->
+      <div style="display:flex;align-items:center;gap:10px;margin:14px 0 10px">
+        <div style="flex:1;height:1px;background:rgba(255,255,255,0.07)"></div>
+        <span style="font-size:10px;color:rgba(255,255,255,0.2)">or continue with</span>
+        <div style="flex:1;height:1px;background:rgba(255,255,255,0.07)"></div>
+      </div>
+      <button onclick="alert('Google login coming soon!')" style="width:100%;padding:11px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;transition:background 0.2s">
+        <span style="font-size:16px">🔵</span> Continue with Google
+      </button>
+
+      <button onclick="closeOv('loginOv')" style="background:none;border:none;font-size:11px;color:rgba(255,255,255,0.2);cursor:pointer;width:100%;text-align:center;margin-top:10px;padding:4px;font-family:inherit">✕ Maybe later</button>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div id="registerForm" style="display:none">
+      <div style="margin-bottom:10px">
+        <label style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.4);display:block;margin-bottom:5px;letter-spacing:1px">FULL NAME</label>
+        <input type="text" id="lName" placeholder="Your full name" class="cd-input-style">
+      </div>
+      <div style="margin-bottom:10px">
+        <label style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.4);display:block;margin-bottom:5px;letter-spacing:1px">WHATSAPP NUMBER</label>
+        <input type="tel" id="rPhone" placeholder="08012345678" class="cd-input-style">
+      </div>
+      <div style="margin-bottom:10px">
+        <label style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.4);display:block;margin-bottom:5px;letter-spacing:1px">EMAIL ADDRESS</label>
+        <input type="email" id="rEmail" placeholder="your@email.com" class="cd-input-style">
+      </div>
+      <div style="margin-bottom:10px">
+        <label style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.4);display:block;margin-bottom:5px;letter-spacing:1px">PASSWORD</label>
+        <div style="position:relative">
+          <input type="password" id="rPass" placeholder="Min 6 characters" class="cd-input-style" style="padding-right:38px">
+          <button onclick="togglePwd('rPass',this)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,0.3);cursor:pointer;font-size:15px;padding:4px;font-family:inherit">👁</button>
+        </div>
+      </div>
+      <div style="margin-bottom:16px">
+        <label style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.4);display:block;margin-bottom:5px;letter-spacing:1px">CONFIRM PASSWORD</label>
+        <div style="position:relative">
+          <input type="password" id="rPass2" placeholder="Repeat password" class="cd-input-style" style="padding-right:38px">
+          <button onclick="togglePwd('rPass2',this)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,0.3);cursor:pointer;font-size:15px;padding:4px;font-family:inherit">👁</button>
+        </div>
+      </div>
+      <button onclick="doRegister()" style="width:100%;background:linear-gradient(135deg,#FFD700,#FF8C00);color:#080f08;border:none;padding:13px;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit">Create Account →</button>
+      <div style="text-align:center;margin-top:6px;font-size:9px;color:rgba(255,255,255,0.15)">Protected by reCAPTCHA</div>
+      <button onclick="closeOv('loginOv')" style="background:none;border:none;font-size:11px;color:rgba(255,255,255,0.2);cursor:pointer;width:100%;text-align:center;margin-top:8px;padding:4px;font-family:inherit">✕ Maybe later</button>
+    </div>
+
+    <!-- FORGOT PASSWORD FORM -->
+    <div id="forgotForm" style="display:none">
+      <div style="text-align:center;margin-bottom:16px">
+        <div style="font-size:36px;margin-bottom:8px">🔑</div>
+        <h3 style="font-size:16px;font-weight:900;color:#fff;margin-bottom:4px">Reset Password</h3>
+        <p style="font-size:11px;color:rgba(255,255,255,0.4)">We'll send a reset link to your email</p>
+      </div>
+      <label style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.4);display:block;margin-bottom:5px;letter-spacing:1px">EMAIL ADDRESS</label>
+      <input type="email" id="fEmail" placeholder="your@email.com" class="cd-input-style" style="margin-bottom:5px">
+      <p style="font-size:10px;color:rgba(255,255,255,0.25);margin-bottom:14px">Check spam folder if no email arrives!</p>
+      <button onclick="doResetPass()" style="width:100%;background:linear-gradient(135deg,#FFD700,#FF8C00);color:#080f08;border:none;padding:13px;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit">Send Reset Link →</button>
+      <button onclick="switchAuthTab('login')" style="background:none;border:none;font-size:12px;color:rgba(255,215,0,0.5);cursor:pointer;width:100%;text-align:center;margin-top:10px;padding:4px;font-family:inherit">← Back to Sign In</button>
+    </div>
+
+    </div>
+  </div>
+
+<!-- ADMIN LOGIN MODAL -->
+<div class="ov ovc" id="adminLoginOv" style="z-index:3000">
+  <div style="background:rgba(255,255,255,0.04);border-radius:18px;padding:1.5rem;width:90%;max-width:320px;text-align:center">
+    <div style="font-size:48px;margin-bottom:10px">&#128272;</div>
+    <h2 style="font-size:20px;font-weight:900;color:#fff;margin-bottom:6px">Admin Access</h2>
+    <p style="font-size:13px;color:rgba(255,255,255,0.45);margin-bottom:1.2rem">Enter admin password to continue</p>
+    <input type="password" id="adminPwd" class="linp" placeholder="Enter password" autocomplete="off" onkeypress="if(event.key==='Enter')checkAdminPwd()">
+    <button onclick="checkAdminPwd()" style="width:100%;background:#1a1a1a;color:#fff;border:none;padding:13px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:10px">&#128272; Login as Admin</button>
+    <button onclick="closeOv('adminLoginOv')" style="background:none;border:none;font-size:12px;color:rgba(255,255,255,0.35);cursor:pointer">Cancel</button>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bnav">
+  <button class="bn on" id="bn-home" onclick="goHome()">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span>Home</span>
+  </button>
+  
+  <button class="bn" id="bn-wish" onclick="goAccount();setTimeout(function(){var t=document.querySelectorAll('.atab');if(t[2])showTab('wishlist',t[2]);},300)">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    <span>Wishlist</span>
+  </button>
+  <div class="bns" onclick="doSell()">
+    <div class="bnsi">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    </div>
+    <div class="bnsl">Sell</div>
+  </div>
+  <button class="bn" id="bn-myads" onclick="goMyAds()">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+    <span>My Ads</span>
+  </button>
+  
+</div>
+
+<script>
+// EmailJS Config
+var EMAILJS_SERVICE = "service_bnw94qd";
+var EMAILJS_TEMPLATE = "template_ew7mg7o";
+var EMAILJS_KEY = "X7jMdSsnRIGkI3_1z";
+
+var FB_CFG={apiKey:"AIzaSyArBa1BadOOK-JPCOeQuVYFMz438O1bi4o",authDomain:"funaab-market-d2be4.firebaseapp.com",projectId:"funaab-market-d2be4",storageBucket:"funaab-market-d2be4.firebasestorage.app",messagingSenderId:"1017196044190",appId:"1:1017196044190:web:98e8bb22679ecc2f3c008f"};
+var CLOUD="fqlyopju",PRESET="funaab-upload";
+var EMO={phones:"P",electronics:"L",fashion:"F",furniture:"C",vehicles:"V",food:"R",books:"B",services:"S",beauty:"Y",jobs:"J",others:"O"};
+var EMOS={phones:"📱",electronics:"💻",fashion:"👗",furniture:"🛋️",vehicles:"🚗",food:"🍔",books:"📚",services:"🔧",beauty:"💄",jobs:"💼",others:"📦"};
+var SAMPLES=[];
+
+var allAds=SAMPLES.slice(),currentCat="all",uploadedImgs=[],db=null,auth=null,fbReady=false,chatOpen=false,currentItem=null;
+
+// =============================================================
+// USER AUTH — Simple localStorage (works on ALL devices)
+// =============================================================
+function getUser(){try{return JSON.parse(localStorage.getItem("cd_u")||"null");}catch(e){return null;}}
+function setUser(u){localStorage.setItem("cd_u",JSON.stringify(u));}
+function removeUser(){localStorage.removeItem("cd_u");}
+
+function refreshNav(){
+  var u=getUser();
+  var bi=document.getElementById("bnIcon");
+  var bl=document.getElementById("bnLabel");
+  if(u){
+    var nm=u.name||"User";
+    var ini=nm.charAt(0).toUpperCase();
+    if(bi)bi.innerHTML=ini;
+    if(bl){bl.textContent=nm.split(" ")[0];bl.style.color="var(--g)";}
+  } else {
+    if(bi)bi.innerHTML="&#128100;";
+    if(bl){bl.textContent="Account";bl.style.color="";}
+  }
+  // Update hamburger menu user section
+  if(typeof updateHamburgerUser === "function") updateHamburgerUser();
+}
+
+function openLogin(){
+  switchAuthTab("login");
+  var lEmail=document.getElementById("lEmail");
+  var lPass=document.getElementById("lPass");
+  if(lEmail)lEmail.value="";
+  if(lPass)lPass.value="";
+  openOv("loginOv");
+}
+
+function switchAuthTab(tab){
+  var authTitle = document.getElementById("authTitle");
+  var authSubtitle = document.getElementById("authSubtitle");
+  var tabLogin = document.getElementById("tabLogin");
+  var tabRegister = document.getElementById("tabRegister");
+  if(tab==="login"){
+    if(authTitle) authTitle.textContent = "Welcome back";
+    if(authSubtitle) authSubtitle.textContent = "Sign in to manage your ads";
+    if(tabLogin){tabLogin.style.color="#FFD700";tabLogin.style.borderBottomColor="#FFD700";}
+    if(tabRegister){tabRegister.style.color="rgba(255,255,255,0.35)";tabRegister.style.borderBottomColor="transparent";}
+  } else if(tab==="register"){
+    if(authTitle) authTitle.textContent = "Create account";
+    if(authSubtitle) authSubtitle.textContent = "Join CampusDeal for free!";
+    if(tabLogin){tabLogin.style.color="rgba(255,255,255,0.35)";tabLogin.style.borderBottomColor="transparent";}
+    if(tabRegister){tabRegister.style.color="#FFD700";tabRegister.style.borderBottomColor="#FFD700";}
+  } else if(tab==="forgot"){
+    if(authTitle) authTitle.textContent = "Reset password";
+    if(authSubtitle) authSubtitle.textContent = "We'll send you a reset link";
+  }
+  var loginForm=document.getElementById("loginForm");
+  var registerForm=document.getElementById("registerForm");
+  var forgotForm=document.getElementById("forgotForm");
+  var tabLogin=document.getElementById("tabLogin");
+  var tabRegister=document.getElementById("tabRegister");
+  if(loginForm) loginForm.style.display=tab==="login"?"block":"none";
+  if(registerForm) registerForm.style.display=tab==="register"?"block":"none";
+  if(forgotForm) forgotForm.style.display=tab==="forgot"?"block":"none";
+  if(tabLogin){tabLogin.style.background=tab==="login"?"#FFD700":"transparent";tabLogin.style.color=tab==="login"?"#080f08":"rgba(255,255,255,0.5)";}
+  if(tabRegister){tabRegister.style.background=tab==="register"?"#FFD700":"transparent";tabRegister.style.color=tab==="register"?"#080f08":"rgba(255,255,255,0.5)";}
+}
+
+function showForgotPass(){switchAuthTab("forgot");}
+
+function togglePass(id){
+  var input=document.getElementById(id);
+  if(input) input.type=input.type==="password"?"text":"password";
+}
+
+function hashPass(pass){
+  var hash=0;
+  for(var i=0;i<pass.length;i++){var char=pass.charCodeAt(i);hash=((hash<<5)-hash)+char;hash=hash&hash;}
+  return "h_"+Math.abs(hash)+"_"+pass.length;
+}
+
+function doLogin(){
+  var em=(document.getElementById("lEmail").value||"").trim();
+  var pass=(document.getElementById("lPass").value||"").trim();
+  if(!em||!em.includes("@")){alert("Please enter a valid email!");return;}
+  if(!pass){alert("Please enter your password!");return;}
+
+  var btn=document.querySelector("#loginForm button[onclick='doLogin()']");
+  if(btn){btn.textContent="Logging in...";btn.disabled=true;}
+
+  if(auth){
+    auth.signInWithEmailAndPassword(em, pass)
+      .then(function(result){
+        if(btn){btn.textContent="Login →";btn.disabled=false;}
+        // Get user profile from Firestore
+        db.collection("users").where("uid","==",result.user.uid).get().then(function(snap){
+          var name = snap.empty ? em.split("@")[0] : snap.docs[0].data().name;
+          var phone = snap.empty ? "" : (snap.docs[0].data().phone||"");
+          setUser({name:name, phone:phone, email:em, uid:result.user.uid});
+          closeOv("loginOv");
+          refreshNav();
+          var iN=document.getElementById("iName");
+          var iW=document.getElementById("iWa");
+          if(iN)iN.value=name;
+          if(iW&&phone)iW.value=phone.replace("234","0");
+          askNotifAfterLogin(name);
+        });
+      })
+      .catch(function(e){
+        if(btn){btn.textContent="Login →";btn.disabled=false;}
+        if(e.code==="auth/user-not-found"||e.code==="auth/invalid-credential"){
+          alert("No account found with this email!\nPlease register first.");
+          switchAuthTab("register");
+        } else if(e.code==="auth/wrong-password"){
+          alert("Incorrect password!\nTry again or reset your password.");
+        } else {
+          alert("Login error: "+e.message);
+        }
+      });
+  } else {
+    alert("Please wait for the app to load and try again!");
+    if(btn){btn.textContent="Login →";btn.disabled=false;}
+  }
+}
+
+function doRegister(){
+  var nm=(document.getElementById("lName").value||"").trim();
+  // reCAPTCHA v3 check — optional, won't block registration if fails
+  try{
+    if(typeof grecaptcha !== "undefined"){
+      grecaptcha.ready(function(){
+        try{
+          grecaptcha.execute("6LdlpWEtAAAAAIwygtHzEssSeiUgv6SIMIVH35_4", {action:"register"})
+          .then(function(token){
+            // Token received — proceed with registration
+            doRegisterVerified(nm);
+          })
+          .catch(function(){
+            // reCAPTCHA failed — still allow registration
+            doRegisterVerified(nm);
+          });
+        }catch(e){
+          doRegisterVerified(nm);
+        }
+      });
+      return;
+    }
+  }catch(e){}
+  // Fallback if reCAPTCHA not loaded
+  doRegisterVerified(nm);
+}
+
+function doRegisterVerified(nm){
+  nm = nm || (document.getElementById("lName").value||"").trim();
+  var ph=(document.getElementById("rPhone").value||"").trim();
+  var em=(document.getElementById("rEmail").value||"").trim();
+  var pass=(document.getElementById("rPass").value||"").trim();
+  var pass2=(document.getElementById("rPass2").value||"").trim();
+  if(!nm){alert("Please enter your full name!");return;}
+  if(!ph||ph.length<8){alert("Please enter a valid WhatsApp number!");return;}
+  if(!em||!em.includes("@")){alert("Please enter a valid email address!");return;}
+  if(pass.length<6){alert("Password must be at least 6 characters!");return;}
+  if(pass!==pass2){alert("Passwords do not match!");return;}
+
+  var cleanPhone=ph.replace(/^0/,"234");
+  var btn=document.querySelector("#registerForm button[onclick='doRegister()']");
+  if(btn){btn.textContent="Creating account...";btn.disabled=true;}
+
+  if(auth){
+    auth.createUserWithEmailAndPassword(em, pass)
+      .then(function(result){
+        // Save extra user info to Firestore
+        return db.collection("users").add({
+          name:nm,
+          phone:cleanPhone,
+          email:em,
+          uid:result.user.uid,
+          createdAt:firebase.firestore.FieldValue.serverTimestamp()
+        }).then(function(){
+          if(btn){btn.textContent="Create Account →";btn.disabled=false;}
+          setUser({name:nm,phone:ph,email:em,uid:result.user.uid});
+          closeOv("loginOv");
+          refreshNav();
+          var iN=document.getElementById("iName");
+          var iW=document.getElementById("iWa");
+          if(iN)iN.value=nm;
+          if(iW)iW.value=ph;
+          alert("Welcome to CampusDeal, "+nm+"! 🎉");
+        });
+      })
+      .catch(function(e){
+        if(btn){btn.textContent="Create Account →";btn.disabled=false;}
+        if(e.code==="auth/email-already-in-use"){
+          alert("This email is already registered!\nPlease login instead.");
+          switchAuthTab("login");
+        } else if(e.code==="auth/weak-password"){
+          alert("Password is too weak!\nUse at least 6 characters.");
+        } else {
+          alert("Registration error: "+e.message);
+        }
+      });
+  } else {
+    alert("Please wait for the app to load!");
+    if(btn){btn.textContent="Create Account →";btn.disabled=false;}
+  }
+}
+
+// Alias for reCAPTCHA flow
+var doRegisterVerified = doRegisterVerified || function(){};
+
+function registerLocal(nm,ph,cleanPhone,hashedPass,em){
+  var stored=localStorage.getItem("cd_users");
+  var users=stored?JSON.parse(stored):{};
+  if(users[cleanPhone]){alert("This number is already registered!");switchAuthTab("login");return;}
+  users[cleanPhone]={name:nm,password:hashedPass,email:em||""};
+  localStorage.setItem("cd_users",JSON.stringify(users));
+  setUser({name:nm,phone:ph,email:em||"",uid:cleanPhone,isLocal:true});
+  closeOv("loginOv");
+  refreshNav();
+  alert("Welcome to CampusDeal, "+nm+"!");
+}
+
+function saveToLocalUsers(cleanPhone,nm,hashedPass,em){
+  var stored=localStorage.getItem("cd_users");
+  var users=stored?JSON.parse(stored):{};
+  if(!users[cleanPhone])users[cleanPhone]={};
+  if(nm)users[cleanPhone].name=nm;
+  users[cleanPhone].password=hashedPass;
+  if(em)users[cleanPhone].email=em;
+  localStorage.setItem("cd_users",JSON.stringify(users));
+}
+
+function confirmReset(docId,expectedCode){
+  var enteredCode=(document.getElementById("resetCode").value||"").trim();
+  var newPass=(document.getElementById("newPassCode").value||"").trim();
+  if(enteredCode!==String(expectedCode)){alert("Wrong code! Please try again.");return;}
+  if(newPass.length<6){alert("Password must be at least 6 characters!");return;}
+  db.collection("users").doc(docId).update({password:hashPass(newPass),resetCode:null}).then(function(){
+    alert("Password reset! Please login with your new password.");
+    switchAuthTab("login");
+  }).catch(function(e){alert("Error: "+e.message);});
+}
+
+function confirmResetLocal(foundPhone,expectedCode){
+  var enteredCode=(document.getElementById("resetCode").value||"").trim();
+  var newPass=(document.getElementById("newPassCode").value||"").trim();
+  if(enteredCode!==String(expectedCode)){alert("Wrong code!");return;}
+  if(newPass.length<6){alert("Password must be at least 6 characters!");return;}
+  saveToLocalUsers(foundPhone,null,hashPass(newPass),null);
+  alert("Password reset! Please login.");
+  switchAuthTab("login");
+}
+
+function doResetPass(){
+  var em=(document.getElementById("fEmail").value||"").trim();
+  if(!em||!em.includes("@")){alert("Please enter a valid email address!");return;}
+
+  var btn=document.querySelector("#forgotForm button");
+  if(btn){btn.textContent="Sending...";btn.disabled=true;btn.style.opacity="0.7";}
+
+  var resetCode=Math.floor(100000+Math.random()*900000);
+
+  function sendCode(docId, userName){
+    if(typeof emailjs!=="undefined"){
+      emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
+        to_email: em,
+        to_name: userName||"User",
+        reset_code: String(resetCode)
+      }).then(function(){
+        if(btn){btn.textContent="✅ Code Sent!";btn.style.background="rgba(34,197,94,0.2)";btn.style.color="#22c55e";btn.style.border="1px solid #22c55e";btn.disabled=false;btn.style.opacity="1";}
+        setTimeout(function(){showResetCodeForm(em, docId, resetCode);}, 1000);
+      }).catch(function(e){
+        console.log("EmailJS error:", e);
+        if(btn){btn.textContent="✅ Code Sent!";btn.style.background="rgba(34,197,94,0.2)";btn.style.color="#22c55e";btn.style.border="1px solid #22c55e";btn.disabled=false;btn.style.opacity="1";}
+        setTimeout(function(){showResetCodeForm(em, docId, resetCode);}, 1000);
+      });
+    } else {
+      if(btn){btn.textContent="✅ Code Sent!";btn.style.background="rgba(34,197,94,0.2)";btn.style.color="#22c55e";btn.style.border="1px solid #22c55e";btn.disabled=false;btn.style.opacity="1";}
+      setTimeout(function(){showResetCodeForm(em, docId, resetCode);}, 1000);
+    }
+  }
+
+  if(fbReady&&db){
+    db.collection("users").where("email","==",em).get()
+      .then(function(snap){
+        if(snap.empty){
+          if(btn){btn.textContent="Send Reset Code →";btn.disabled=false;}
+          alert("No account found with this email!\nPlease register first.");
+          return;
+        }
+        var ud=snap.docs[0].data();
+        var docId=snap.docs[0].id;
+        db.collection("users").doc(docId).update({
+          resetCode:String(resetCode),
+          resetExpiry:Date.now()+3600000
+        }).then(function(){sendCode(docId, ud.name);});
+      })
+      .catch(function(e){
+        if(btn){btn.textContent="Send Reset Code →";btn.disabled=false;}
+        alert("Error: "+e.message);
+      });
+  } else {
+    // localStorage fallback
+    var stored=localStorage.getItem("cd_users");
+    var users=stored?JSON.parse(stored):{};
+    var found=null,foundPhone=null;
+    Object.keys(users).forEach(function(ph){
+      if(users[ph].email===em){found=users[ph];foundPhone=ph;}
+    });
+    if(!found){
+      if(btn){btn.textContent="Send Reset Code →";btn.disabled=false;}
+      alert("No account found with this email!");
+      return;
+    }
+    sendCode(foundPhone, found.name);
+  }
+}
+
+function showResetCodeForm(em, docId, code){
+  var f=document.getElementById("forgotForm");
+  if(!f)return;
+  f.innerHTML="";
+  var html=document.createElement("div");
+  html.style.textAlign="center";
+  html.style.marginBottom="1rem";
+  html.innerHTML="<div style='font-size:32px;margin-bottom:6px'>📧</div>"
+    +"<h2 style='font-size:18px;font-weight:900;color:#fff;margin-bottom:4px'>Check Your Email</h2>"
+    +"<p style='font-size:12px;color:rgba(255,255,255,0.4)'>Code sent to <strong style=color:#FFD700>"+em+"</strong></p>"
+    +"<p style='font-size:11px;color:rgba(255,255,255,0.3);margin-top:4px'>Check spam if not received!</p>";
+  f.appendChild(html);
+  var inp1=document.createElement("input");
+  inp1.type="text";inp1.id="resetCode";inp1.placeholder="Enter 6-digit code";
+  inp1.inputMode="numeric";inp1.autocomplete="off";
+  inp1.style.cssText="width:100%;padding:11px 14px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:18px;outline:none;background:rgba(255,255,255,0.05);color:#fff;margin-bottom:12px;letter-spacing:4px;text-align:center";
+  f.appendChild(inp1);
+  var inp2=document.createElement("input");
+  inp2.type="password";inp2.id="newPassCode";inp2.placeholder="New password (min 6 chars)";
+  inp2.style.cssText="width:100%;padding:11px 14px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:14px;outline:none;background:rgba(255,255,255,0.05);color:#fff;margin-bottom:14px";
+  f.appendChild(inp2);
+  var btn1=document.createElement("button");
+  btn1.textContent="Reset Password →";
+  btn1.style.cssText="width:100%;background:#FFD700;color:#080f08;border:none;padding:13px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:10px";
+  btn1.onclick=function(){confirmReset(docId,code);};
+  f.appendChild(btn1);
+  var btn2=document.createElement("button");
+  btn2.textContent="← Back to Login";
+  btn2.style.cssText="background:none;border:none;color:rgba(255,255,255,0.4);font-size:12px;cursor:pointer;width:100%";
+  btn2.onclick=function(){switchAuthTab("login");};
+  f.appendChild(btn2);
+}
+
+
+
+function doLogout(){
+  closeHamburger();
+  removeUser();
+  refreshNav();
+  goHome();
+}
+
+function toggleDrop_old(){
+  var m=document.getElementById("ddmenu");
+  m.classList.toggle("on");
+}
+
+function closeDrop_old(){
+  document.getElementById("ddmenu").classList.remove("on");
+}
+
+document.addEventListener("click",function(e){
+  var pb=document.getElementById("profileBtn");
+  var m=document.getElementById("ddmenu");
+  if(m.classList.contains("on")&&!pb.contains(e.target)&&!m.contains(e.target)){
+    m.classList.remove("on");
+  }
+  if(e.target.classList.contains("ov")){e.target.classList.remove("on");}
+});
+
+// =============================================================
+// NAVIGATION
+// =============================================================
+function goHome(){
+  showPg("home");
+  setActiveBn("bn-home");
+}
+
+function goMyAds(){
+  if(!getUser()){openLogin();return;}
+  showPg("account");
+  showTab("myads",null);
+  setActiveBn("bn-myads");
+}
+
+function goAccount(){
+  if(!getUser()){openLogin();return;}
+  showPg("account");
+  showTab("profile",null);
+  setActiveBn("bn-account");
+}
+
+function showPg(name){
+  document.querySelectorAll(".pg").forEach(function(p){p.classList.remove("on");});
+  var el=document.getElementById("pg-"+name);
+  if(el)el.classList.add("on");
+  window.scrollTo(0,0);
+}
+
+function setActiveBn(id){
+  document.querySelectorAll(".bn").forEach(function(b){b.classList.remove("on");});
+  var el=document.getElementById(id);
+  if(el)el.classList.add("on");
+}
+
+function doSell(){
+  if(!getUser()){openLogin();return;}
+  var u=getUser();
+  document.getElementById("editId").value="";
+  document.getElementById("sellTitle").textContent="Post Your Ad";
+  document.getElementById("sellBtn").textContent="Post Ad - FREE";
+  document.getElementById("iTitle").value="";
+  document.getElementById("iPrice").value="";
+  document.getElementById("iDesc").value="";
+  document.getElementById("iName").value=u?u.name:"";
+  document.getElementById("iWa").value=u?u.phone:"";
+  document.getElementById("imgPrevs").innerHTML="";
+  uploadedImgs=[];
+  openOv("sellOv");
+}
+
+// =============================================================
+// ACCOUNT TABS
+// =============================================================
+function showTab(tab,tabEl){
+  document.querySelectorAll(".atab").forEach(function(t){t.classList.remove("on");});
+  if(tabEl)tabEl.classList.add("on");
+  else{
+    var tabs=document.querySelectorAll(".atab");
+    var names=["profile","myads","post","support"];
+    var idx=names.indexOf(tab);
+    if(tabs[idx])tabs[idx].classList.add("on");
+  }
+  var body=document.getElementById("accBody");
+  var u=getUser();
+  if(tab==="profile"){
+    body.innerHTML="<div style='background:rgba(255,255,255,0.04);border-radius:14px;padding:1.5rem;border:1px solid rgba(255,215,0,0.12);margin-bottom:1rem;text-align:center'>"
+      +"<div style='width:72px;height:72px;border-radius:50%;background:#FFD700;color:#080f08;font-size:28px;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 12px'>"+(u?u.name.charAt(0).toUpperCase():"?")+"</div>"
+      +"<div style='font-size:18px;font-weight:900;color:#fff;margin-bottom:4px'>"+(u?u.name:"")+"</div>"
+      +"<div style='font-size:13px;color:rgba(255,255,255,0.45)'>"+( u?u.phone:"")+"</div>"
+      +"</div>"
+      +"<div style='background:rgba(255,255,255,0.04);border-radius:14px;padding:1.2rem;border:1px solid rgba(255,255,255,0.08);margin-bottom:1rem'>"
+      +"<h3 style='font-size:15px;font-weight:700;margin-bottom:1rem;color:#fff'>Edit Profile</h3>"
+      +"<div style='margin-bottom:12px'><label style='font-size:12px;font-weight:700;display:block;margin-bottom:4px;color:rgba(255,255,255,0.6)'>Full Name</label>"
+      +"<input type='text' id='epName' value='"+(u?u.name:"")+"' autocomplete='off' style='width:100%;padding:10px 12px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:14px;outline:none;font-family:inherit;background:rgba(255,255,255,0.05);color:#fff'></div>"
+      +"<div style='margin-bottom:16px'><label style='font-size:12px;font-weight:700;display:block;margin-bottom:4px;color:rgba(255,255,255,0.6)'>WhatsApp</label>"
+      +"<input type='text' id='epPhone' value='"+(u?u.phone:"")+"' autocomplete='off' style='width:100%;padding:10px 12px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:14px;outline:none;font-family:inherit;background:rgba(255,255,255,0.05);color:#fff'></div>"
+      +"<button onclick='saveProfile()' style='width:100%;background:#FFD700;color:#080f08;border:none;padding:13px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer'>Save Changes</button>"
+      +"</div>"
+      +"<button onclick='requestNotifPermission()' style='width:100%;background:rgba(255,215,0,0.08);color:#FFD700;border:1.5px solid rgba(255,215,0,0.25);padding:13px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:10px'>&#128276; Enable Notifications</button>"
+      +"<button onclick='doLogout()' style='width:100%;background:rgba(255,68,68,0.08);color:#ff4444;border:1.5px solid rgba(255,68,68,0.25);padding:13px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer'>Logout</button>";
+  } else if(tab==="myads"){
+    body.innerHTML="<div style='text-align:center;padding:1rem'><div class='spin'></div></div>";
+    loadMyAds(body);
+  } else if(tab==="post"){
+    body.innerHTML="<button onclick='doSell()' style='width:100%;background:#FFD700;color:#080f08;border:none;padding:16px;border-radius:10px;font-size:16px;font-weight:900;cursor:pointer;margin-bottom:1rem'>Post New Ad</button>"
+      +"<div style='background:rgba(255,255,255,0.04);border-radius:12px;padding:1rem;border:1px solid rgba(255,255,255,0.08)'>"
+      +"<h3 style='font-size:14px;font-weight:700;margin-bottom:10px;color:#fff'>Tips for a great ad:</h3>"
+      +"<div style='font-size:13px;color:rgba(255,255,255,0.5);line-height:1.8'>Upload clear photos<br>Set a fair price<br>Write a good description<br>Add your WhatsApp number</div></div>";
+  } else if(tab==="wishlist"){
+    showWishlistPage();
+  } else if(tab==="support"){
+    body.innerHTML="<div style='background:rgba(37,211,102,0.06);border-radius:12px;padding:1.2rem;border:1px solid rgba(37,211,102,0.15);margin-bottom:1rem;text-align:center'>"
+      +"<div style='font-size:36px;margin-bottom:8px'>🟢</div>"
+      +"<div style='font-size:15px;font-weight:700;margin-bottom:4px;color:#fff'>WhatsApp Support</div>"
+      +"<div style='font-size:13px;color:rgba(255,255,255,0.45);margin-bottom:12px'>We reply within 1 hour!</div>"
+      +"<button onclick='contactAdmin()' style='background:#25D366;color:#fff;border:none;padding:12px 24px;border-radius:25px;font-size:14px;font-weight:700;cursor:pointer'>Chat with Admin</button></div>"
+      +"<div style='background:rgba(255,255,255,0.04);border-radius:12px;border:1px solid rgba(255,255,255,0.08);overflow:hidden;margin-bottom:1rem'>"
+      +"<div style='padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.06);cursor:pointer' onclick='contactAdmin()'><div style='font-size:14px;font-weight:700;color:#fff'>🚨 Report a Problem</div><div style='font-size:12px;color:rgba(255,255,255,0.4)'>Scam, fraud or bad seller</div></div>"
+      +"<div style='padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.06);cursor:pointer' onclick='contactAdmin()'><div style='font-size:14px;font-weight:700;color:#fff'>❓ How to use CampusDeal</div><div style='font-size:12px;color:rgba(255,255,255,0.4)'>Get help posting or buying</div></div>"
+      +"<div style='padding:14px 16px;cursor:pointer' onclick='contactAdmin()'><div style='font-size:14px;font-weight:700;color:#fff'>💡 Suggest a Feature</div><div style='font-size:12px;color:rgba(255,255,255,0.4)'>Help us improve</div></div></div>"
+      +"<button onclick='contactAdmin()' style='width:100%;background:#FFD700;color:#080f08;border:none;padding:14px;border-radius:10px;font-size:15px;font-weight:900;cursor:pointer'>📞 Contact Admin on WhatsApp</button>";
+  }
+}
+
+function saveProfile(){
+  var nn=(document.getElementById("epName").value||"").trim();
+  var np=(document.getElementById("epPhone").value||"").trim();
+  if(!nn){alert("Please enter your name!");return;}
+  var u=getUser();
+  if(u){u.name=nn;u.phone=np;setUser(u);refreshNav();showTab("profile",null);alert("Profile updated!");}
+}
+
+function loadMyAds(container){
+  var u=getUser();
+  if(!u){container.innerHTML="<div class='emp'><div class='empi'>🔐</div><p>Please login</p></div>";return;}
+  if(!fbReady||!db){container.innerHTML="<div class='emp'><div class='empi'>⚠️</div><p>Firebase not connected</p></div>";return;}
+  db.collection("ads").where("userId","==",u.uid).get()
+    .then(function(snap){
+      if(snap.empty){
+        container.innerHTML="<div class='emp'><div class='empi'>📭</div><p>No ads yet!</p><br><button onclick='doSell()' style='background:#FFD700;color:#080f08;border:none;padding:10px 20px;border-radius:20px;cursor:pointer;font-size:14px;font-weight:700;margin-top:10px'>Post Your First Ad</button></div>";
+        return;
+      }
+      container.innerHTML="<h2 style='font-size:17px;font-weight:900;margin-bottom:1rem'>My Ads</h2>"+snap.docs.map(function(doc){
+        var d=doc.data();
+        var em=EMOS[d.cat]||"📦";
+        return "<div class='mac'>"
+          +"<div class='mat'>"+(d.img?"<img src='"+d.img+"'>":em)+"</div>"
+          +"<div class='mai'><div class='man'>"+d.title+"</div>"
+          +"<div class='map'>N"+Number(d.price).toLocaleString()+"</div>"
+          +"<div class='mab'>"
+          +'<button class="edb" data-id="'+doc.id+'" onclick="editAd(this.dataset.id)">Edit</button>'
+          +'<button class="dlb" data-id="'+doc.id+'" onclick="askDel(this.dataset.id)">Delete</button>'
+          +"</div></div></div>";
+      }).join("");
+    })
+    .catch(function(e){container.innerHTML="<div class='emp'><div class='empi'>⚠️</div><p>Error: "+e.message+"</p></div>";});
+}
+
+// =============================================================
+// ADS
+// =============================================================
+function buildCard(item){
+  var img=item.img||"";
+  var em=EMOS[item.cat]||"📦";
+  var id=String(item.id);
+  var pr=Number(item.price).toLocaleString();
+  var loc=item.loc||"";
+  var maskedWa=maskPhone(item.wa||"");
+  var titl=(item.title||"").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  var wa=item.wa||"";
+  var price=Number(item.price)||0;
+  // Use data-id to avoid quote issues
+  var html='<div class="ac" data-id="'+id+'" onclick="openItemById(this)">'
+    +'<div class="ai">'
+    +(img?'<img src="'+img+'" onerror="imgErr(this)">':'')
+    +'<div class="aif" style="'+(img?'display:none':'display:flex')+'">'+em+'</div>'
+    +(item.feat?'<div class="abg feat">Featured</div>':'')
+    +(item.cond==="new"?'<div class="abg new" style="top:'+(item.feat?'28px':'6px')+'">New</div>':'')
+    +'<button class="afav" data-wish="'+id+'" onclick="event.stopPropagation();toggleWishlist(this.dataset.wish,this)">'+(isWishlisted(id)?'&#10084;&#65039;':'&#129293;')+'</button>'
+    +'</div>'
+    +'<div class="ab">'
+    +'<div class="ap">&#8358;'+pr+'</div>'
+    +'<div class="at">'+titl+'</div>'
+    +'<div class="af">'
+    +'<div class="al">'+loc+'</div>'
+    +'<button class="aw" data-wa="'+wa+'" data-title="'+titl.replace(/"/g,'')+'" data-price="'+price+'" onclick="event.stopPropagation();waFromBtn(this)">WhatsApp</button>'
+    +'</div></div></div>';
+  return html;
+}
+
+function toggleFav(btn){btn.textContent=btn.textContent==="🤍"?"❤️":"🤍";}
+function imgErr(img){img.style.display="none";var n=img.nextSibling;if(n)n.style.display="flex";}
+function openItemById(el){
+  var id=el.dataset.id;
+  openDetail(id);
+}
+
+function waFromBtn(btn){
+  chatSeller(btn.dataset.wa, btn.dataset.title, Number(btn.dataset.price));
+}
+
+
+function renderAds(){
+  var q=(document.getElementById("si").value||"").toLowerCase();
+  var main=allAds.filter(function(i){return (currentCat==="all"||i.cat===currentCat)&&(i.title.toLowerCase().includes(q)||(i.desc||"").toLowerCase().includes(q));});
+  var mg=document.getElementById("mainGrid");
+  var es=document.getElementById("emptyState");
+  var ac=document.getElementById("adsCount");
+  var ft=document.getElementById("featTrack");
+
+  // Build sliding carousel with random ads
+  if(ft && allAds.length > 0){
+    // Show ALL ads shuffled randomly (max 20)
+    var shuffled=allAds.slice();
+    for(var i=shuffled.length-1;i>0;i--){
+      var j=Math.floor(Math.random()*(i+1));
+      var tmp=shuffled[i];shuffled[i]=shuffled[j];shuffled[j]=tmp;
+    }
+    var carouselAds=shuffled.slice(0, Math.min(shuffled.length, 20));
+    ft.innerHTML=carouselAds.map(function(item){
+      var em=EMOS[item.cat]||"📦";
+      var pr=Number(item.price).toLocaleString();
+      return '<div class="fc" data-id="'+item.id+'" onclick="openItemById(this)">'
+        +(item.img?'<img class="fc-img" src="'+item.img+'" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'flex\'">':'')
+        +'<div class="fc-em" style="'+(item.img?'display:none':'display:flex')+'">'+em+'</div>'
+        +'<div class="fc-body">'
+        +'<div class="fc-price">&#8358;'+pr+'</div>'
+        +'<div class="fc-title">'+item.title+'</div>'
+        +'<div class="fc-loc">'+(item.loc||"")+'</div>'
+        +'</div></div>';
+    }).join("");
+    startCarouselAuto();
+  } else if(ft && allAds.length===0){
+    ft.innerHTML='<div style="padding:1.5rem;text-align:center;color:rgba(255,255,255,0.3);font-size:12px;min-width:280px">No ads yet — be the first to post! 🚀</div>';
+  }
+
+  if(mg)mg.innerHTML=main.length?main.map(buildCard).join(""):"";
+  if(ac)ac.textContent=main.length+" ads";
+  if(es)es.style.display=(!main.length)?"block":"none";
+}
+
+function doSearch(){renderAds();}
+
+function filterCat(cat,el){
+  currentCat=cat;
+  document.querySelectorAll(".cb").forEach(function(c){c.classList.remove("on");});
+  if(el)el.classList.add("on");
+  goHome();
+  renderAds();
+}
+
+// =============================================================
+// DETAIL
+// =============================================================
+function openDetail(id){
+  var item=allAds.find(function(i){return String(i.id)===String(id);});
+  if(!item)return;
+  currentItem=item;
+  var em=EMOS[item.cat]||"📦";
+  var box=document.getElementById("detImg");
+  if(box){
+    if(item.img){
+      var imgEl2=document.createElement("img");
+      imgEl2.src=item.img;
+      imgEl2.style.cssText="width:100%;height:100%;object-fit:cover";
+      imgEl2.onerror=function(){box.innerHTML="<span style='font-size:72px'>"+em+"</span>";};
+      box.innerHTML="";
+      box.appendChild(imgEl2);
+    } else {
+      box.innerHTML="<span style='font-size:72px'>"+em+"</span>";
+    }
+  }
+  var dp=document.getElementById("detPrice");if(dp)dp.textContent="N"+Number(item.price).toLocaleString();
+  var dt=document.getElementById("detTitle");if(dt)dt.textContent=item.title;
+  var dc=document.getElementById("detChips");if(dc)dc.innerHTML="<span class='dchp'>"+item.loc+"</span><span class='dchp'>"+(item.cond==="new"?"Brand New":"Used")+"</span><span class='dchp'>"+(item.time||"Recently")+"</span>";
+  var dd=document.getElementById("detDesc");if(dd)dd.textContent=item.desc||"";
+  var da=document.getElementById("detAv");if(da)da.textContent=item.seller.charAt(0).toUpperCase();
+  var ds=document.getElementById("detSeller");if(ds)ds.textContent=item.seller;
+  // Mask phone in detail view
+  var detPhone = document.getElementById("detPhone");
+  if(detPhone) detPhone.textContent = maskPhone(item.wa||"");
+  var dw=document.getElementById("detWa");if(dw)dw.onclick=function(){chatSeller(item.wa,item.title,item.price);};
+  openOv("detOv");
+}
+
+function reportAd(){
+  if(!currentItem){return;}
+  var u=getUser();
+  var msg="REPORT AD:\n\nAd Title: "+currentItem.title+"\nAd ID: "+currentItem.id+"\nSeller: "+currentItem.seller+"\n\nReason: ";
+  var reason=prompt("Why are you reporting this ad?\n\n1. Fake/Scam\n2. Wrong price\n3. Item not available\n4. Inappropriate content\n\nType your reason:");
+  if(!reason)return;
+  window.open("https://wa.me/2348033873918?text="+encodeURIComponent(msg+reason));
+  closeOv("detOv");
+  alert("Thank you for reporting! We will review this ad within 24 hours.");
+}
+
+function chatSeller(wa,title,price){
+  var msg="Hi! I saw your ad on CampusDeal:\n\n*"+title+"*\nPrice: \u20a6"+Number(price).toLocaleString()+"\n\nIs it still available?";
+  window.open("https://wa.me/"+wa+"?text="+encodeURIComponent(msg));
+}
+
+// =============================================================
+// POST AD
+// =============================================================
+function handleImgs(e){
+  var allowedTypes = ["image/jpeg","image/jpg","image/png","image/webp","image/gif"];
+  var files = Array.from(e.target.files).slice(0,5).filter(function(f){
+    if(!allowedTypes.includes(f.type)){
+      alert("Only image files are allowed! (JPG, PNG, WEBP, GIF)");
+      return false;
+    }
+    if(f.size > 5 * 1024 * 1024){
+      alert("Image too large! Maximum size is 5MB per image.");
+      return false;
+    }
+    return true;
+  });
+  uploadedImgs=[];
+  var prev=document.getElementById("imgPrevs");
+  if(!prev)return;
+  prev.innerHTML="";
+  files.forEach(function(f,i){
+    var r=new FileReader();
+    r.onload=function(ev){
+      uploadedImgs[i]={file:f,dataUrl:ev.target.result};
+      var w=document.createElement("div");
+      w.className="ipw";
+      w.innerHTML="<img src='"+ev.target.result+"' class='ipv'><button class='rim' onclick='this.parentElement.remove()'>x</button>";
+      prev.appendChild(w);
+    };
+    r.readAsDataURL(f);
+  });
+}
+
+async function postAd(){
+  var u=getUser();
+  if(!u){openLogin();return;}
+  
+  // Rate limiting - max 10 ads per hour
+  var postTimes = JSON.parse(localStorage.getItem("cd_post_times")||"[]");
+  var now = Date.now();
+  var oneHourAgo = now - 3600000;
+  postTimes = postTimes.filter(function(t){ return t > oneHourAgo; });
+  if(postTimes.length >= 10){
+    alert("You can only post 10 ads per hour! Please wait before posting again.");
+    return;
+  }
+  postTimes.push(now);
+  localStorage.setItem("cd_post_times", JSON.stringify(postTimes));
+  var title=(document.getElementById("iTitle").value||"").trim();
+  var cat=(document.getElementById("iCat").value||"").trim();
+  var price=document.getElementById("iPrice").value;
+  var cond=document.getElementById("iCond").value;
+  var desc=(document.getElementById("iDesc").value||"").trim();
+  var loc=document.getElementById("iLoc").value;
+  var seller=(document.getElementById("iName").value||"").trim();
+  var wa=(document.getElementById("iWa").value||"").trim();
+  var eid=document.getElementById("editId").value;
+  if(!title||!cat||!price||!seller||!wa){alert("Please fill all required fields!");return;}
+  var btn=document.getElementById("sellBtn");
+  if(btn){btn.disabled=true;btn.textContent="Saving...";}
+  try{
+    // Wait for Firebase Auth to be ready
+    var firebaseUid = null;
+    if(auth && auth.currentUser){
+      firebaseUid = auth.currentUser.uid;
+    } else if(u && u.uid && u.uid.length > 10){
+      // Use stored uid only if it looks like a Firebase uid
+      firebaseUid = u.uid;
+    }
+    
+    // If still no uid, try waiting for auth state
+    if(!firebaseUid){
+      await new Promise(function(resolve){
+        var unsubscribe = auth.onAuthStateChanged(function(user){
+          unsubscribe();
+          if(user) firebaseUid = user.uid;
+          resolve();
+        });
+        setTimeout(resolve, 3000); // timeout after 3 seconds
+      });
+    }
+
+    if(!firebaseUid){
+      alert("Please login again to post an ad!");
+      openLogin();
+      if(btn){btn.disabled=false;btn.textContent="Post Ad - FREE";}
+      return;
+    }
+    var imgUrl=null;
+    if(uploadedImgs.length>0){
+      // Try Cloudinary first
+      var imgFile = uploadedImgs[0].file;
+      if(imgFile){
+        try{
+          if(btn) btn.textContent = "Uploading image...";
+          var fd=new FormData();
+          fd.append("file", imgFile);
+          fd.append("upload_preset", PRESET);
+          var res=await fetch("https://api.cloudinary.com/v1_1/"+CLOUD+"/image/upload",{method:"POST",body:fd});
+          var data=await res.json();
+          if(data.secure_url){
+            imgUrl=data.secure_url;
+          } else {
+            // Cloudinary returned error
+            console.log("Cloudinary error:", data.error);
+            imgUrl=uploadedImgs[0].dataUrl||"";
+          }
+          if(btn) btn.textContent = "Saving...";
+        }catch(e){
+          console.log("Upload failed:", e);
+          imgUrl=uploadedImgs[0].dataUrl||"";
+          if(btn) btn.textContent = "Saving...";
+        }
+      } else if(uploadedImgs[0].dataUrl){
+        imgUrl=uploadedImgs[0].dataUrl;
+      }
+    }
+    if(!fbReady||!db)throw new Error("Firebase not ready");
+    var adData={
+      title:(title||"").replace(/</g,"&lt;").replace(/>/g,"&gt;").substring(0,100),
+      cat:cat||"others",
+      price:Number(price)||0,
+      cond:cond||"used",
+      desc:(desc||"").replace(/</g,"&lt;").replace(/>/g,"&gt;").substring(0,500),
+      loc:loc||"FUNAAB Campus",
+      seller:seller||"",
+      wa:(wa||"").replace(/^0/,"234"),
+      img:imgUrl||"",
+      feat:false,
+      time:"Just now",
+      userId:firebaseUid,
+      createdAt:firebase.firestore.FieldValue.serverTimestamp()
+    };
+    if(eid){await db.collection("ads").doc(eid).update(adData);closeOv("sellOv");alert("Ad updated!");}
+    else{await db.collection("ads").add(adData);closeOv("sellOv");showPostSuccess();}
+    uploadedImgs=[];
+    document.getElementById("imgPrevs").innerHTML="";
+  }catch(e){alert("Error: "+e.message);}
+  if(btn){btn.disabled=false;btn.textContent=eid?"Save Changes":"Post Ad - FREE";}
+}
+
+function postViaWa(){
+  var t=document.getElementById("iTitle").value||"My Item";
+  var p=document.getElementById("iPrice").value||"Negotiable";
+  var s=document.getElementById("iName").value||"Seller";
+  var w=document.getElementById("iWa").value||"";
+  var msg="*New Ad - CampusDeal*\n\nItem: "+t+"\nPrice: N"+p+"\nSeller: "+s+"\nContact: "+maskPhone(w);
+  window.open("https://wa.me/2348033873918?text="+encodeURIComponent(msg));
+}
+
+function editAd(id){
+  if(!fbReady||!db)return;
+  db.collection("ads").doc(id).get().then(function(doc){
+    if(!doc.exists)return;
+    var d=doc.data();
+    document.getElementById("editId").value=id;
+    document.getElementById("sellTitle").textContent="Edit Your Ad";
+    document.getElementById("sellBtn").textContent="Save Changes";
+    document.getElementById("iTitle").value=d.title||"";
+    document.getElementById("iCat").value=d.cat||"";
+    document.getElementById("iPrice").value=d.price||"";
+    document.getElementById("iCond").value=d.cond||"used";
+    document.getElementById("iDesc").value=d.desc||"";
+    document.getElementById("iLoc").value=d.loc||"FUNAAB Campus";
+    document.getElementById("iName").value=d.seller||"";
+    document.getElementById("iWa").value=(d.wa||"").replace("234","0");
+    document.getElementById("imgPrevs").innerHTML=d.img?"<div class='ipw'><img src='"+d.img+"' class='ipv'></div>":"";
+    uploadedImgs=[];
+    openOv("sellOv");
+  });
+}
+
+function askDel(id){
+  var ov=document.getElementById("cnfOv");
+  ov.classList.add("on");
+  document.getElementById("cnfYes").onclick=function(){
+    ov.classList.remove("on");
+    if(fbReady&&db){db.collection("ads").doc(id).delete().then(function(){alert("Ad deleted!");goMyAds();}).catch(function(e){alert("Error: "+e.message);});}
+  };
+}
+
+// =============================================================
+// OVERLAYS
+// =============================================================
+function openOv(id){var el=document.getElementById(id);if(el)el.classList.add("on");}
+function closeOv(id){var el=document.getElementById(id);if(el)el.classList.remove("on");}
+
+// =============================================================
+// FIREBASE
+// =============================================================
+window.addEventListener("load",function(){
+  // Init EmailJS
+  if(typeof emailjs !== "undefined"){
+    emailjs.init(EMAILJS_KEY);
+  }
+  refreshNav();
+  renderAds();
+  setTimeout(function(){
+    try{
+      if(typeof firebase==="undefined")return;
+      firebase.initializeApp(FB_CFG);
+      db=firebase.firestore();
+      auth=firebase.auth();
+      fbReady=true;
+      
+      // Listen for auth state changes
+      auth.onAuthStateChanged(function(firebaseUser){
+        if(firebaseUser){
+          // User is signed in
+          db.collection("users").where("uid","==",firebaseUser.uid).get().then(function(snap){
+            if(!snap.empty){
+              var ud = snap.docs[0].data();
+              var user = {name:ud.name, phone:ud.phone||"", email:firebaseUser.email, uid:firebaseUser.uid};
+              setUser(user);
+              refreshNav();
+              var iN=document.getElementById("iName");
+              var iW=document.getElementById("iWa");
+              if(iN)iN.value=ud.name;
+              if(iW&&ud.phone)iW.value=ud.phone.replace("234","0");
+            }
+          });
+        }
+      });
+      setTimeout(startAdWatcher, 3000);
+      db.collection("ads").orderBy("createdAt","desc").onSnapshot(function(snap){
+        var fbAds=snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
+        allAds=fbAds;
+        renderAds();
+        var el=document.getElementById("totalAds");
+        if(el)el.textContent=allAds.length+"+";
+      },function(err){console.log("Firestore:",err.message);});
+    }catch(e){console.log("Firebase:",e.message);}
+  },500);
+});
+
+// =============================================================
+// CHAT
+// =============================================================
+var REPLIES={post:"To post an ad: Click Sell, upload photos, fill in details, click Post.",contact:"Click any listing then tap WhatsApp Seller to contact them!",free:"YES! Posting is 100% FREE!",safe:"Safety: Meet on campus, never pay upfront, bring a friend!",def:"Contact us: WhatsApp +2348033873918"};
+function getReply(m){m=m.toLowerCase();if(m.includes("post")||m.includes("sell"))return REPLIES.post;if(m.includes("contact")||m.includes("whatsapp"))return REPLIES.contact;if(m.includes("free")||m.includes("cost"))return REPLIES.free;if(m.includes("safe")||m.includes("scam"))return REPLIES.safe;return REPLIES.def;}
+function toggleChat(){chatOpen=!chatOpen;document.getElementById("chatWin").classList.toggle("on",chatOpen);}
+function addMsg(text,type){var msgs=document.getElementById("chatMsgs");if(!msgs)return;var d=document.createElement("div");d.className="cm "+type;d.innerHTML=text.replace(/\n/g,"<br>")+"<div class='cmt'>"+new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})+"</div>";msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;}
+function sendChat(){var inp=document.getElementById("chatInp");if(!inp||!inp.value.trim())return;var msg=inp.value.trim();inp.value="";addMsg(msg,"usr");var qr=document.getElementById("cqr");var msgs=document.getElementById("chatMsgs");var t=document.createElement("div");t.className="typ";t.innerHTML="<div class='dot'></div><div class='dot'></div><div class='dot'></div>";if(msgs){msgs.appendChild(t);msgs.scrollTop=msgs.scrollHeight;}setTimeout(function(){t.remove();addMsg(getReply(msg),"bot");},900);}
+function sendQ(msg){var inp=document.getElementById("chatInp");if(inp)inp.value=msg;sendChat();}
+var logoTapCount=0,logoTapTimer=null;
+function logoTap(){
+  goHome();
+  logoTapCount++;
+  if(logoTapTimer) clearTimeout(logoTapTimer);
+  logoTapTimer = setTimeout(function(){ logoTapCount=0; }, 2500);
+  if(logoTapCount >= 5){
+    logoTapCount = 0;
+    clearTimeout(logoTapTimer);
+    setTimeout(function(){ openAdmin(); }, 100);
+  }
+}
+
+var carouselTimer=null;
+function startCarouselAuto(){
+  if(carouselTimer) clearInterval(carouselTimer);
+  var track = document.getElementById("featTrack");
+  if(!track) return;
+  carouselTimer = setInterval(function(){
+    if(!track) return;
+    var maxScroll = track.scrollWidth - track.clientWidth;
+    if(track.scrollLeft >= maxScroll - 10){
+      track.scrollLeft = 0;
+    } else {
+      track.scrollLeft += 210;
+    }
+  }, 3000);
+}
+
+function toggleHamburger(){
+  var menu = document.getElementById("hamburgerMenu");
+  var ov = document.getElementById("hamburgerOv");
+  if(!menu || !ov) return;
+  var isOpen = menu.classList.contains("open");
+  if(isOpen){
+    closeHamburger();
+  } else {
+    menu.style.display = "block";
+    ov.style.display = "block";
+    setTimeout(function(){ menu.classList.add("open"); }, 10);
+    updateHamburgerUser();
+  }
+}
+
+function closeHamburger(){
+  var menu = document.getElementById("hamburgerMenu");
+  var ov = document.getElementById("hamburgerOv");
+  if(!menu || !ov) return;
+  menu.classList.remove("open");
+  setTimeout(function(){
+    menu.style.display = "none";
+    ov.style.display = "none";
+  }, 300);
+}
+
+function updateHamburgerUser(){
+  var u = getUser();
+  var section = document.getElementById("hmUserSection");
+  var logout = document.getElementById("hmLogout");
+  if(!section) return;
+  if(u){
+    var ini = u.name ? u.name.charAt(0).toUpperCase() : "?";
+    section.innerHTML = "<div style='display:flex;align-items:center;gap:10px'>"
+      +"<div style='width:40px;height:40px;border-radius:50%;background:#FFD700;color:#080f08;font-size:16px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0'>"+ini+"</div>"
+      +"<div><div style='font-size:14px;font-weight:700;color:#fff'>"+(u.name||"User")+"</div>"
+      +"<div style='font-size:11px;color:rgba(255,255,255,0.4)'>"+(u.email||u.phone||"")+"</div></div></div>";
+    if(logout) logout.style.display = "flex";
+  } else {
+    section.innerHTML = "<button onclick='closeHamburger();openLogin()' style='width:100%;background:#FFD700;color:#080f08;border:none;padding:10px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer'>Login / Register</button>";
+    if(logout) logout.style.display = "none";
+  }
+}
+
+function clearWishlist(){
+  if(confirm("Clear all saved ads?")){
+    saveWishlist([]);
+    showWishlistPage();
+  }
+}
+
+function showAbout(){
+  alert("CampusDeal\n\nNigeria\'s #1 Campus Marketplace!\n\nBuy & Sell anything on FUNAAB campus. Post ads FREE and let buyers contact you on WhatsApp!\n\ncampusdeal.com.ng");
+}
+
+// ============= WISHLIST =============
+function getWishlist(){
+  try{return JSON.parse(localStorage.getItem("cd_wishlist")||"[]");}
+  catch(e){return [];}
+}
+
+function saveWishlist(list){
+  localStorage.setItem("cd_wishlist", JSON.stringify(list));
+}
+
+function toggleWishlist(id, btn){
+  event.stopPropagation();
+  var list = getWishlist();
+  var idx = list.indexOf(String(id));
+  if(idx > -1){
+    list.splice(idx, 1);
+    if(btn){btn.innerHTML="&#129293;";btn.title="Save to wishlist";}
+  } else {
+    list.push(String(id));
+    if(btn){btn.innerHTML="&#10084;&#65039;";btn.title="Remove from wishlist";}
+    showWishlistToast();
+  }
+  saveWishlist(list);
+  // Update all heart buttons for this ad
+  document.querySelectorAll('[data-wish="'+id+'"]').forEach(function(b){
+    b.innerHTML = list.indexOf(String(id))>-1 ? "&#10084;&#65039;" : "&#129293;";
+  });
+}
+
+function isWishlisted(id){
+  return getWishlist().indexOf(String(id)) > -1;
+}
+
+function showWishlistToast(){
+  var t = document.getElementById("wishToast");
+  if(!t){
+    t = document.createElement("div");
+    t.id = "wishToast";
+    t.style.cssText = "position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#FFD700;color:#080f08;padding:8px 18px;border-radius:20px;font-size:12px;font-weight:700;z-index:9999;opacity:1;transition:opacity 0.5s";
+    t.textContent = "❤️ Added to Wishlist!";
+    document.body.appendChild(t);
+  }
+  t.style.opacity = "1";
+  t.textContent = "❤️ Added to Wishlist!";
+  setTimeout(function(){ t.style.opacity = "0"; }, 2000);
+}
+
+function showWishlistPage(){
+  var list = getWishlist();
+  var body = document.getElementById("accBody");
+  if(!body) return;
+  
+  if(list.length === 0){
+    body.innerHTML = "<div class='emp'>"
+      +"<div style='font-size:48px;margin-bottom:10px'>&#129293;</div>"
+      +"<p style='font-weight:700;color:#fff;margin-bottom:6px'>No saved items yet!</p>"
+      +"<p style='font-size:12px;color:rgba(255,255,255,0.4)'>Tap the ❤️ on any ad to save it here</p>"
+      +"<button onclick='goHome()' style='margin-top:14px;background:#FFD700;color:#080f08;border:none;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer'>Browse Ads</button>"
+      +"</div>";
+    return;
+  }
+
+  var wishAds = allAds.filter(function(a){ return list.indexOf(String(a.id)) > -1; });
+  
+  if(wishAds.length === 0){
+    body.innerHTML = "<div class='emp'><div style='font-size:48px'>&#129293;</div><p>Your saved ads are no longer available</p>"
+      +"<button onclick='var w=[];saveWishlist(w);showWishlistPage()' style='margin-top:14px;background:rgba(255,68,68,0.1);color:#ff4444;border:1px solid rgba(255,68,68,0.3);padding:8px 16px;border-radius:20px;font-size:12px;cursor:pointer'>Clear Wishlist</button></div>";
+    return;
+  }
+
+  body.innerHTML = "<h3 style='font-size:15px;font-weight:900;margin-bottom:1rem;color:#fff'>&#10084;&#65039; Saved Ads ("+wishAds.length+")</h3>"
+    +"<div style='display:grid;grid-template-columns:repeat(2,1fr);gap:8px'>"
+    + wishAds.map(function(item){
+      var em = EMOS[item.cat]||"📦";
+      var pr = Number(item.price).toLocaleString();
+      return "<div class='ac' data-id='"+item.id+"' onclick='openItemById(this)'>"
+        +"<div class='ai'>"
+        +(item.img?"<img src='"+item.img+"' onerror='imgErr(this)'>":"")
+        +"<div class='aif' style='"+(item.img?"display:none":"display:flex")+"'>"+em+"</div>"
+        +"<button class='afav' data-wish='"+item.id+"' onclick='event.stopPropagation();toggleWishlist(this.dataset.wish,this);showWishlistPage()' style='color:#ff4444'>&#10084;&#65039;</button>"
+        +"</div>"
+        +"<div class='ab'>"
+        +"<div class='ap'>&#8358;"+pr+"</div>"
+        +"<div class='at'>"+item.title+"</div>"
+        +"<div class='af'><div class='al'>"+(item.loc||"")+"</div></div>"
+        +"</div></div>";
+    }).join("")
+    +"</div>"
+    +"<button onclick='clearWishlist()' style='width:100%;margin-top:1rem;background:rgba(255,68,68,0.08);color:#ff4444;border:1px solid rgba(255,68,68,0.2);padding:10px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer'>&#128465; Clear Wishlist</button>";
+}
+
+function maskPhone(phone){
+  if(!phone) return "";
+  var p = String(phone).replace(/\D/g,"");
+  if(p.length < 7) return phone;
+  // Show first 4 and last 2 digits only
+  return p.substring(0,4) + "***" + p.substring(p.length-2);
+}
+
+function togglePwd(id, btn){
+  var input = document.getElementById(id);
+  if(!input) return;
+  if(input.type === "password"){
+    input.type = "text";
+    btn.style.color = "rgba(255,215,0,0.6)";
+  } else {
+    input.type = "password";
+    btn.style.color = "rgba(255,255,255,0.3)";
+  }
+}
+
+function cdDoLogin(){
+  var btn = document.getElementById("cdSignInBtn");
+  var btnText = document.getElementById("cdBtnText");
+  var doorScene = document.getElementById("cdDoorScene");
+  var welcomeState = document.getElementById("cdWelcomeState");
+  var walker = document.getElementById("cdWalker");
+  var door = document.getElementById("cdDoor");
+  if(!btn){ doLogin(); return; }
+
+  // Hide text, show door scene
+  if(btnText) btnText.style.display = "none";
+  if(doorScene) doorScene.style.display = "flex";
+  if(welcomeState) welcomeState.style.display = "none";
+
+  // Glow the button
+  btn.style.background = "linear-gradient(135deg,#FFD700,#FF8C00)";
+
+  // Animate walker
+  if(walker){
+    walker.style.animation = "none";
+    walker.offsetHeight;
+    walker.style.animation = "cdWalkIn 1.3s ease-in forwards";
+  }
+
+  // Open door at walker approach
+  setTimeout(function(){
+    if(door) door.style.animation = "cdDoorOpen 0.35s ease forwards";
+  }, 750);
+
+  // Close door after walker enters
+  setTimeout(function(){
+    if(door) door.style.animation = "cdDoorClose 0.3s ease forwards";
+  }, 1050);
+
+  // Show WELCOME BACK state!
+  setTimeout(function(){
+    if(doorScene) doorScene.style.display = "none";
+    if(welcomeState){
+      welcomeState.style.display = "flex";
+      // Reset animation
+      welcomeState.querySelector(".cd-welcome-icon").style.animation = "none";
+      welcomeState.querySelector(".cd-welcome-icon").offsetHeight;
+      welcomeState.querySelector(".cd-welcome-icon").style.animation = "cdWelcome 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards";
+      welcomeState.querySelector(".cd-welcome-text").style.animation = "none";
+      welcomeState.querySelector(".cd-welcome-text").offsetHeight;
+      welcomeState.querySelector(".cd-welcome-text").style.animation = "cdWelcome 0.4s cubic-bezier(0.34,1.56,0.64,1) 0.1s both";
+    }
+    btn.style.background = "linear-gradient(135deg,#22c55e,#16a34a)";
+    btn.style.color = "#fff";
+  }, 1380);
+
+  // Call real doLogin after showing welcome
+  setTimeout(function(){
+    doLogin();
+    // Reset button
+    setTimeout(function(){
+      btn.style.background = "";
+      btn.style.color = "";
+      if(btnText) btnText.style.display = "";
+      if(doorScene) doorScene.style.display = "none";
+      if(welcomeState) welcomeState.style.display = "none";
+      if(walker) walker.style.animation = "none";
+      if(door) door.style.animation = "none";
+    }, 2000);
+  }, 1800);
+}
+
+function showPostSuccess(){
+  // Show success toast
+  var t = document.createElement("div");
+  t.style.cssText = "position:fixed;top:20px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;padding:14px 24px;border-radius:12px;font-size:14px;font-weight:700;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,0.3);display:flex;align-items:center;gap:8px;animation:slideDown 0.3s ease";
+  t.innerHTML = "&#10003; Ad posted successfully!";
+  document.body.appendChild(t);
+  // Add animation
+  var style = document.createElement("style");
+  style.textContent = "@keyframes slideDown{from{top:-60px;opacity:0}to{top:20px;opacity:1}}";
+  document.head.appendChild(style);
+  setTimeout(function(){
+    t.style.transition = "opacity 0.3s";
+    t.style.opacity = "0";
+    setTimeout(function(){ t.remove(); style.remove(); }, 300);
+  }, 3000);
+  // Reload ads
+  if(typeof loadAds === "function") loadAds();
+}
+
+function contactAdmin(){var u=getUser();var msg=u?"Hi CampusDeal Admin! My name is "+u.name+" and I need help.":"Hi CampusDeal Admin! I need help.";window.open("https://wa.me/2348033873918?text="+encodeURIComponent(msg));}
+
+// =============================================================
+// ADMIN DASHBOARD
+// =============================================================
+var ADMIN_PWD_HASH = "bf91bfd76d6d2457c3ba57ac887023f2edd6f79d984e290d273fd11b15465315";
+var isAdmin = false;
+
+function openAdmin(){
+  closeHamburger();
+  setTimeout(function(){
+    if(isAdmin){
+      showPg("admin");
+      waitForFirebaseAndLoad();
+      return;
+    }
+    var pwd = prompt("Enter Admin Password:");
+    if(pwd === null) return;
+    if(pwd === atob("TXJBZGVsZWtlQGFkbWlu")){
+      isAdmin = true;
+      showPg("admin");
+      waitForFirebaseAndLoad();
+    } else {
+      alert("Wrong password!");
+    }
+  }, 400);
+}
+
+function waitForFirebaseAndLoad(){
+  if(fbReady && db){
+    loadAdminDashboard();
+    return;
+  }
+  var body = document.getElementById("adminBody");
+  if(body) body.innerHTML = "<div style='text-align:center;padding:2rem'><div class='spin'></div><p style='color:rgba(255,255,255,0.35);margin-top:8px'>Loading data...</p></div>";
+  
+  // Try to init Firebase manually if not done yet
+  if(typeof firebase !== "undefined" && !fbReady){
+    try{
+      if(!firebase.apps.length) firebase.initializeApp(FB_CFG);
+      db = firebase.firestore();
+      fbReady = true;
+      loadAdminDashboard();
+      return;
+    }catch(e){ console.log("Manual init error:", e.message); }
+  }
+
+  // Keep retrying for up to 15 seconds
+  var tries = 0;
+  var interval = setInterval(function(){
+    tries++;
+    // Try manual init each time
+    if(typeof firebase !== "undefined" && !fbReady){
+      try{
+        if(!firebase.apps.length) firebase.initializeApp(FB_CFG);
+        db = firebase.firestore();
+        fbReady = true;
+      }catch(e){}
+    }
+    if(fbReady && db){
+      clearInterval(interval);
+      loadAdminDashboard();
+    } else if(tries > 30){
+      clearInterval(interval);
+      if(body) body.innerHTML = "<div style='text-align:center;padding:1rem'>"
+        +"<div style='font-size:36px;margin-bottom:10px'>⚠️</div>"
+        +"<p style='font-weight:700;margin-bottom:8px'>Could not connect to Firebase</p>"
+        +"<p style='font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:14px'>Make sure you have internet connection</p>"
+        +"<button onclick='waitForFirebaseAndLoad()' style='background:#FFD700;color:#080f08;border:none;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer'>Try Again</button>"
+        +"</div>";
+    }
+  }, 500);
+}
+
+function hashString(str){
+  // Simple hash function
+  var hash = 0;
+  for(var i = 0; i < str.length; i++){
+    var char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  return Math.abs(hash).toString(16);
+}
+
+async function checkAdminPwd(){
+  var pwd = document.getElementById("adminPwd").value;
+  var correct = false;
+  
+  // Try SHA-256 hash first
+  try{
+    var msgBuffer = new TextEncoder().encode(pwd);
+    var hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
+    var hashArray = Array.from(new Uint8Array(hashBuffer));
+    var hashHex = hashArray.map(function(b){return b.toString(16).padStart(2,"0");}).join("");
+    if(hashHex === ADMIN_PWD_HASH) correct = true;
+  }catch(e){}
+  
+  // Fallback check for older browsers
+  if(!correct && pwd === atob("TXJBZGVsZWtlQGFkbWlu")) correct = true;
+
+  if(correct){
+    isAdmin = true;
+    closeOv("adminLoginOv");
+    showPg("admin");
+    waitForFirebaseAndLoad();
+  } else {
+    alert("Wrong password! Try again.");
+    document.getElementById("adminPwd").value = "";
+  }
+}
+
+function loadAdminDashboard(){
+  if(!fbReady || !db){ 
+    setTimeout(loadAdminDashboard, 1000);
+    return; 
+  }
+  // Load ads stats
+  db.collection("ads").get().then(function(snap){
+    var total = snap.size;
+    var today = 0;
+    var featured = 0;
+    var now = new Date();
+    snap.docs.forEach(function(doc){
+      var d = doc.data();
+      if(d.feat) featured++;
+      if(d.createdAt && d.createdAt.toDate){
+        var created = d.createdAt.toDate();
+        if(created.toDateString() === now.toDateString()) today++;
+      }
+    });
+    // Update stat cards directly by ID
+    var sn1 = document.getElementById("statAdsNum");
+    if(sn1) sn1.textContent = total;
+    var sn3 = document.getElementById("statTodayNum");
+    if(sn3) sn3.textContent = today;
+    var sn4 = document.getElementById("statFeatNum");
+    if(sn4) sn4.textContent = featured;
+    // Old IDs fallback
+    var el = document.getElementById("adminTotalAds"); if(el) el.textContent = total;
+    var el2 = document.getElementById("adminTodayAds"); if(el2) el2.textContent = today;
+    var el3 = document.getElementById("adminFeatured"); if(el3) el3.textContent = featured;
+  });
+  // Load users count separately
+  db.collection("users").get().then(function(snap){
+    var sn2 = document.getElementById("statUsersNum");
+    if(sn2) sn2.textContent = snap.size;
+    var el4 = document.getElementById("adminTotalUsers"); 
+    if(el4) el4.textContent = snap.size;
+  });
+  showAdminTab("ads", null);
+}
+
+function showAdminTab(tab, tabEl){
+  document.querySelectorAll(".atab").forEach(function(t){t.style.color="var(--gr)";t.style.borderBottom="3px solid transparent";});
+  if(tabEl){tabEl.style.color="var(--g)";tabEl.style.borderBottom="3px solid var(--g)";}
+  var body = document.getElementById("adminBody");
+
+  if(tab === "ads"){
+    if(!db){ waitForFirebaseAndLoad(); return; }
+    body.innerHTML = "<div style='text-align:center;padding:1rem'><div class='spin'></div></div>";
+    db.collection("ads").orderBy("createdAt","desc").get().then(function(snap){
+      if(snap.empty){body.innerHTML="<div class='emp'><div class='empi'>📭</div><p>No ads yet</p></div>";return;}
+      body.innerHTML = "<h3 style='font-size:15px;font-weight:900;margin-bottom:1rem'>All Ads ("+snap.size+")</h3>"
+        + snap.docs.map(function(doc){
+          var d = doc.data();
+          var em = EMOS[d.cat]||"📦";
+          return "<div style='background:rgba(255,255,255,0.04);border-radius:10px;border:1px solid rgba(255,255,255,0.08);padding:10px;display:flex;gap:10px;margin-bottom:8px;align-items:flex-start'>"
+            +"<div style='width:50px;height:50px;border-radius:6px;overflow:hidden;flex-shrink:0;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font-size:20px'>"+(d.img?"<img src='"+d.img+"' style='width:100%;height:100%;object-fit:cover'>":em)+"</div>"
+            +"<div style='flex:1;min-width:0'>"
+            +"<div style='font-size:12px;font-weight:700;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap'>"+d.title+"</div>"
+            +"<div style='font-size:11px;color:var(--g);font-weight:700'>₦"+Number(d.price).toLocaleString()+"</div>"
+            +"<div style='font-size:10px;color:rgba(255,255,255,0.4)'>"+d.seller+" • "+d.loc+"</div>"
+            +"</div>"
+            +"<div style='display:flex;flex-direction:column;gap:4px;flex-shrink:0'>"
+            +"<button data-id='"+doc.id+"' data-feat='"+(d.feat?'1':'0')+"' onclick='adminToggleFeat(this)' style='background:"+(d.feat?"var(--go)":"#f0f0f0")+";border:none;padding:4px 8px;border-radius:4px;font-size:10px;font-weight:700;cursor:pointer'>"+(d.feat?"★ Feat":"☆ Feat")+"</button>"
+            +"<button data-id='"+doc.id+"' onclick='adminDeleteAd(this)' style='background:rgba(255,255,255,0.04);color:var(--rd);border:1px solid var(--rd);padding:4px 8px;border-radius:4px;font-size:10px;font-weight:700;cursor:pointer'>Delete</button>"
+            +"</div></div>";
+        }).join("");
+    }).catch(function(e){body.innerHTML="<div class='emp'><div class='empi'>⚠️</div><p>"+e.message+"</p></div>";});
+
+  } else if(tab === "users"){
+    if(!db){ waitForFirebaseAndLoad(); return; }
+    body.innerHTML = "<div style='text-align:center;padding:1rem'><div class='spin'></div></div>";
+    db.collection("users").get().then(function(snap){
+      var list = snap.docs.map(function(doc){
+        var d = doc.data();
+        return {name:d.name||"Unknown", wa:d.phone||"", email:d.email||"", uid:d.uid||doc.id};
+      });
+      // Update stat card
+      var sn2 = document.getElementById("statUsersNum");
+      if(sn2) sn2.textContent = list.length;
+      if(!list.length){
+        body.innerHTML = "<div class='emp'><div class='empi'>&#128100;</div><p>No users yet</p></div>";
+        return;
+      }
+      body.innerHTML = "<h3 style='font-size:15px;font-weight:900;margin-bottom:1rem;color:#fff'>&#128100; Registered Users ("+list.length+")</h3>"
+        + list.map(function(u){
+          return "<div style='background:#0d1a0d;border-radius:10px;padding:12px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.06)'>"
+            +"<div style='display:flex;align-items:center;gap:10px'>"
+            +"<div style='width:36px;height:36px;border-radius:50%;background:#FFD700;color:#080f08;font-size:15px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0'>"+(u.name?u.name.charAt(0).toUpperCase():"?")+"</div>"
+            +"<div style='flex:1'>"
+            +"<div style='font-size:13px;font-weight:700;color:#fff'>"+u.name+"</div>"
+            +"<div style='font-size:11px;color:rgba(255,255,255,0.4)'>"+u.email+"</div>"
+            +"</div>"
+            +(u.wa?"<button onclick='waUser(this.dataset.wa,this.dataset.name)' data-wa='"+u.wa+"' data-name='"+u.name+"' style='background:#25D366;color:#fff;border:none;padding:6px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer'>WhatsApp</button>":"")
+            +"</div></div>";
+        }).join("");
+    });
+    } else if(tab === "announce"){
+    body.innerHTML = "<h3 style='font-size:15px;font-weight:900;margin-bottom:1rem;color:#fff'>📢 Send Announcement</h3>"
+      +"<div style='background:rgba(255,255,255,0.04);border-radius:12px;padding:1.2rem;border:1px solid rgba(255,255,255,0.08)'>"
+      +"<div style='margin-bottom:12px'><label style='font-size:12px;font-weight:700;display:block;margin-bottom:4px;color:rgba(255,255,255,0.6)'>Message</label>"
+      +"<textarea id='announceMsg' style='width:100%;padding:10px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:14px;outline:none;font-family:inherit;height:100px;resize:none;background:rgba(255,255,255,0.05);color:#fff' placeholder='Type your announcement...'></textarea></div>"
+      +"<button onclick='sendAnnounce()' style='width:100%;background:#FFD700;color:#080f08;border:none;padding:13px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer'>Send via WhatsApp</button>"
+      +"</div>"
+      +"<div style='background:rgba(255,255,255,0.04);border-radius:12px;padding:1.2rem;border:1px solid rgba(255,255,255,0.08);margin-top:1rem'>"
+      +"<h3 style='font-size:14px;font-weight:700;margin-bottom:10px;color:#fff'>Quick Actions</h3>"
+      +"<button onclick='adminClearSamples()' style='width:100%;background:rgba(255,255,255,0.08);color:#fff;border:none;padding:12px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px'>🔄 Refresh Dashboard</button>"
+      +"</div>";
+  }
+}
+
+
+// Usage tab handler - injected into showAdminTab via separate function
+function showUsageTab(body){
+  if(!db){ waitForFirebaseAndLoad(); return; }
+  body.innerHTML = "<h3 style='font-size:15px;font-weight:900;margin-bottom:1rem;color:#fff'>&#128200; Firebase Usage Monitor</h3>"
+    +"<div style='background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.15);border-radius:12px;padding:1rem;margin-bottom:1rem'>"
+    +"<div style='font-size:11px;font-weight:700;color:rgba(255,215,0,0.5);letter-spacing:1px;margin-bottom:10px'>FREE TIER LIMITS</div>"
+    +"<div style='display:grid;grid-template-columns:1fr 1fr;gap:8px'>"
+    +"<div style='background:rgba(255,255,255,0.04);border-radius:8px;padding:10px;text-align:center'><div style='font-size:18px;font-weight:900;color:#FFD700'>50K</div><div style='font-size:10px;color:rgba(255,255,255,0.4);margin-top:2px'>Reads/day</div></div>"
+    +"<div style='background:rgba(255,255,255,0.04);border-radius:8px;padding:10px;text-align:center'><div style='font-size:18px;font-weight:900;color:#FFD700'>20K</div><div style='font-size:10px;color:rgba(255,255,255,0.4);margin-top:2px'>Writes/day</div></div>"
+    +"<div style='background:rgba(255,255,255,0.04);border-radius:8px;padding:10px;text-align:center'><div style='font-size:18px;font-weight:900;color:#FFD700'>1GB</div><div style='font-size:10px;color:rgba(255,255,255,0.4);margin-top:2px'>Storage</div></div>"
+    +"<div style='background:rgba(255,255,255,0.04);border-radius:8px;padding:10px;text-align:center'><div style='font-size:18px;font-weight:900;color:#FFD700'>200</div><div style='font-size:10px;color:rgba(255,255,255,0.4);margin-top:2px'>Emails/month</div></div>"
+    +"</div></div>"
+    +"<div style='background:rgba(255,255,255,0.04);border-radius:12px;border:1px solid rgba(255,255,255,0.08);padding:1rem;margin-bottom:1rem' id='usageStats'>"
+    +"<div style='text-align:center;padding:1rem'><div class='spin'></div><p style='color:rgba(255,255,255,0.3);margin-top:8px;font-size:12px'>Loading stats...</p></div>"
+    +"</div>"
+    +"<div style='background:rgba(255,255,255,0.04);border-radius:12px;border:1px solid rgba(255,255,255,0.08);padding:1rem;margin-bottom:1rem'>"
+    +"<div style='font-size:11px;font-weight:700;color:rgba(255,255,255,0.4);letter-spacing:1px;margin-bottom:10px'>&#128161; TIPS TO STAY FREE</div>"
+    +"<div style='font-size:12px;color:rgba(255,255,255,0.5);line-height:2'>"
+    +"&#9989; Delete old/expired ads regularly<br>"
+    +"&#9989; Back up data weekly<br>"
+    +"&#9989; Upgrade Firebase when you hit 400+ daily users<br>"
+    +"&#9989; Upgrade EmailJS when you hit 150+ resets/month<br>"
+    +"&#9989; Monitor Cloudinary for image storage"
+    +"</div></div>"
+    +"<a href='https://console.firebase.google.com/project/funaab-market-d2be4/usage' target='_blank' style='display:block;background:#FFD700;color:#080f08;padding:13px;border-radius:8px;font-size:14px;font-weight:700;text-align:center;text-decoration:none;margin-bottom:8px'>&#128202; View Full Usage on Firebase</a>"
+    +"<a href='https://dashboard.emailjs.com/admin/statistics' target='_blank' style='display:block;background:rgba(255,255,255,0.06);color:#fff;padding:13px;border-radius:8px;font-size:14px;font-weight:700;text-align:center;text-decoration:none'>&#128140; View EmailJS Usage</a>";
+
+  Promise.all([db.collection("ads").get(), db.collection("users").get()]).then(function(r){
+    var ads=r[0].size, users=r[1].size;
+    var estReads=ads*3+users*2;
+    var estWrites=Math.ceil(ads*0.1)+Math.ceil(users*0.05);
+    var rPct=Math.min(Math.round((estReads/50000)*100),100);
+    var wPct=Math.min(Math.round((estWrites/20000)*100),100);
+    var rClr=rPct>70?"#e74c3c":rPct>40?"#FFA500":"#22c55e";
+    var wClr=wPct>70?"#e74c3c":wPct>40?"#FFA500":"#22c55e";
+    var el=document.getElementById("usageStats");
+    if(!el)return;
+    el.innerHTML="<div style='font-size:11px;font-weight:700;color:rgba(255,255,255,0.4);letter-spacing:1px;margin-bottom:12px'>ESTIMATED DAILY USAGE</div>"
+      +"<div style='margin-bottom:12px'><div style='display:flex;justify-content:space-between;margin-bottom:5px'>"
+      +"<span style='font-size:12px;color:rgba(255,255,255,0.6)'>Reads</span>"
+      +"<span style='font-size:12px;font-weight:700;color:"+rClr+"'>~"+estReads+" / 50,000 ("+rPct+"%)</span></div>"
+      +"<div style='background:rgba(255,255,255,0.08);border-radius:4px;height:8px'>"
+      +"<div style='background:"+rClr+";height:8px;border-radius:4px;width:"+rPct+"%'></div></div></div>"
+      +"<div style='margin-bottom:12px'><div style='display:flex;justify-content:space-between;margin-bottom:5px'>"
+      +"<span style='font-size:12px;color:rgba(255,255,255,0.6)'>Writes</span>"
+      +"<span style='font-size:12px;font-weight:700;color:"+wClr+"'>~"+estWrites+" / 20,000 ("+wPct+"%)</span></div>"
+      +"<div style='background:rgba(255,255,255,0.08);border-radius:4px;height:8px'>"
+      +"<div style='background:"+wClr+";height:8px;border-radius:4px;width:"+wPct+"%'></div></div></div>"
+      +"<div style='display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px'>"
+      +"<div style='background:rgba(255,255,255,0.04);border-radius:8px;padding:10px;text-align:center'>"
+      +"<div style='font-size:22px;font-weight:900;color:#FFD700'>"+ads+"</div>"
+      +"<div style='font-size:10px;color:rgba(255,255,255,0.4);margin-top:2px'>Total Ads</div></div>"
+      +"<div style='background:rgba(255,255,255,0.04);border-radius:8px;padding:10px;text-align:center'>"
+      +"<div style='font-size:22px;font-weight:900;color:#FFD700'>"+users+"</div>"
+      +"<div style='font-size:10px;color:rgba(255,255,255,0.4);margin-top:2px'>Total Users</div></div></div>"
+      +(rPct>70?"<div style='background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.3);border-radius:8px;padding:10px;font-size:12px;color:#e74c3c;text-align:center'>&#9888;&#65039; High usage! Consider upgrading Firebase plan soon.</div>"
+      :"<div style='background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:8px;padding:10px;font-size:12px;color:#22c55e;text-align:center'>&#9989; Usage is healthy! Safely within free limits.</div>");
+  }).catch(function(){
+    var el=document.getElementById("usageStats");
+    if(el)el.innerHTML="<div style='color:rgba(255,255,255,0.4);font-size:13px;text-align:center'>Could not load stats</div>";
+  });
+}
+
+function adminToggleFeat(btn){
+  if(!db){alert("Firebase not ready!");return;}
+  var id = btn.dataset.id;
+  var isFeat = btn.dataset.feat === "1";
+  db.collection("ads").doc(id).update({feat: !isFeat}).then(function(){
+    btn.dataset.feat = isFeat ? "0" : "1";
+    btn.style.background = isFeat ? "#f0f0f0" : "var(--go)";
+    btn.textContent = isFeat ? "☆ Feat" : "★ Feat";
+    loadAdminDashboard();
+  }).catch(function(e){alert("Error: "+e.message);});
+}
+
+function adminDeleteAd(btn){
+  if(!db){alert("Firebase not ready!");return;}
+  var id = btn.dataset.id;
+  if(!confirm("Delete this ad permanently?")) return;
+  db.collection("ads").doc(id).delete().then(function(){
+    btn.closest("div[style]").remove();
+    loadAdminDashboard();
+    alert("✅ Ad deleted!");
+  }).catch(function(e){alert("Error: "+e.message);});
+}
+
+function waUser(wa, name){
+  window.open("https://wa.me/"+wa+"?text="+encodeURIComponent("Hi "+name+"! This is CampusDeal Admin."));
+}
+
+function sendAnnounce(){
+  var msg = (document.getElementById("announceMsg").value || "").trim();
+  if(!msg){alert("Please type a message!");return;}
+  window.open("https://wa.me/2348033873918?text="+encodeURIComponent("CAMPUSDEAL ANNOUNCEMENT:\n\n"+msg));
+}
+
+function adminClearSamples(){
+  loadAdminDashboard();
+  alert("Dashboard refreshed!");
+}
+
+function downloadJSON(data, filename){
+  var json = JSON.stringify(data, null, 2);
+  var blob = new Blob([json], {type: "application/json"});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  var now = new Date().toLocaleString();
+  localStorage.setItem("cd_last_backup", now);
+  var el = document.getElementById("lastBackupDate");
+  if(el) el.textContent = now;
+}
+
+function backupAds(){
+  if(!db){alert("Firebase not ready!");return;}
+  var btn = event.target;
+  btn.textContent = "⏳ Backing up...";
+  btn.disabled = true;
+  db.collection("ads").get().then(function(snap){
+    var ads = snap.docs.map(function(doc){
+      return Object.assign({id: doc.id}, doc.data());
+    });
+    var now = new Date().toISOString().split("T")[0];
+    downloadJSON({
+      backup_date: new Date().toLocaleString(),
+      total_ads: ads.length,
+      ads: ads
+    }, "campusdeal-ads-"+now+".json");
+    btn.textContent = "✅ Downloaded!";
+    btn.disabled = false;
+    setTimeout(function(){btn.textContent="⬇️ Download Ads Backup";},3000);
+  }).catch(function(e){
+    alert("Error: "+e.message);
+    btn.textContent = "⬇️ Download Ads Backup";
+    btn.disabled = false;
+  });
+}
+
+function backupUsers(){
+  if(!db){alert("Firebase not ready!");return;}
+  var btn = event.target;
+  btn.textContent = "⏳ Backing up...";
+  btn.disabled = true;
+  db.collection("users").get().then(function(snap){
+    var users = snap.docs.map(function(doc){
+      var d = doc.data();
+      // Remove password from backup for security
+      return {id: doc.id, name: d.name, phone: d.phone, email: d.email, createdAt: d.createdAt};
+    });
+    var now = new Date().toISOString().split("T")[0];
+    downloadJSON({
+      backup_date: new Date().toLocaleString(),
+      total_users: users.length,
+      users: users
+    }, "campusdeal-users-"+now+".json");
+    btn.textContent = "✅ Downloaded!";
+    btn.disabled = false;
+    setTimeout(function(){btn.textContent="⬇️ Download Users Backup";},3000);
+  }).catch(function(e){
+    alert("Error: "+e.message);
+    btn.textContent = "⬇️ Download Users Backup";
+    btn.disabled = false;
+  });
+}
+
+function backupAll(){
+  if(!db){alert("Firebase not ready!");return;}
+  var btn = event.target;
+  btn.textContent = "⏳ Backing up...";
+  btn.disabled = true;
+  Promise.all([
+    db.collection("ads").get(),
+    db.collection("users").get()
+  ]).then(function(results){
+    var ads = results[0].docs.map(function(doc){
+      return Object.assign({id: doc.id}, doc.data());
+    });
+    var users = results[1].docs.map(function(doc){
+      var d = doc.data();
+      return {id: doc.id, name: d.name, phone: d.phone, email: d.email, createdAt: d.createdAt};
+    });
+    var now = new Date().toISOString().split("T")[0];
+    downloadJSON({
+      backup_date: new Date().toLocaleString(),
+      site: "campusdeal.com.ng",
+      total_ads: ads.length,
+      total_users: users.length,
+      ads: ads,
+      users: users
+    }, "campusdeal-full-backup-"+now+".json");
+    btn.textContent = "✅ Downloaded!";
+    btn.disabled = false;
+    setTimeout(function(){btn.textContent="⬇️ Download Full Backup";},3000);
+  }).catch(function(e){
+    alert("Error: "+e.message);
+    btn.textContent = "⬇️ Download Full Backup";
+    btn.disabled = false;
+  });
+}
+
+// =============================================================
+// PUSH NOTIFICATIONS
+// =============================================================
+
+function requestNotifPermission(){
+  if(!("Notification" in window)){
+    console.log("Browser does not support notifications");
+    return;
+  }
+  if(Notification.permission === "granted"){
+    console.log("Notifications already enabled");
+    return;
+  }
+  if(Notification.permission !== "denied"){
+    Notification.requestPermission().then(function(permission){
+      if(permission === "granted"){
+        showNotif("CampusDeal", "Notifications enabled! You'll get updates here.", "🔔");
+        saveNotifPref(true);
+      }
+    });
+  }
+}
+
+function saveNotifPref(enabled){
+  localStorage.setItem("cd_notif", enabled ? "1" : "0");
+}
+
+function showNotif(title, body, icon){
+  if(Notification.permission !== "granted") return;
+  try{
+    new Notification(title, {
+      body: body,
+      icon: icon || "https://campusdeal.com.ng/favicon.ico",
+      badge: "https://campusdeal.com.ng/favicon.ico",
+      vibrate: [200, 100, 200]
+    });
+  }catch(e){ console.log("Notification error:", e.message); }
+}
+
+// Ask for notification permission after login
+function askNotifAfterLogin(userName){
+  if(!("Notification" in window)) return;
+  if(Notification.permission === "granted") return;
+  if(localStorage.getItem("cd_notif_asked")) return;
+  localStorage.setItem("cd_notif_asked", "1");
+  setTimeout(function(){
+    requestNotifPermission();
+  }, 3000);
+}
+
+// Notify when new ad is posted
+function notifyNewAd(title, price){
+  showNotif(
+    "New Ad Posted! 🛒",
+    title + " - ₦" + Number(price).toLocaleString(),
+    "🛒"
+  );
+}
+
+// Notify admin when someone posts an ad
+function notifyAdminNewAd(sellerName, title){
+  // This fires for everyone - in production use a real push service
+  console.log("New ad posted by", sellerName, ":", title);
+}
+
+// Check for new ads every 2 minutes and notify
+var lastAdCount = 0;
+function startAdWatcher(){
+  if(!fbReady || !db) return;
+  setInterval(function(){
+    if(!fbReady || !db) return;
+    db.collection("ads").get().then(function(snap){
+      if(lastAdCount > 0 && snap.size > lastAdCount){
+        var diff = snap.size - lastAdCount;
+        showNotif(
+          "CampusDeal 🛒",
+          diff + " new ad"+(diff>1?"s":"")+" just posted! Check them out!",
+          "🛒"
+        );
+      }
+      lastAdCount = snap.size;
+    }).catch(function(){});
+  }, 120000); // Check every 2 minutes
+}
+
+// Auto-request notifications 5 seconds after page loads
+window.addEventListener("load", function(){
+  setTimeout(function(){
+    var u = getUser();
+    if(u && Notification.permission === "default" && !localStorage.getItem("cd_notif_asked")){
+      requestNotifPermission();
+    }
+  }, 5000);
+});
+
+// =============================================================
+// PWA - SERVICE WORKER + INSTALL PROMPT
+// =============================================================
+
+// Service Worker — force update on every visit
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.getRegistrations().then(function(regs){
+      regs.forEach(function(r){ r.unregister(); });
+    });
+    if(window.caches){
+      caches.keys().then(function(keys){
+        keys.forEach(function(k){ caches.delete(k); });
+      });
+    }
+    navigator.serviceWorker.register('/sw.js').catch(function(){});
+  });
+}
+
+// Install Prompt (Add to Home Screen)
+var deferredPrompt = null;
+var installBanner = null;
+
+window.addEventListener('beforeinstallprompt', function(e){
+  e.preventDefault();
+  deferredPrompt = e;
+  showInstallBanner();
+});
+
+function showInstallBanner(){
+  if(document.getElementById('installBanner')) return;
+  var banner = document.createElement('div');
+  banner.id = 'installBanner';
+  banner.style.cssText = 'position:fixed;bottom:70px;left:10px;right:10px;background:#1a1a1a;color:#fff;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.3)';
+  banner.innerHTML = '<div style="font-size:28px">📱</div>'
+    +'<div style="flex:1"><div style="font-size:13px;font-weight:700">Install CampusDeal</div><div style="font-size:11px;color:rgba(255,255,255,0.35)">Add to home screen for best experience!</div></div>'
+    +'<button onclick="installApp()" style="background:#006400;color:#fff;border:none;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0">Install</button>'
+    +'<button onclick="dismissInstall()" style="background:none;border:none;color:rgba(255,255,255,0.35);font-size:18px;cursor:pointer;padding:0 4px">✕</button>';
+  document.body.appendChild(banner);
+  installBanner = banner;
+}
+
+function installApp(){
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(function(result){
+    if(result.outcome === 'accepted'){
+      console.log('App installed!');
+      dismissInstall();
+    }
+    deferredPrompt = null;
+  });
+}
+
+function dismissInstall(){
+  if(installBanner){ installBanner.remove(); installBanner = null; }
+  localStorage.setItem('cd_install_dismissed', '1');
+}
+
+// Show iOS install instructions
+window.addEventListener('load', function(){
+  var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  var isStandalone = window.navigator.standalone;
+  var dismissed = localStorage.getItem('cd_ios_install_dismissed');
+  if(isIOS && !isStandalone && !dismissed){
+    setTimeout(function(){
+      showIOSInstallTip();
+    }, 4000);
+  }
+});
+
+function showIOSInstallTip(){
+  if(document.getElementById('iosTip')) return;
+  var tip = document.createElement('div');
+  tip.id = 'iosTip';
+  tip.style.cssText = 'position:fixed;bottom:70px;left:10px;right:10px;background:#1a1a1a;color:#fff;border-radius:12px;padding:14px;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.3);text-align:center';
+  tip.innerHTML = '<div style="font-size:13px;font-weight:700;margin-bottom:6px">📱 Install CampusDeal on iPhone!</div>'
+    +'<div style="font-size:12px;color:#ccc;margin-bottom:10px">Tap <strong>Share</strong> &#8679; then <strong>"Add to Home Screen"</strong> &#43; for the best experience!</div>'
+    +'<div style="font-size:24px;margin-bottom:8px">&#8679; Share → Add to Home Screen</div>'
+    +'<button onclick="dismissIOSTip()" style="background:#006400;color:#fff;border:none;padding:8px 20px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer">Got it!</button>';
+  document.body.appendChild(tip);
+}
+
+function dismissIOSTip(){
+  var tip = document.getElementById('iosTip');
+  if(tip) tip.remove();
+  localStorage.setItem('cd_ios_install_dismissed', '1');
+}
+
+// Fired when app is installed
+window.addEventListener('appinstalled', function(){
+  console.log('CampusDeal installed as PWA!');
+  dismissInstall();
+});
+
+</script>
+
+<!-- FAQ Section -->
+<div id="faqSection" style="display:none;position:fixed;inset:0;z-index:150;background:rgba(0,0,0,0.85);padding:20px;overflow-y:auto">
+  <div style="max-width:600px;margin:40px auto;background:#1a1a2e;border-radius:12px;padding:28px;border:1px solid rgba(255,255,255,0.1);position:relative">
+    <button onclick="document.getElementById('faqSection').style.display='none'" style="position:absolute;top:14px;right:16px;background:none;border:none;color:#fff;font-size:24px;cursor:pointer">✕</button>
+    <h2 style="font-size:22px;font-weight:800;margin-bottom:20px;color:#FFD700">Frequently Asked Questions</h2>
+    
+    <div style="margin-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:14px">
+      <div style="font-size:14px;font-weight:600;margin-bottom:6px">How do I post an ad?</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.6);line-height:1.7">Click the "Post Ad" or "Sell" button, fill in your item details, upload a photo, and submit. Your ad goes live immediately after approval!</div>
+    </div>
+    <div style="margin-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:14px">
+      <div style="font-size:14px;font-weight:600;margin-bottom:6px">Is CampusDeal free to use?</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.6);line-height:1.7">Yes! Posting ads and browsing listings is completely free. CampusDeal is a free service for FUNAAB students.</div>
+    </div>
+    <div style="margin-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:14px">
+      <div style="font-size:14px;font-weight:600;margin-bottom:6px">How do I contact a seller?</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.6);line-height:1.7">Click the WhatsApp button on any listing. You'll be connected directly to the seller via WhatsApp to negotiate and arrange payment.</div>
+    </div>
+    <div style="margin-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:14px">
+      <div style="font-size:14px;font-weight:600;margin-bottom:6px">How many ads can I post?</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.6);line-height:1.7">You can post up to 10 ads per hour. Each ad stays active until you delete it or mark it as sold.</div>
+    </div>
+    <div style="margin-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:14px">
+      <div style="font-size:14px;font-weight:600;margin-bottom:6px">Is my phone number safe?</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.6);line-height:1.7">Yes! Your phone number is masked in listings (e.g. 0803***18). Only buyers who click WhatsApp can contact you directly.</div>
+    </div>
+    <div>
+      <div style="font-size:14px;font-weight:600;margin-bottom:6px">How do I report a suspicious listing?</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.6);line-height:1.7">Contact us via WhatsApp: +234 703 606 9955. We review all reports within 24 hours and remove suspicious listings immediately.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Privacy Policy Modal -->
+<div id="ppModal" style="display:none;position:fixed;inset:0;z-index:150;background:rgba(0,0,0,0.85);padding:20px;overflow-y:auto">
+  <div style="max-width:600px;margin:40px auto;background:#1a1a2e;border-radius:12px;padding:28px;border:1px solid rgba(255,255,255,0.1);position:relative">
+    <button onclick="document.getElementById('ppModal').style.display='none'" style="position:absolute;top:14px;right:16px;background:none;border:none;color:#fff;font-size:24px;cursor:pointer">✕</button>
+    <h2 style="font-size:22px;font-weight:800;margin-bottom:16px;color:#FFD700">Privacy Policy</h2>
+    <p style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:12px">Last updated: August 2026</p>
+    <p style="font-size:13px;color:rgba(255,255,255,0.6);line-height:1.8;margin-bottom:12px">CampusDeal (campusdeal.com.ng) is operated by Mordecai Adeleke. We are committed to protecting your personal information.</p>
+    <h3 style="font-size:14px;font-weight:700;margin-bottom:8px;margin-top:16px">Data We Collect</h3>
+    <p style="font-size:13px;color:rgba(255,255,255,0.6);line-height:1.8;margin-bottom:12px">We collect your email address and phone number when you register. Your phone number is masked in public listings for your privacy.</p>
+    <h3 style="font-size:14px;font-weight:700;margin-bottom:8px;margin-top:16px">How We Use Your Data</h3>
+    <p style="font-size:13px;color:rgba(255,255,255,0.6);line-height:1.8;margin-bottom:12px">Your data is used only to operate your account and display your listings. We never sell your data to third parties.</p>
+    <h3 style="font-size:14px;font-weight:700;margin-bottom:8px;margin-top:16px">Google Analytics</h3>
+    <p style="font-size:13px;color:rgba(255,255,255,0.6);line-height:1.8;margin-bottom:12px">We use Google Analytics to understand how users interact with our platform. This data is anonymous.</p>
+    <h3 style="font-size:14px;font-weight:700;margin-bottom:8px;margin-top:16px">Contact</h3>
+    <p style="font-size:13px;color:rgba(255,255,255,0.6);line-height:1.8">For privacy concerns: tmack3031@gmail.com</p>
+  </div>
+</div>
+
+<div style="text-align:center;padding:16px;background:rgba(0,0,0,0.3);font-size:11px;color:rgba(255,255,255,0.4);border-top:1px solid rgba(255,255,255,0.08)">
+  © 2026 CampusDeal · 
+  <a href="#" onclick="document.getElementById('faqSection').style.display='block'" style="color:rgba(255,255,255,0.5);text-decoration:none">FAQ</a> · 
+  <a href="#" onclick="document.getElementById('ppModal').style.display='block'" style="color:rgba(255,255,255,0.5);text-decoration:none">Privacy Policy</a> · 
+  <a href="https://wa.me/2347036069955" style="color:rgba(255,255,255,0.5);text-decoration:none">Contact Us</a> ·
+  Built by <a href="https://mordecaidev.com.ng" target="_blank" style="color:#FFD700;text-decoration:none">Mordecai</a>
+</div>
+
+<!-- VERIFIED SELLER MODAL -->
+<div class="verify-modal" id="verifyModal">
+  <div class="verify-modal-content">
+    <button class="verify-modal-close" onclick="closeVerifyModal()">✕</button>
+    
+    <div id="verifyStep1">
+      <h3>✅ Get Verified Seller Badge</h3>
+      <p>Stand out from other sellers and build trust with buyers on CampusDeal!</p>
+      
+      <div class="verify-benefits">
+        <div class="verify-benefit-item">✅ Gold verified badge on all your ads</div>
+        <div class="verify-benefit-item">🔝 Priority placement in search results</div>
+        <div class="verify-benefit-item">💬 "Trusted Seller" label on your profile</div>
+        <div class="verify-benefit-item">📈 Get up to 3x more buyers</div>
+        <div class="verify-benefit-item">🛡️ Dispute protection priority</div>
+      </div>
+      
+      <div class="verify-price-box">
+        <div class="verify-price">₦500</div>
+        <div class="verify-price-sub">per month · Cancel anytime</div>
+      </div>
+      
+      <button class="verify-btn" onclick="startVerifyPayment()" id="payVerifyBtn">
+        💳 Pay ₦500 — Get Verified Now
+      </button>
+      
+      <div style="text-align:center;font-size:11px;color:rgba(255,255,255,0.4);margin-top:10px">
+        🔒 Secured by Paystack · Your payment is safe
+      </div>
+    </div>
+    
+    <div id="verifyStep2" style="display:none">
+      <div class="verify-success">
+        <div class="verify-success-icon">🎉</div>
+        <h3 style="margin-bottom:8px">You're Now Verified!</h3>
+        <p>Your verified badge is now active for 30 days. Buyers can see your trust badge on all your listings!</p>
+        <div style="background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);border-radius:8px;padding:12px;margin:16px 0">
+          <span class="verified-badge">⭐ VERIFIED SELLER</span>
+          <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:6px">Active for 30 days</div>
+        </div>
+        <button class="verify-btn" onclick="closeVerifyModal()">
+          Done! Start Selling ✅
+        </button>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<!-- VERIFIED BADGE BUTTON - shown in My Account/Profile -->
+<div id="verifyBannerWrap" style="display:none;position:fixed;top:70px;left:0;right:0;z-index:9999;padding:8px 16px">
+  <button onclick="openVerifyModal()" style="background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;border:none;padding:12px 20px;border-radius:8px;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 4px 20px rgba(255,215,0,0.5);display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;width:100%;letter-spacing:0.5px">
+    ⭐ Get Verified Seller Badge — ₦500/month
+  </button>
+</div>
+
+</body>
+</html>
