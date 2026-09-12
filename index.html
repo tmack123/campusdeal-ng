@@ -942,7 +942,7 @@ function doLogin(){
         } else if(e.code==="auth/wrong-password"){
           alert("Incorrect password!\nTry again or reset your password.");
         } else {
-          alert("Login error: "+e.message);
+          alert("Invalid email or password! Please check and try again.");
         }
       });
   } else {
