@@ -21,7 +21,7 @@
 <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=CD&background=006400&color=FFD700&size=512&font-size=0.4&bold=true&rounded=true">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="description" content="Buy and sell anything on FUNAAB Campus. Post ads FREE!">
-<meta name="version" content="1789201303">
+<meta name="version" content="1789202018">
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script>window.addEventListener("load",function(){
@@ -935,6 +935,8 @@ function doLogin(){
           if(iN)iN.value=name;
           if(iW&&phone)iW.value=phone.replace("234","0");
           askNotifAfterLogin(name);
+          // Show verify banner after login
+          showVerifyBannerForUser(result.user.uid);
         });
       })
       .catch(function(e){
@@ -1017,6 +1019,8 @@ function doRegisterVerified(nm){
           if(iN)iN.value=nm;
           if(iW)iW.value=ph;
           alert("Welcome to CampusDeal, "+nm+"! 🎉");
+          // Show verify banner after register
+          showVerifyBannerForUser(result.user.uid);
         });
       })
       .catch(function(e){
@@ -2689,6 +2693,26 @@ function startPayment(){
 }
 
 // Show banner when logged in - called after firebase init
+function showVerifyBannerForUser(uid){
+  var banner = document.getElementById('verifyBanner');
+  if(!banner) return;
+  if(!fbReady || !db){ 
+    // Firebase not ready yet - show banner anyway
+    banner.style.display = 'block';
+    return;
+  }
+  db.collection('users').doc(uid).get().then(function(doc){
+    var data = (doc && doc.data()) || {};
+    if(data.isVerified && data.verifiedUntil && new Date(data.verifiedUntil) > new Date()){
+      banner.style.display = 'none';
+    } else {
+      banner.style.display = 'block';
+    }
+  }).catch(function(){
+    banner.style.display = 'block';
+  });
+}
+
 function initVerifyBadge(){
   if(!firebase.apps || !firebase.apps.length) return;
   firebase.auth().onAuthStateChanged(function(user){
