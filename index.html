@@ -21,7 +21,7 @@
 <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=CD&background=006400&color=FFD700&size=512&font-size=0.4&bold=true&rounded=true">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="description" content="Buy and sell anything on FUNAAB Campus. Post ads FREE!">
-<meta name="version" content="1789203905">
+<meta name="version" content="1789204645">
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script>window.addEventListener("load",function(){
@@ -536,6 +536,59 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
     <button class="atab" onclick="showAdminTab('usage',this)" style="flex-shrink:0;padding:12px 16px;font-size:13px;font-weight:700;border:none;background:transparent;color:rgba(255,255,255,0.45);border-bottom:3px solid transparent;cursor:pointer">&#128200; Usage</button>
   </div>
   <div id="adminBody" style="padding:1rem"></div>
+</div>
+
+
+<!-- DASHBOARD PAGE -->
+<div class="pg" id="pg-dashboard" style="padding-bottom:80px">
+  <div style="background:#080f08;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,215,0,0.12)">
+    <div>
+      <div style="font-size:18px;font-weight:900;color:#FFD700">📊 My Dashboard</div>
+      <div id="dashWelcome" style="font-size:11px;color:rgba(255,255,255,0.4)">Welcome back!</div>
+    </div>
+    <button onclick="doSell()" style="background:#FFD700;color:#080f08;border:none;padding:8px 14px;border-radius:20px;font-size:12px;font-weight:800;cursor:pointer">+ Post Ad</button>
+  </div>
+
+  <!-- Verify Prompt -->
+  <div id="dashVerifyBanner" onclick="openVerify()" style="display:none;margin:12px 14px;background:linear-gradient(135deg,#FFD700,#FFA500);border-radius:10px;padding:14px 16px;cursor:pointer">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="font-size:28px">⭐</span>
+      <div style="flex:1">
+        <div style="font-size:14px;font-weight:800;color:#000">Get Verified Seller Badge!</div>
+        <div style="font-size:12px;color:rgba(0,0,0,0.7)">3x more buyers · Top listing · ₦500/month</div>
+      </div>
+      <span style="font-size:22px;color:#000;font-weight:800">›</span>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:14px">
+    <div style="background:#0d1a0d;border-radius:12px;padding:14px;border:1px solid rgba(255,215,0,0.1);text-align:center">
+      <div id="dashTotalAds" style="font-size:28px;font-weight:900;color:#FFD700">-</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px">My Ads</div>
+    </div>
+    <div style="background:#0d1a0d;border-radius:12px;padding:14px;border:1px solid rgba(255,215,0,0.1);text-align:center">
+      <div id="dashTotalClicks" style="font-size:28px;font-weight:900;color:#4fc3f7">-</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px">WhatsApp Chats</div>
+    </div>
+    <div style="background:#0d1a0d;border-radius:12px;padding:14px;border:1px solid rgba(255,215,0,0.1);text-align:center">
+      <div id="dashTotalViews" style="font-size:28px;font-weight:900;color:#81c784">-</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px">Total Views</div>
+    </div>
+    <div style="background:#0d1a0d;border-radius:12px;padding:14px;border:1px solid rgba(255,215,0,0.1);text-align:center">
+      <div id="dashVerifiedStatus" style="font-size:13px;font-weight:800;color:#ff4444">Not Verified</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px">Badge Status</div>
+    </div>
+  </div>
+
+  <!-- My Ads List -->
+  <div style="padding:0 14px 14px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <div style="font-size:15px;font-weight:900;color:#fff">My Ads</div>
+      <button onclick="doSell()" style="background:rgba(255,215,0,0.1);color:#FFD700;border:1px solid rgba(255,215,0,0.3);padding:5px 12px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer">+ New Ad</button>
+    </div>
+    <div id="dashAdsList"><div style="text-align:center;padding:2rem;color:rgba(255,255,255,0.3)">Loading your ads...</div></div>
+  </div>
 </div>
 
 <!-- SELL MODAL -->
@@ -2797,19 +2850,19 @@ function loadDashboard(){
         // Verified!
         if(verifyBanner) verifyBanner.style.display = 'none';
         if(verifyStatus){
-          verifyStatus.textContent = '⭐ Verified';
+          verifyStatus.textContent = '* Verified';
           verifyStatus.style.color = '#FFD700';
         }
         if(navVerifyBtn) navVerifyBtn.style.display = 'none';
         // Show expiry
         var exp = new Date(data.verifiedUntil);
         var days = Math.ceil((exp - new Date()) / (1000*60*60*24));
-        if(verifyStatus) verifyStatus.textContent = '⭐ Verified ('+days+'d left)';
+        if(verifyStatus) verifyStatus.textContent = '* Verified ('+days+'d left)';
       } else {
         // Not verified
         if(verifyBanner) verifyBanner.style.display = 'block';
         if(verifyStatus){
-          verifyStatus.textContent = '❌ Not Verified';
+          verifyStatus.textContent = 'Not Verified';
           verifyStatus.style.color = '#ff4444';
         }
         if(navVerifyBtn) navVerifyBtn.style.display = 'block';
@@ -2903,14 +2956,6 @@ function checkNavVerifyBtn(){
 }
 
 </script>
-
-<!-- DASHBOARD PAGE -->
-<div class="pg" id="pg-dashboard" style="padding-bottom:80px">
-
-  <!-- Dashboard Header -->
-  <div style="background:#080f08;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,215,0,0.12)">
-    <div>
-      <div style="font-size:18px;font-weight:900;color:#FFD700">My Dashboard</div>
       <div id="dashWelcome" style="font-size:11px;color:rgba(255,255,255,0.4)">Welcome back!</div>
     </div>
     <button onclick="doSell()" style="background:#FFD700;color:#080f08;border:none;padding:8px 14px;border-radius:20px;font-size:12px;font-weight:800;cursor:pointer">+ Post Ad</button>
