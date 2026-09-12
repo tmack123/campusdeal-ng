@@ -21,7 +21,7 @@
 <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=CD&background=006400&color=FFD700&size=512&font-size=0.4&bold=true&rounded=true">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="description" content="Buy and sell anything on FUNAAB Campus. Post ads FREE!">
-<meta name="version" content="1789203053">
+<meta name="version" content="1789203471">
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script>window.addEventListener("load",function(){
@@ -2717,19 +2717,23 @@ function initVerifyBadge(){
   if(!firebase.apps || !firebase.apps.length) return;
   firebase.auth().onAuthStateChanged(function(user){
     if(user){
+      // User logged in - check if already verified
       firebase.firestore().collection('users').doc(user.uid).get().then(function(doc){
-        var data = doc.data() || {};
-        if(data.isVerified && new Date(data.verifiedUntil) > new Date()){
+        var data = (doc && doc.exists && doc.data()) || {};
+        if(data.isVerified && data.verifiedUntil && new Date(data.verifiedUntil) > new Date()){
+          // Already verified - hide banner
           document.getElementById('verifyBanner').style.display = 'none';
         } else {
+          // Not verified - keep banner visible
           document.getElementById('verifyBanner').style.display = 'block';
         }
       }).catch(function(){
+        // Error - keep banner visible
         document.getElementById('verifyBanner').style.display = 'block';
       });
-    } else {
-      document.getElementById('verifyBanner').style.display = 'none';
     }
+    // If not logged in - banner still shows (to prompt login)
+    // We keep display:block from CSS for everyone
   });
 }
 
