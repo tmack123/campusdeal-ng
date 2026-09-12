@@ -21,7 +21,7 @@
 <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=CD&background=006400&color=FFD700&size=512&font-size=0.4&bold=true&rounded=true">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="description" content="Buy and sell anything on FUNAAB Campus. Post ads FREE!">
-<meta name="version" content="9999999999">
+<meta name="version" content="1784028999">
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script>window.addEventListener("load",function(){
@@ -1713,6 +1713,7 @@ window.addEventListener("load",function(){
         }
       });
       setTimeout(startAdWatcher, 3000);
+      initVerifyBadge();
       db.collection("ads").orderBy("createdAt","desc").onSnapshot(function(snap){
         var fbAds=snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
         allAds=fbAds;
@@ -2638,8 +2639,9 @@ window.addEventListener('appinstalled', function(){
 var PAYSTACK_KEY = 'pk_test_aba9e89491dd40e2fe332ef46dfba51138de21db';
 
 function openVerify(){
-  var user = firebase.auth().currentUser;
-  if(!user){ alert('Please login first!'); return; }
+  if(!fbReady || !auth){ alert('Please wait for app to load!'); return; }
+  var user = firebase.auth().currentUser || getUser();
+  if(!user){ openLogin(); return; }
   document.getElementById('verifyStep1').style.display = 'block';
   document.getElementById('verifyStep2').style.display = 'none';
   document.getElementById('verifyModal').classList.add('open');
@@ -2686,25 +2688,26 @@ function startPayment(){
   handler.openIframe();
 }
 
-// Show banner when logged in
-firebase.auth().onAuthStateChanged(function(user){
-  if(user){
-    firebase.firestore().collection('users').doc(user.uid).get().then(function(doc){
-      var data = doc.data() || {};
-      if(data.isVerified && new Date(data.verifiedUntil) > new Date()){
-        // Already verified - hide banner
-        document.getElementById('verifyBanner').style.display = 'none';
-      } else {
-        // Show banner
+// Show banner when logged in - called after firebase init
+function initVerifyBadge(){
+  if(!firebase.apps || !firebase.apps.length) return;
+  firebase.auth().onAuthStateChanged(function(user){
+    if(user){
+      firebase.firestore().collection('users').doc(user.uid).get().then(function(doc){
+        var data = doc.data() || {};
+        if(data.isVerified && new Date(data.verifiedUntil) > new Date()){
+          document.getElementById('verifyBanner').style.display = 'none';
+        } else {
+          document.getElementById('verifyBanner').style.display = 'block';
+        }
+      }).catch(function(){
         document.getElementById('verifyBanner').style.display = 'block';
-      }
-    }).catch(function(){
-      document.getElementById('verifyBanner').style.display = 'block';
-    });
-  } else {
-    document.getElementById('verifyBanner').style.display = 'none';
-  }
-});
+      });
+    } else {
+      document.getElementById('verifyBanner').style.display = 'none';
+    }
+  });
+}
 
 </script>
 </body>
