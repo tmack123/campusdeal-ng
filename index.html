@@ -21,7 +21,7 @@
 <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=CD&background=006400&color=FFD700&size=512&font-size=0.4&bold=true&rounded=true">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="description" content="Buy and sell anything on FUNAAB Campus. Post ads FREE!">
-<meta name="version" content="1784028999">
+<meta name="version" content="1789201303">
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script>window.addEventListener("load",function(){
@@ -1201,7 +1201,7 @@ function closeDrop_old(){
 document.addEventListener("click",function(e){
   var pb=document.getElementById("profileBtn");
   var m=document.getElementById("ddmenu");
-  if(m.classList.contains("on")&&!pb.contains(e.target)&&!m.contains(e.target)){
+  if(m&&pb&&m.classList.contains("on")&&!pb.contains(e.target)&&!m.contains(e.target)){
     m.classList.remove("on");
   }
   if(e.target.classList.contains("ov")){e.target.classList.remove("on");}
