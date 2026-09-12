@@ -21,7 +21,7 @@
 <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=CD&background=006400&color=FFD700&size=512&font-size=0.4&bold=true&rounded=true">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="description" content="Buy and sell anything on FUNAAB Campus. Post ads FREE!">
-<meta name="version" content="1789204645">
+<meta name="version" content="1789204856">
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script>window.addEventListener("load",function(){
@@ -268,50 +268,7 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
 .fc-loc{font-size:9px;color:rgba(255,255,255,0.3)}
 .fc-badge{background:rgba(255,215,0,0.15);color:#FFD700;font-size:8px;font-weight:700;padding:2px 7px;border-radius:10px;display:inline-block;margin-bottom:4px}
 .empi{font-size:48px;margin-bottom:8px}
-
-/* VERIFIED BADGE */
-.verify-banner{display:block;margin:10px 14px;background:linear-gradient(135deg,#FFD700,#FFA500);border-radius:10px;padding:14px 16px;cursor:pointer}
-.verify-banner-inner{display:flex;align-items:center;gap:10px}
-.verify-modal-wrap{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.85);align-items:center;justify-content:center;padding:20px}
-.verify-modal-wrap.open{display:flex}
-.verify-box{background:#1a1a2e;border-radius:16px;padding:24px;max-width:360px;width:100%;border:1px solid rgba(255,215,0,0.2);position:relative}
-.verify-close{position:absolute;top:12px;right:14px;background:none;border:none;color:#fff;font-size:22px;cursor:pointer}
-.verify-benefit{display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.8);margin-bottom:8px}
-.verify-pay-btn{width:100%;background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;border:none;padding:13px;border-radius:8px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;margin-top:12px}
-.verified-tag{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;font-size:10px;font-weight:700;padding:2px 8px;border-radius:12px}
-
-/* DASHBOARD AD CARD */
-.dash-ad-card{
-  background:#0d1a0d;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,0.07);
-  padding:12px;
-  display:flex;
-  gap:10px;
-  margin-bottom:10px;
-  align-items:flex-start;
-}
-.dash-ad-img{
-  width:72px;height:72px;
-  border-radius:8px;overflow:hidden;
-  flex-shrink:0;
-  background:rgba(255,255,255,0.06);
-  display:flex;align-items:center;
-  justify-content:center;font-size:26px;
-}
-.dash-ad-img img{width:100%;height:100%;object-fit:cover}
-.dash-ad-info{flex:1;min-width:0}
-.dash-ad-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dash-ad-price{font-size:15px;font-weight:900;color:#FFD700;margin-bottom:6px}
-.dash-ad-stats{display:flex;gap:10px;margin-bottom:8px}
-.dash-stat{font-size:10px;color:rgba(255,255,255,0.4);display:flex;align-items:center;gap:3px}
-.dash-stat span{color:rgba(255,255,255,0.7);font-weight:600}
-.dash-ad-btns{display:flex;gap:6px}
-.dash-edit-btn{background:rgba(255,215,0,0.1);color:#FFD700;border:1px solid rgba(255,215,0,0.3);padding:5px 10px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer}
-.dash-del-btn{background:rgba(255,68,68,0.08);color:#ff4444;border:1px solid rgba(255,68,68,0.25);padding:5px 10px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer}
-
 </style>
-<script src="https://js.paystack.co/v1/inline.js"></script>
 </head>
 <body>
 
@@ -324,7 +281,6 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
   </button>
   <div style="flex:1"></div>
   <span class="logo" onclick="logoTap()">Campus<span>Deal</span></span>
-  <button id="navVerifyBtn" onclick="openVerify()" style="display:none;background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;border:none;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap">⭐ Get Verified</button>
 </nav>
 <input type="hidden" id="si" value="">
 
@@ -408,50 +364,6 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
     <div><h3>&#127881; Post Your Ad FREE Today!</h3><p>Buyers contact you directly on WhatsApp!</p></div>
     <button class="pbtn" onclick="doSell()">Post Now &#8594;</button>
   </div>
-
-<!-- VERIFIED SELLER BANNER -->
-<div class="verify-banner" id="verifyBanner" onclick="openVerify()">
-  <div class="verify-banner-inner">
-    <span style="font-size:28px">⭐</span>
-    <div>
-      <div style="font-size:14px;font-weight:800;color:#000">Get Verified Seller Badge</div>
-      <div style="font-size:12px;color:rgba(0,0,0,0.7)">More buyers · Top listing · Only ₦500/month</div>
-    </div>
-    <span style="margin-left:auto;font-size:20px;color:#000;font-weight:800">›</span>
-  </div>
-</div>
-
-<!-- VERIFIED MODAL -->
-<div class="verify-modal-wrap" id="verifyModal">
-  <div class="verify-box">
-    <button class="verify-close" onclick="closeVerify()">✕</button>
-    <div id="verifyStep1">
-      <div style="font-size:22px;font-weight:800;color:#FFD700;margin-bottom:6px">⭐ Get Verified</div>
-      <div style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:16px">Stand out and get more buyers on CampusDeal!</div>
-      <div style="background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.15);border-radius:8px;padding:14px;margin-bottom:14px">
-        <div class="verify-benefit">✅ Gold verified badge on all your ads</div>
-        <div class="verify-benefit">🔝 Priority placement in search</div>
-        <div class="verify-benefit">💬 Trusted Seller label on profile</div>
-        <div class="verify-benefit">📈 Up to 3x more buyer contacts</div>
-        <div class="verify-benefit">🛡️ Dispute protection priority</div>
-      </div>
-      <div style="text-align:center;background:rgba(255,255,255,0.04);border-radius:8px;padding:14px;margin-bottom:14px">
-        <div style="font-size:36px;font-weight:800;color:#FFD700">₦500</div>
-        <div style="font-size:12px;color:rgba(255,255,255,0.5)">per month · Cancel anytime</div>
-      </div>
-      <button class="verify-pay-btn" id="verifyPayBtn" onclick="startPayment()">💳 Pay ₦500 — Get Verified Now</button>
-      <div style="text-align:center;font-size:11px;color:rgba(255,255,255,0.3);margin-top:10px">🔒 Secured by Paystack</div>
-    </div>
-    <div id="verifyStep2" style="display:none;text-align:center;padding:20px 0">
-      <div style="font-size:52px;margin-bottom:12px">🎉</div>
-      <div style="font-size:20px;font-weight:800;color:#FFD700;margin-bottom:8px">You're Verified!</div>
-      <div style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:16px">Your badge is active for 30 days!</div>
-      <span class="verified-tag">⭐ VERIFIED SELLER</span>
-      <button class="verify-pay-btn" onclick="closeVerify()" style="margin-top:16px">Done! Start Selling ✅</button>
-    </div>
-  </div>
-</div>
-
   <div class="sec"><h2>Browse by <span>Category</span></h2></div>
   <div class="cig">
     <div class="ci" onclick="filterCat('vehicles',null)"><div class="cie">&#128663;</div><div class="cil">Vehicles</div></div>
@@ -536,59 +448,6 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
     <button class="atab" onclick="showAdminTab('usage',this)" style="flex-shrink:0;padding:12px 16px;font-size:13px;font-weight:700;border:none;background:transparent;color:rgba(255,255,255,0.45);border-bottom:3px solid transparent;cursor:pointer">&#128200; Usage</button>
   </div>
   <div id="adminBody" style="padding:1rem"></div>
-</div>
-
-
-<!-- DASHBOARD PAGE -->
-<div class="pg" id="pg-dashboard" style="padding-bottom:80px">
-  <div style="background:#080f08;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,215,0,0.12)">
-    <div>
-      <div style="font-size:18px;font-weight:900;color:#FFD700">📊 My Dashboard</div>
-      <div id="dashWelcome" style="font-size:11px;color:rgba(255,255,255,0.4)">Welcome back!</div>
-    </div>
-    <button onclick="doSell()" style="background:#FFD700;color:#080f08;border:none;padding:8px 14px;border-radius:20px;font-size:12px;font-weight:800;cursor:pointer">+ Post Ad</button>
-  </div>
-
-  <!-- Verify Prompt -->
-  <div id="dashVerifyBanner" onclick="openVerify()" style="display:none;margin:12px 14px;background:linear-gradient(135deg,#FFD700,#FFA500);border-radius:10px;padding:14px 16px;cursor:pointer">
-    <div style="display:flex;align-items:center;gap:10px">
-      <span style="font-size:28px">⭐</span>
-      <div style="flex:1">
-        <div style="font-size:14px;font-weight:800;color:#000">Get Verified Seller Badge!</div>
-        <div style="font-size:12px;color:rgba(0,0,0,0.7)">3x more buyers · Top listing · ₦500/month</div>
-      </div>
-      <span style="font-size:22px;color:#000;font-weight:800">›</span>
-    </div>
-  </div>
-
-  <!-- Stats -->
-  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:14px">
-    <div style="background:#0d1a0d;border-radius:12px;padding:14px;border:1px solid rgba(255,215,0,0.1);text-align:center">
-      <div id="dashTotalAds" style="font-size:28px;font-weight:900;color:#FFD700">-</div>
-      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px">My Ads</div>
-    </div>
-    <div style="background:#0d1a0d;border-radius:12px;padding:14px;border:1px solid rgba(255,215,0,0.1);text-align:center">
-      <div id="dashTotalClicks" style="font-size:28px;font-weight:900;color:#4fc3f7">-</div>
-      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px">WhatsApp Chats</div>
-    </div>
-    <div style="background:#0d1a0d;border-radius:12px;padding:14px;border:1px solid rgba(255,215,0,0.1);text-align:center">
-      <div id="dashTotalViews" style="font-size:28px;font-weight:900;color:#81c784">-</div>
-      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px">Total Views</div>
-    </div>
-    <div style="background:#0d1a0d;border-radius:12px;padding:14px;border:1px solid rgba(255,215,0,0.1);text-align:center">
-      <div id="dashVerifiedStatus" style="font-size:13px;font-weight:800;color:#ff4444">Not Verified</div>
-      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px">Badge Status</div>
-    </div>
-  </div>
-
-  <!-- My Ads List -->
-  <div style="padding:0 14px 14px">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-      <div style="font-size:15px;font-weight:900;color:#fff">My Ads</div>
-      <button onclick="doSell()" style="background:rgba(255,215,0,0.1);color:#FFD700;border:1px solid rgba(255,215,0,0.3);padding:5px 12px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer">+ New Ad</button>
-    </div>
-    <div id="dashAdsList"><div style="text-align:center;padding:2rem;color:rgba(255,255,255,0.3)">Loading your ads...</div></div>
-  </div>
 </div>
 
 <!-- SELL MODAL -->
@@ -897,9 +756,9 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
     </div>
     <div class="bnsl">Sell</div>
   </div>
-  <button class="bn" id="bn-myads" onclick="goDashboard()">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-    <span>Dashboard</span>
+  <button class="bn" id="bn-myads" onclick="goMyAds()">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+    <span>My Ads</span>
   </button>
   
 </div>
@@ -1020,9 +879,6 @@ function doLogin(){
           if(iN)iN.value=name;
           if(iW&&phone)iW.value=phone.replace("234","0");
           askNotifAfterLogin(name);
-          // Show verify banner after login
-          showVerifyBannerForUser(result.user.uid);
-          checkNavVerifyBtn();
         });
       })
       .catch(function(e){
@@ -1105,8 +961,6 @@ function doRegisterVerified(nm){
           if(iN)iN.value=nm;
           if(iW)iW.value=ph;
           alert("Welcome to CampusDeal, "+nm+"! 🎉");
-          // Show verify banner after register
-          showVerifyBannerForUser(result.user.uid);
         });
       })
       .catch(function(e){
@@ -1291,7 +1145,7 @@ function closeDrop_old(){
 document.addEventListener("click",function(e){
   var pb=document.getElementById("profileBtn");
   var m=document.getElementById("ddmenu");
-  if(m&&pb&&m.classList.contains("on")&&!pb.contains(e.target)&&!m.contains(e.target)){
+  if(m.classList.contains("on")&&!pb.contains(e.target)&&!m.contains(e.target)){
     m.classList.remove("on");
   }
   if(e.target.classList.contains("ov")){e.target.classList.remove("on");}
@@ -1306,7 +1160,10 @@ function goHome(){
 }
 
 function goMyAds(){
-  goDashboard();
+  if(!getUser()){openLogin();return;}
+  showPg("account");
+  showTab("myads",null);
+  setActiveBn("bn-myads");
 }
 
 function goAccount(){
@@ -1800,7 +1657,6 @@ window.addEventListener("load",function(){
         }
       });
       setTimeout(startAdWatcher, 3000);
-      initVerifyBadge();
       db.collection("ads").orderBy("createdAt","desc").onSnapshot(function(snap){
         var fbAds=snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
         allAds=fbAds;
@@ -2721,288 +2577,6 @@ window.addEventListener('appinstalled', function(){
   dismissInstall();
 });
 
-
-// ===== VERIFIED SELLER BADGE =====
-var PAYSTACK_KEY = 'pk_test_aba9e89491dd40e2fe332ef46dfba51138de21db';
-
-function openVerify(){
-  if(!fbReady || !auth){ alert('Please wait for app to load!'); return; }
-  var user = firebase.auth().currentUser || getUser();
-  if(!user){ openLogin(); return; }
-  document.getElementById('verifyStep1').style.display = 'block';
-  document.getElementById('verifyStep2').style.display = 'none';
-  document.getElementById('verifyModal').classList.add('open');
-}
-
-function closeVerify(){
-  document.getElementById('verifyModal').classList.remove('open');
-}
-
-function startPayment(){
-  var user = firebase.auth().currentUser;
-  if(!user){ alert('Please login first!'); return; }
-  var btn = document.getElementById('verifyPayBtn');
-  btn.disabled = true;
-  btn.textContent = '⏳ Loading...';
-  var handler = PaystackPop.setup({
-    key: PAYSTACK_KEY,
-    email: user.email,
-    amount: 50000,
-    currency: 'NGN',
-    ref: 'VRF_' + Date.now(),
-    onClose: function(){ btn.disabled=false; btn.textContent='💳 Pay ₦500 — Get Verified Now'; },
-    callback: function(res){
-      var exp = new Date();
-      exp.setDate(exp.getDate()+30);
-      firebase.firestore().collection('users').doc(user.uid).update({
-        isVerified: true,
-        verifiedUntil: exp.toISOString(),
-        verifyRef: res.reference
-      }).then(function(){
-        firebase.firestore().collection('payments').add({
-          userId: user.uid,
-          amount: 500,
-          type: 'verified_badge',
-          ref: res.reference,
-          createdAt: new Date().toISOString()
-        });
-        document.getElementById('verifyStep1').style.display = 'none';
-        document.getElementById('verifyStep2').style.display = 'block';
-        document.getElementById('verifyBanner').style.display = 'none';
-      });
-    }
-  });
-  handler.openIframe();
-}
-
-// Show banner when logged in - called after firebase init
-function showVerifyBannerForUser(uid){
-  var banner = document.getElementById('verifyBanner');
-  if(!banner) return;
-  if(!fbReady || !db){ 
-    // Firebase not ready yet - show banner anyway
-    banner.style.display = 'block';
-    return;
-  }
-  db.collection('users').doc(uid).get().then(function(doc){
-    var data = (doc && doc.data()) || {};
-    if(data.isVerified && data.verifiedUntil && new Date(data.verifiedUntil) > new Date()){
-      banner.style.display = 'none';
-    } else {
-      banner.style.display = 'block';
-    }
-  }).catch(function(){
-    banner.style.display = 'block';
-  });
-}
-
-function initVerifyBadge(){
-  if(!firebase.apps || !firebase.apps.length) return;
-  firebase.auth().onAuthStateChanged(function(user){
-    if(user){
-      // User logged in - check if already verified
-      firebase.firestore().collection('users').doc(user.uid).get().then(function(doc){
-        var data = (doc && doc.exists && doc.data()) || {};
-        if(data.isVerified && data.verifiedUntil && new Date(data.verifiedUntil) > new Date()){
-          // Already verified - hide banner
-          document.getElementById('verifyBanner').style.display = 'none';
-        } else {
-          // Not verified - keep banner visible
-          document.getElementById('verifyBanner').style.display = 'block';
-        }
-      }).catch(function(){
-        // Error - keep banner visible
-        document.getElementById('verifyBanner').style.display = 'block';
-      });
-    }
-    // If not logged in - banner still shows (to prompt login)
-    // We keep display:block from CSS for everyone
-  });
-}
-
-
-// ===== DASHBOARD =====
-function goDashboard(){
-  var u = getUser();
-  if(!u){ openLogin(); return; }
-  showPg('dashboard');
-  setActiveBn('bn-myads');
-  loadDashboard();
-}
-
-function loadDashboard(){
-  var u = getUser();
-  if(!u) return;
-
-  // Set welcome message
-  var welcome = document.getElementById('dashWelcome');
-  if(welcome) welcome.textContent = 'Welcome back, ' + (u.name||'User') + '!';
-
-  // Check verified status
-  var verifyBanner = document.getElementById('dashVerifyBanner');
-  var verifyStatus = document.getElementById('dashVerifiedStatus');
-  var navVerifyBtn = document.getElementById('navVerifyBtn');
-
-  if(fbReady && db && u.uid){
-    db.collection('users').doc(u.uid).get().then(function(doc){
-      var data = (doc && doc.exists && doc.data()) || {};
-      if(data.isVerified && data.verifiedUntil && new Date(data.verifiedUntil) > new Date()){
-        // Verified!
-        if(verifyBanner) verifyBanner.style.display = 'none';
-        if(verifyStatus){
-          verifyStatus.textContent = '* Verified';
-          verifyStatus.style.color = '#FFD700';
-        }
-        if(navVerifyBtn) navVerifyBtn.style.display = 'none';
-        // Show expiry
-        var exp = new Date(data.verifiedUntil);
-        var days = Math.ceil((exp - new Date()) / (1000*60*60*24));
-        if(verifyStatus) verifyStatus.textContent = '* Verified ('+days+'d left)';
-      } else {
-        // Not verified
-        if(verifyBanner) verifyBanner.style.display = 'block';
-        if(verifyStatus){
-          verifyStatus.textContent = 'Not Verified';
-          verifyStatus.style.color = '#ff4444';
-        }
-        if(navVerifyBtn) navVerifyBtn.style.display = 'block';
-      }
-    }).catch(function(){
-      if(verifyBanner) verifyBanner.style.display = 'block';
-      if(navVerifyBtn) navVerifyBtn.style.display = 'block';
-    });
-
-    // Load user ads
-    loadDashboardAds(u);
-  }
-}
-
-function loadDashboardAds(u){
-  var list = document.getElementById('dashAdsList');
-  if(!list) return;
-  list.innerHTML = '<div style="text-align:center;padding:1rem"><div class="spin"></div></div>';
-
-  db.collection('ads').where('userId','==',u.uid).get().then(function(snap){
-    // Update total ads stat
-    var totalEl = document.getElementById('dashTotalAds');
-    if(totalEl) totalEl.textContent = snap.size;
-
-    if(snap.empty){
-      list.innerHTML = '<div class="emp"><div class="empi">📭</div><p style="margin-bottom:10px">No ads yet!</p>'
-        +'<button onclick="doSell()" style="background:#FFD700;color:#080f08;border:none;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer">Post Your First Ad</button></div>';
-      return;
-    }
-
-    var totalClicks = 0;
-    var totalViews = 0;
-
-    list.innerHTML = snap.docs.map(function(doc){
-      var d = doc.data();
-      var em = EMOS[d.cat]||'📦';
-      var clicks = d.clicks||Math.floor(Math.random()*50)+5; // simulate if no data
-      var views = d.views||Math.floor(Math.random()*200)+20;
-      totalClicks += clicks;
-      totalViews += views;
-
-      return '<div class="dash-ad-card">'
-        +'<div class="dash-ad-img">'+(d.img?'<img src="'+d.img+'" onerror="this.parentElement.innerHTML=''+em+''">':em)+'</div>'
-        +'<div class="dash-ad-info">'
-          +'<div class="dash-ad-title">'+d.title+'</div>'
-          +'<div class="dash-ad-price">₦'+Number(d.price).toLocaleString()+'</div>'
-          +'<div class="dash-ad-stats">'
-            +'<div class="dash-stat">👁 <span>'+views+'</span> views</div>'
-            +'<div class="dash-stat">💬 <span>'+clicks+'</span> chats</div>'
-            +'<div class="dash-stat">📍 '+d.loc+'</div>'
-          +'</div>'
-          +'<div class="dash-ad-btns">'
-            +'<button class="dash-edit-btn" data-id="'+doc.id+'" onclick="editAd(this.dataset.id)">✏️ Edit</button>'
-            +'<button class="dash-del-btn" data-id="'+doc.id+'" onclick="askDel(this.dataset.id)">🗑 Delete</button>'
-          +'</div>'
-        +'</div>'
-      +'</div>';
-    }).join('');
-
-    // Update stats
-    var clicksEl = document.getElementById('dashTotalClicks');
-    var viewsEl = document.getElementById('dashTotalViews');
-    if(clicksEl) clicksEl.textContent = totalClicks;
-    if(viewsEl) viewsEl.textContent = totalViews;
-
-  }).catch(function(e){
-    list.innerHTML = '<div class="emp"><div class="empi">⚠️</div><p>'+e.message+'</p></div>';
-  });
-}
-
-// Show nav verify button when logged in and not verified
-function checkNavVerifyBtn(){
-  var u = getUser();
-  var btn = document.getElementById('navVerifyBtn');
-  if(!btn) return;
-  if(!u){ btn.style.display='none'; return; }
-  if(fbReady && db && u.uid){
-    db.collection('users').doc(u.uid).get().then(function(doc){
-      var data = (doc && doc.exists && doc.data()) || {};
-      if(data.isVerified && data.verifiedUntil && new Date(data.verifiedUntil) > new Date()){
-        btn.style.display = 'none';
-      } else {
-        btn.style.display = 'block';
-      }
-    }).catch(function(){
-      btn.style.display = 'block';
-    });
-  } else {
-    btn.style.display = 'block';
-  }
-}
-
 </script>
-      <div id="dashWelcome" style="font-size:11px;color:rgba(255,255,255,0.4)">Welcome back!</div>
-    </div>
-    <button onclick="doSell()" style="background:#FFD700;color:#080f08;border:none;padding:8px 14px;border-radius:20px;font-size:12px;font-weight:800;cursor:pointer">+ Post Ad</button>
-  </div>
-
-  <!-- Verify Banner in Dashboard -->
-  <div id="dashVerifyBanner" style="display:none;margin:12px 14px;background:linear-gradient(135deg,#FFD700,#FFA500);border-radius:10px;padding:14px 16px;cursor:pointer" onclick="openVerify()">
-    <div style="display:flex;align-items:center;gap:10px">
-      <span style="font-size:28px">⭐</span>
-      <div style="flex:1">
-        <div style="font-size:14px;font-weight:800;color:#000">Get Verified Seller Badge</div>
-        <div style="font-size:12px;color:rgba(0,0,0,0.7)">Get 3x more buyers · Top listing · ₦500/month</div>
-      </div>
-      <span style="font-size:20px;color:#000;font-weight:800">›</span>
-    </div>
-  </div>
-
-  <!-- Stats Cards -->
-  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:14px">
-    <div style="background:#0d1a0d;border-radius:12px;padding:14px;border:1px solid rgba(255,215,0,0.1);text-align:center">
-      <div id="dashTotalAds" style="font-size:28px;font-weight:900;color:#FFD700">0</div>
-      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px">Total Ads</div>
-    </div>
-    <div style="background:#0d1a0d;border-radius:12px;padding:14px;border:1px solid rgba(255,215,0,0.1);text-align:center">
-      <div id="dashTotalClicks" style="font-size:28px;font-weight:900;color:#4fc3f7">0</div>
-      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px">Total Clicks</div>
-    </div>
-    <div style="background:#0d1a0d;border-radius:12px;padding:14px;border:1px solid rgba(255,215,0,0.1);text-align:center">
-      <div id="dashTotalViews" style="font-size:28px;font-weight:900;color:#81c784">0</div>
-      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px">WhatsApp Chats</div>
-    </div>
-    <div style="background:#0d1a0d;border-radius:12px;padding:14px;border:1px solid rgba(255,215,0,0.1);text-align:center">
-      <div id="dashVerifiedStatus" style="font-size:13px;font-weight:800;color:#aaa">Not Verified</div>
-      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px">Badge Status</div>
-    </div>
-  </div>
-
-  <!-- My Ads Section -->
-  <div style="padding:0 14px 14px">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-      <div style="font-size:15px;font-weight:900;color:#fff">My Ads</div>
-      <button onclick="doSell()" style="background:rgba(255,215,0,0.1);color:#FFD700;border:1px solid rgba(255,215,0,0.3);padding:5px 12px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer">+ New Ad</button>
-    </div>
-    <div id="dashAdsList"></div>
-  </div>
-
-</div>
-
 </body>
 </html>
