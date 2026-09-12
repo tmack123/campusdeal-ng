@@ -21,7 +21,7 @@
 <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=CD&background=006400&color=FFD700&size=512&font-size=0.4&bold=true&rounded=true">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="description" content="Buy and sell anything on FUNAAB Campus. Post ads FREE!">
-<meta name="version" content="1789205102">
+<meta name="version" content="1789208403">
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script>window.addEventListener("load",function(){
@@ -292,6 +292,7 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
   </button>
   <div style="flex:1"></div>
   <span class="logo" onclick="logoTap()">Campus<span>Deal</span></span>
+  <button id="navVerifyBtn" onclick="openVerifyModal()" style="display:none;background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;border:none;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;flex-shrink:0">&#11088; Verified</button>
 </nav>
 <input type="hidden" id="si" value="">
 
@@ -455,7 +456,8 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
     <span class="atitle">My Account</span>
   </div>
   <div class="atabs" id="atabs">
-    <button class="atab on" onclick="showTab('profile',this)">&#128100; Profile</button>
+    <button class="atab on" onclick="showTab('dashboard',this)">&#128202; Dashboard</button>
+    <button class="atab" onclick="showTab('profile',this)">&#128100; Profile</button>
     <button class="atab" onclick="showTab('myads',this)">&#128203; My Ads</button>
     <button class="atab" onclick="showTab('wishlist',this)">&#10084; Wishlist</button>
     <button class="atab" onclick="showTab('post',this)">&#10133; Post Ad</button>
@@ -809,9 +811,9 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
     </div>
     <div class="bnsl">Sell</div>
   </div>
-  <button class="bn" id="bn-myads" onclick="goMyAds()">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-    <span>My Ads</span>
+  <button class="bn" id="bn-myads" onclick="goDashboard()">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+    <span>Dashboard</span>
   </button>
   
 </div>
@@ -936,13 +938,15 @@ function doLogin(){
       })
       .catch(function(e){
         if(btn){btn.textContent="Login →";btn.disabled=false;}
-        if(e.code==="auth/user-not-found"||e.code==="auth/invalid-credential"){
-          alert("No account found with this email!\nPlease register first.");
+        if(e.code==="auth/user-not-found"||e.code==="auth/invalid-credential"||e.code==="auth/invalid-login-credentials"){
+          alert("Invalid email or password!\nPlease check your details and try again.\n\nNew user? Click Create Account!");
           switchAuthTab("register");
         } else if(e.code==="auth/wrong-password"){
-          alert("Incorrect password!\nTry again or reset your password.");
+          alert("Incorrect password!\nPlease try again or reset your password.");
+        } else if(e.code==="auth/too-many-requests"){
+          alert("Too many attempts! Please wait a few minutes and try again.");
         } else {
-          alert("Login error: "+e.message);
+          alert("Invalid email or password! Please check and try again.");
         }
       });
   } else {
@@ -1019,10 +1023,10 @@ function doRegisterVerified(nm){
       .catch(function(e){
         if(btn){btn.textContent="Create Account →";btn.disabled=false;}
         if(e.code==="auth/email-already-in-use"){
-          alert("This email is already registered!\nPlease login instead.");
+          alert("This email is already registered! Please Sign In instead.");
           switchAuthTab("login");
         } else if(e.code==="auth/weak-password"){
-          alert("Password is too weak!\nUse at least 6 characters.");
+          alert("Password too short! Use at least 6 characters.");
         } else {
           alert("Registration error: "+e.message);
         }
@@ -1113,7 +1117,7 @@ function doResetPass(){
       .then(function(snap){
         if(snap.empty){
           if(btn){btn.textContent="Send Reset Code →";btn.disabled=false;}
-          alert("No account found with this email!\nPlease register first.");
+          alert("No account found! Please click Create Account to register first.");
           return;
         }
         var ud=snap.docs[0].data();
@@ -1269,6 +1273,11 @@ function showTab(tab,tabEl){
   }
   var body=document.getElementById("accBody");
   var u=getUser();
+  if(tab==="dashboard"){
+    body.innerHTML="<div style='text-align:center;padding:1rem'><div class='spin'></div></div>";
+    loadDashboardTab(body);
+    return;
+  }
   if(tab==="profile"){
     body.innerHTML="<div style='background:rgba(255,255,255,0.04);border-radius:14px;padding:1.5rem;border:1px solid rgba(255,215,0,0.12);margin-bottom:1rem;text-align:center'>"
       +"<div style='width:72px;height:72px;border-radius:50%;background:#FFD700;color:#080f08;font-size:28px;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 12px'>"+(u?u.name.charAt(0).toUpperCase():"?")+"</div>"
@@ -2691,6 +2700,137 @@ function startVerifyPayment(){
     }
   });
   handler.openIframe();
+}
+
+
+// ===== DASHBOARD TAB =====
+function goDashboard(){
+  if(!getUser()){ openLogin(); return; }
+  showPg("account");
+  var tabs = document.querySelectorAll(".atab");
+  tabs.forEach(function(t){ t.classList.remove("on"); });
+  tabs[0].classList.add("on");
+  showTab("dashboard", tabs[0]);
+  setActiveBn("bn-myads");
+}
+
+function loadDashboardTab(body){
+  var u = getUser();
+  if(!u){ body.innerHTML="<div class='emp'>Please login</div>"; return; }
+
+  // Show nav verify button
+  checkNavVerify(u);
+
+  body.innerHTML =
+    // Welcome
+    "<div style='background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.15);border-radius:12px;padding:14px;margin-bottom:14px;display:flex;align-items:center;gap:10px'>"
+    +"<div style='width:44px;height:44px;border-radius:50%;background:#FFD700;color:#080f08;font-size:18px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0'>"+(u.name?u.name.charAt(0).toUpperCase():"?")+"</div>"
+    +"<div><div style='font-size:16px;font-weight:900;color:#fff'>Hello, "+(u.name||"Seller")+"!</div>"
+    +"<div style='font-size:12px;color:rgba(255,255,255,0.45)'>Here is your seller dashboard</div></div>"
+    +"<button onclick='doSell()' style='margin-left:auto;background:#FFD700;color:#080f08;border:none;padding:8px 12px;border-radius:20px;font-size:11px;font-weight:800;cursor:pointer;flex-shrink:0'>+ Post Ad</button>"
+    +"</div>"
+
+    // Stats
+    +"<div style='display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px'>"
+    +"<div style='background:#0d1a0d;border-radius:12px;padding:14px;border:1px solid rgba(255,215,0,0.1);text-align:center'>"
+    +"<div id='dTotalAds' style='font-size:28px;font-weight:900;color:#FFD700'>...</div>"
+    +"<div style='font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px'>My Ads</div></div>"
+    +"<div style='background:#0d1a0d;border-radius:12px;padding:14px;border:1px solid rgba(255,215,0,0.1);text-align:center'>"
+    +"<div id='dBadge' style='font-size:13px;font-weight:800;color:#ff4444'>Not Verified</div>"
+    +"<div style='font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px'>Badge Status</div></div>"
+    +"</div>"
+
+    // Verify prompt
+    +"<div id='dbVerifyBanner' onclick='openVerifyModal()' style='display:block;background:linear-gradient(135deg,#FFD700,#FFA500);border-radius:10px;padding:14px;margin-bottom:14px;cursor:pointer'>"
+    +"<div style='display:flex;align-items:center;gap:10px'>"
+    +"<span style='font-size:24px'>&#11088;</span>"
+    +"<div><div style='font-size:14px;font-weight:800;color:#000'>Get Verified Seller Badge!</div>"
+    +"<div style='font-size:12px;color:rgba(0,0,0,0.7)'>3x more buyers - Only N500/month</div></div>"
+    +"<span style='margin-left:auto;font-size:20px;color:#000;font-weight:800'>&#8250;</span>"
+    +"</div></div>"
+
+    // My ads list
+    +"<div style='font-size:15px;font-weight:900;color:#fff;margin-bottom:10px'>My Ads</div>"
+    +"<div id='dAdsList'><div style='text-align:center;padding:2rem'><div class='spin'></div></div></div>";
+
+  // Load data from firebase
+  if(fbReady && db && u.uid){
+    // Check verified status
+    db.collection("users").doc(u.uid).get().then(function(doc){
+      var data = (doc && doc.exists && doc.data()) || {};
+      var badgeEl = document.getElementById("dBadge");
+      var verifyBanner = document.getElementById("dbVerifyBanner");
+      var navBtn = document.getElementById("navVerifyBtn");
+      if(data.isVerified && data.verifiedUntil && new Date(data.verifiedUntil) > new Date()){
+        var exp = new Date(data.verifiedUntil);
+        var days = Math.ceil((exp - new Date())/(1000*60*60*24));
+        if(badgeEl){ badgeEl.textContent = "Verified ("+days+"d)"; badgeEl.style.color="#FFD700"; }
+        if(verifyBanner) verifyBanner.style.display = "none";
+        if(navBtn){ navBtn.style.display="flex"; navBtn.textContent="&#11088; Verified"; navBtn.style.background="rgba(255,215,0,0.15)"; navBtn.style.color="#FFD700"; navBtn.style.border="1px solid rgba(255,215,0,0.3)"; }
+      } else {
+        if(navBtn){ navBtn.style.display="flex"; navBtn.onclick=openVerifyModal; }
+      }
+    }).catch(function(){});
+
+    // Load ads
+    db.collection("ads").where("userId","==",u.uid).get().then(function(snap){
+      var totalEl = document.getElementById("dTotalAds");
+      if(totalEl) totalEl.textContent = snap.size;
+      var listEl = document.getElementById("dAdsList");
+      if(!listEl) return;
+      if(snap.empty){
+        listEl.innerHTML = "<div class='emp'><div class='empi'>&#128241;</div><p>No ads yet!</p><button onclick='doSell()' style='margin-top:10px;background:#FFD700;color:#080f08;border:none;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer'>Post Your First Ad</button></div>";
+        return;
+      }
+      listEl.innerHTML = snap.docs.map(function(doc){
+        var d = doc.data();
+        var em = EMOS[d.cat]||"&#128230;";
+        var clicks = d.clicks||0;
+        var views = d.views||0;
+        return "<div style='background:#0d1a0d;border-radius:10px;border:1px solid rgba(255,255,255,0.07);padding:12px;display:flex;gap:10px;margin-bottom:10px;align-items:flex-start'>"
+          +"<div style='width:68px;height:68px;border-radius:8px;overflow:hidden;flex-shrink:0;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font-size:24px'>"+(d.img?"<img src='"+d.img+"' style='width:100%;height:100%;object-fit:cover' onerror='this.parentElement.innerHTML=""+em+""'>":em)+"</div>"
+          +"<div style='flex:1;min-width:0'>"
+          +"<div style='font-size:13px;font-weight:700;color:#fff;margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap'>"+d.title+"</div>"
+          +"<div style='font-size:15px;font-weight:900;color:#FFD700;margin-bottom:6px'>N"+Number(d.price).toLocaleString()+"</div>"
+          +"<div style='display:flex;gap:12px;margin-bottom:8px'>"
+          +"<span style='font-size:10px;color:rgba(255,255,255,0.4)'>&#128065; "+views+" views</span>"
+          +"<span style='font-size:10px;color:rgba(255,255,255,0.4)'>&#128172; "+clicks+" chats</span>"
+          +"<span style='font-size:10px;color:rgba(255,255,255,0.4)'>&#128205; "+(d.loc||"")+"</span>"
+          +"</div>"
+          +"<div style='display:flex;gap:6px'>"
+          +"<button data-id='"+doc.id+"' onclick='editAd(this.dataset.id)' style='background:rgba(255,215,0,0.1);color:#FFD700;border:1px solid rgba(255,215,0,0.3);padding:5px 10px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer'>Edit</button>"
+          +"<button data-id='"+doc.id+"' onclick='askDel(this.dataset.id)' style='background:rgba(255,68,68,0.08);color:#ff4444;border:1px solid rgba(255,68,68,0.25);padding:5px 10px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer'>Delete</button>"
+          +"</div>"
+          +"</div></div>";
+      }).join("");
+    }).catch(function(e){
+      var listEl = document.getElementById("dAdsList");
+      if(listEl) listEl.innerHTML = "<div class='emp'>Error loading ads</div>";
+    });
+  }
+}
+
+function checkNavVerify(u){
+  if(!u || !fbReady || !db) return;
+  var btn = document.getElementById("navVerifyBtn");
+  if(!btn) return;
+  db.collection("users").doc(u.uid).get().then(function(doc){
+    var data = (doc && doc.exists && doc.data()) || {};
+    if(data.isVerified && data.verifiedUntil && new Date(data.verifiedUntil) > new Date()){
+      btn.style.display = "flex";
+      btn.textContent = "Verified";
+      btn.style.background = "rgba(255,215,0,0.15)";
+      btn.style.color = "#FFD700";
+      btn.style.border = "1px solid rgba(255,215,0,0.3)";
+      btn.onclick = function(){};
+    } else {
+      btn.style.display = "flex";
+      btn.onclick = openVerifyModal;
+    }
+  }).catch(function(){
+    btn.style.display = "flex";
+    btn.onclick = openVerifyModal;
+  });
 }
 
 </script>
