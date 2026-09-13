@@ -1504,7 +1504,7 @@ function handleImgs(e){
       return false;
     }
     if(f.size > 5 * 1024 * 1024){
-      alert("Image too large! Maximum size is 5MB per image.");
+       showToast("Image too large! Max 5MB per image.");
       return false;
     }
     return true;
