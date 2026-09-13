@@ -2031,14 +2031,20 @@ function goDashboard(){
 function loadDashboardTab(body){
   var u=getUser();
   if(!u){body.innerHTML="<div class='emp'>Please login</div>";return;}
-  body.innerHTML="<div style='background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.15);border-radius:12px;padding:14px;margin-bottom:14px;display:flex;align-items:center;gap:10px'><div style='width:44px;height:44px;border-radius:50%;background:#FFD700;color:#080f08;font-size:18px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0'>"+(u.name?u.name.charAt(0).toUpperCase():"?")+"</div><div style='flex:1'><div style='font-size:16px;font-weight:900;color:#fff'>Hello, "+(u.name||"Seller")+"!</div><div style='font-size:12px;color:rgba(255,255,255,0.45)'>Seller Dashboard</div></div><button onclick='doSell()' style='background:#FFD700;color:#080f08;border:none;padding:8px 12px;border-radius:20px;font-size:11px;font-weight:800;cursor:pointer;flex-shrink:0'>+ Post Ad</button></div><div onclick='openVerifyModal()' style='background:linear-gradient(135deg,#FFD700,#FFA500);border-radius:10px;padding:14px;margin-bottom:14px;cursor:pointer'><div style='display:flex;align-items:center;gap:10px'><span style='font-size:24px'>&#11088;</span><div style='flex:1'><div style='font-size:14px;font-weight:800;color:#000'>Get Verified Seller Badge!</div><div style='font-size:12px;color:rgba(0,0,0,0.7)'>3x more buyers - Only N500/month</div></div><span style='font-size:20px;color:#000;font-weight:800'>&#8250;</span></div></div><div style='display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px'><div class='db-card'><div class='db-num' id='dbTotal'>...</div><div class='db-label'>My Ads</div></div><div class='db-card'><div class='db-num' id='dbBadge' style='font-size:13px;color:#ff4444'>Not Verified</div><div class='db-label'>Badge Status</div></div></div><div style='display:flex;align-items:center;justify-content:space-between;margin-bottom:10px'><div style='font-size:15px;font-weight:900;color:#fff'>My Ads</div><button onclick='doSell()' style='background:rgba(255,215,0,0.1);color:#FFD700;border:1px solid rgba(255,215,0,0.3);padding:5px 12px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer'>+ New Ad</button></div><div id='dbList'><div style='text-align:center;padding:2rem'><div class='spin'></div></div></div>";
+  body.innerHTML="<div style='background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.15);border-radius:12px;padding:14px;margin-bottom:14px;display:flex;align-items:center;gap:10px'><div style='width:44px;height:44px;border-radius:50%;background:#FFD700;color:#080f08;font-size:18px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0'>"+(u.name?u.name.charAt(0).toUpperCase():"?")+"</div><div style='flex:1'><div style='font-size:16px;font-weight:900;color:#fff'>Hello, "+(u.name||"Seller")+"!</div><div style='font-size:12px;color:rgba(255,255,255,0.45)'>Seller Dashboard</div></div><button onclick='doSell()' style='background:#FFD700;color:#080f08;border:none;padding:8px 12px;border-radius:20px;font-size:11px;font-weight:800;cursor:pointer;flex-shrink:0'>+ Post Ad</button></div>"
+  +"<div onclick='openVerifyModal()' id='dbVerifyBanner' style='background:linear-gradient(135deg,#FFD700,#FFA500);border-radius:10px;padding:14px;margin-bottom:14px;cursor:pointer'><div style='display:flex;align-items:center;gap:10px'><span style='font-size:24px'>&#11088;</span><div style='flex:1'><div style='font-size:14px;font-weight:800;color:#000'>Get Verified Seller Badge!</div><div style='font-size:12px;color:rgba(0,0,0,0.7)'>3x more buyers - Only N500/month</div></div><span style='font-size:20px;color:#000;font-weight:800'>&#8250;</span></div></div>"
+  +"<div style='display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px'><div class='db-card'><div class='db-num' id='dbTotal'>...</div><div class='db-label'>My Ads</div></div><div class='db-card'><div id='dbBadge' style='font-size:13px;font-weight:800;color:#ff4444'>Not Verified</div><div class='db-label'>Badge Status</div></div></div>"
+  +"<div style='display:flex;align-items:center;justify-content:space-between;margin-bottom:10px'><div style='font-size:15px;font-weight:900;color:#fff'>My Ads</div><button onclick='doSell()' style='background:rgba(255,215,0,0.1);color:#FFD700;border:1px solid rgba(255,215,0,0.3);padding:5px 12px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer'>+ New Ad</button></div>"
+  +"<div id='dbList'><div style='text-align:center;padding:2rem'><div class='spin'></div></div></div>";
   if(!fbReady||!db)return;
   db.collection("users").doc(u.uid).get().then(function(doc){
     var d=(doc&&doc.exists&&doc.data())||{};
     if(d.isVerified&&d.verifiedUntil&&new Date(d.verifiedUntil)>new Date()){
       var days=Math.ceil((new Date(d.verifiedUntil)-new Date())/(1000*60*60*24));
       var b=document.getElementById("dbBadge");
+      var banner=document.getElementById("dbVerifyBanner");
       if(b){b.textContent="Verified ("+days+"d)";b.style.color="#FFD700";}
+      if(banner)banner.style.display="none";
     }
   });
   db.collection("ads").where("userId","==",u.uid).get().then(function(snap){
@@ -2046,11 +2052,22 @@ function loadDashboardTab(body){
     if(t)t.textContent=snap.size;
     var l=document.getElementById("dbList");
     if(!l)return;
-    if(snap.empty){l.innerHTML="<div class='emp'><div class='empi'>&#128241;</div><p>No ads yet!</p><button onclick='doSell()' style='margin-top:10px;background:#FFD700;color:#080f08;border:none;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer'>Post First Ad</button></div>";return;}
+    if(snap.empty){
+      l.innerHTML="<div class='emp'><div class='empi'>&#128241;</div><p>No ads yet!</p><button onclick='doSell()' style='margin-top:10px;background:#FFD700;color:#080f08;border:none;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer'>Post First Ad</button></div>";
+      return;
+    }
     l.innerHTML=snap.docs.map(function(doc){
       var d=doc.data();
       var em=EMOS[d.cat]||"&#128230;";
-      return "<div class='db-ad'><div class='db-ad-img'>"+(d.img?"<img src='"+d.img+"'>":em)+"</div><div style='flex:1;min-width:0'><div style='font-size:13px;font-weight:700;color:#fff;margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap'>"+d.title+"</div><div style='font-size:15px;font-weight:900;color:#FFD700;margin-bottom:6px'>N"+Number(d.price).toLocaleString()+"</div><div style='font-size:10px;color:rgba(255,255,255,0.4);margin-bottom:8px'>&#128205; "+(d.loc||"FUNAAB")+"</div><div style='display:flex;gap:6px'><button data-id='"+doc.id+"' onclick='editAd(this.dataset.id)' style='background:rgba(255,215,0,0.1);color:#FFD700;border:1px solid rgba(255,215,0,0.3);padding:5px 10px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer'>Edit</button><button data-id='"+doc.id+"' onclick='askDel(this.dataset.id)' style='background:rgba(255,68,68,0.08);color:#ff4444;border:1px solid rgba(255,68,68,0.25);padding:5px 10px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer'>Delete</button></div></div></div>";
+      return "<div class='db-ad'><div class='db-ad-img'>"+(d.img?"<img src='"+d.img+"'>":em)+"</div>"
+        +"<div style='flex:1;min-width:0'>"
+        +"<div style='font-size:13px;font-weight:700;color:#fff;margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap'>"+d.title+"</div>"
+        +"<div style='font-size:15px;font-weight:900;color:#FFD700;margin-bottom:6px'>N"+Number(d.price).toLocaleString()+"</div>"
+        +"<div style='font-size:10px;color:rgba(255,255,255,0.4);margin-bottom:8px'>&#128205; "+(d.loc||"FUNAAB")+"</div>"
+        +"<div style='display:flex;gap:6px'>"
+        +"<button data-id='"+doc.id+"' onclick='editAd(this.dataset.id)' style='background:rgba(255,215,0,0.1);color:#FFD700;border:1px solid rgba(255,215,0,0.3);padding:5px 10px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer'>Edit</button>"
+        +"<button data-id='"+doc.id+"' onclick='askDel(this.dataset.id)' style='background:rgba(255,68,68,0.08);color:#ff4444;border:1px solid rgba(255,68,68,0.25);padding:5px 10px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer'>Delete</button>"
+        +"</div></div></div>";
     }).join("");
   });
 }
