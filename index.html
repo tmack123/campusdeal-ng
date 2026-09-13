@@ -2103,7 +2103,7 @@ function contactAdmin(){var u=getUser();var msg=u?"Hi CampusDeal Admin! My name 
 // =============================================================
 // ADMIN DASHBOARD
 // =============================================================
-var ADMIN_PWD_HASH = "bf91bfd76d6d2457c3ba57ac887023f2edd6f79d984e290d273fd11b15465315";
+var ADMIN_PWD_HASH = "5f2353e51b0d82ceeeb7bbaa57dc6d09a5ddc09c0f9889aae107bdcda92292ef";
 var isAdmin = false;
 
 function openAdmin(){
@@ -2116,7 +2116,7 @@ function openAdmin(){
     }
     var pwd = prompt("Enter Admin Password:");
     if(pwd === null) return;
-    if(pwd === atob("TXJBZGVsZWtlQGFkbWlu")){
+    if(pwd === atob("dHJ5aGFja21l")){
       isAdmin = true;
       showPg("admin");
       waitForFirebaseAndLoad();
@@ -2197,7 +2197,7 @@ async function checkAdminPwd(){
   }catch(e){}
   
   // Fallback check for older browsers
-  if(!correct && pwd === atob("TXJBZGVsZWtlQGFkbWlu")) correct = true;
+  if(!correct && pwd === atob("dHJ5aGFja21l")) correct = true;
 
   if(correct){
     isAdmin = true;
