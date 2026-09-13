@@ -1500,7 +1500,7 @@ function handleImgs(e){
   var allowedTypes = ["image/jpeg","image/jpg","image/png","image/webp","image/gif"];
   var files = Array.from(e.target.files).slice(0,5).filter(function(f){
     if(!allowedTypes.includes(f.type)){
-      alert("Only image files are allowed! (JPG, PNG, WEBP, GIF)");
+      showToast("Only image files allowed! JPG, PNG, WEBP, GIF");
       return false;
     }
     if(f.size > 5 * 1024 * 1024){
