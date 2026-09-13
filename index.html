@@ -1309,7 +1309,7 @@ function showTab(tab,tabEl){
       +"<button onclick='doLogout()' style='width:100%;background:rgba(255,68,68,0.08);color:#ff4444;border:1.5px solid rgba(255,68,68,0.25);padding:13px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer'>Logout</button>";
   } else if(tab==="myads"){
     body.innerHTML="<div style='text-align:center;padding:1rem'><div class='spin'></div></div>";
-    loadDashboardTab(body);
+    loadMyAds(body);
   } else if(tab==="post"){
     body.innerHTML="<button onclick='doSell()' style='width:100%;background:#FFD700;color:#080f08;border:none;padding:16px;border-radius:10px;font-size:16px;font-weight:900;cursor:pointer;margin-bottom:1rem'>Post New Ad</button>"
       +"<div style='background:rgba(255,255,255,0.04);border-radius:12px;padding:1rem;border:1px solid rgba(255,255,255,0.08)'>"
