@@ -1603,7 +1603,7 @@ async function postAd(){
           } else {
             // Cloudinary returned error
             console.log("Cloudinary error:", data.error);
-            imgUrl=uploadedImgs[0].dataUrl||"";
+            imgUrl=""||"";
           }
           if(btn) btn.textContent = "Saving...";
         }catch(e){
@@ -1612,7 +1612,7 @@ async function postAd(){
           if(btn) btn.textContent = "Saving...";
         }
       } else if(uploadedImgs[0].dataUrl){
-        imgUrl=uploadedImgs[0].dataUrl;
+        imgUrl="";
       }
     }
     if(!fbReady||!db)throw new Error("Firebase not ready");
