@@ -388,7 +388,7 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
     <span style="font-size:28px">&#11088;</span>
     <div>
       <div style="font-size:14px;font-weight:800;color:#000">Get Verified Seller Badge</div>
-      <div style="font-size:12px;color:rgba(0,0,0,0.7)">More buyers &middot; Top listing &middot; Only N500/month</div>
+      <div style="font-size:12px;color:rgba(0,0,0,0.7)">More buyers &middot; Top listing &middot; Only N1,000/month</div>
     </div>
     <span style="margin-left:auto;font-size:20px;color:#000;font-weight:800">&#8250;</span>
   </div>
@@ -411,7 +411,7 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
         <div style="font-size:36px;font-weight:800;color:#FFD700">N500</div>
         <div style="font-size:12px;color:rgba(255,255,255,0.5)">per month</div>
       </div>
-      <button class="verify-pay-btn" id="vPayBtn" onclick="startVerifyPayment()">Pay N500 - Get Verified Now</button>
+      <button class="verify-pay-btn" id="vPayBtn" onclick="startVerifyPayment()">Pay N1,000 - Get Verified Now</button>
       <div style="text-align:center;font-size:11px;color:rgba(255,255,255,0.3);margin-top:10px">Secured by Paystack</div>
     </div>
     <div id="vStep2" style="display:none;text-align:center;padding:20px 0">
@@ -2045,7 +2045,7 @@ function loadDashboardTab(body){
   +"<div onclick='openVerifyModal()' id='dbVerifyBanner' style='background:linear-gradient(135deg,#FFD700,#FFA500);border-radius:10px;padding:14px;margin-bottom:14px;cursor:pointer'>"
   +"<div style='display:flex;align-items:center;gap:10px'><span style='font-size:24px'>&#11088;</span>"
   +"<div style='flex:1'><div style='font-size:14px;font-weight:800;color:#000'>Get Verified Seller Badge!</div>"
-  +"<div style='font-size:12px;color:rgba(0,0,0,0.7)'>3x more buyers - Only N500/month</div></div>"
+  +"<div style='font-size:12px;color:rgba(0,0,0,0.7)'>3x more buyers - Only N1,000/month</div></div>"
   +"<span style='font-size:20px;color:#000;font-weight:800'>&#8250;</span></div></div>"
   +"<div style='display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px'>"
   +"<div class='db-card'><div class='db-num' id='dbTotal'>...</div><div class='db-label'>My Ads</div></div>"
@@ -2736,12 +2736,12 @@ function startVerifyPayment(){
   var handler = PaystackPop.setup({
     key: PSTACK_KEY,
     email: user.email,
-    amount: 50000,
+    amount: 100000,
     currency: 'NGN',
     ref: 'VRF_' + Date.now(),
     onClose: function(){
       btn.disabled = false;
-      btn.textContent = 'Pay N500 - Get Verified Now';
+      btn.textContent = 'Pay N1,000 - Get Verified Now';
     },
     callback: function(res){
       var exp = new Date();
@@ -2753,7 +2753,7 @@ function startVerifyPayment(){
       }).then(function(){
         firebase.firestore().collection('payments').add({
           userId: user.uid,
-          amount: 500,
+          amount: 1000,
           type: 'verified_badge',
           ref: res.reference,
           createdAt: new Date().toISOString()
