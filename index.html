@@ -1690,21 +1690,18 @@ function editAd(id){
   });
 }
 function dbDel(id){
-  var ov=document.getElementById("cnfOv");
-  if(!ov){if(confirm("Delete this ad?")){dbDelNow(id);}return;}
-  ov.classList.add("on");
-  document.getElementById("cnfYes").onclick=function(){
-    ov.classList.remove("on");
-    dbDelNow(id);
-  };
-}
-function dbDelNow(id){
-  if(fbReady&&db){
-    db.collection("ads").doc(id).delete()
-    .then(function(){showToast("Ad deleted!","success");goMyAds();})
-    .catch(function(e){showToast("Error: "+e.message);});
+  if(confirm("Delete this ad?")){
+    if(fbReady&&db){
+      db.collection("ads").doc(id).delete()
+      .then(function(){
+        showToast("Ad deleted!","success");
+        goMyAds();
+      })
+      .catch(function(e){
+        showToast("Error: "+e.message);
+      });
+    }
   }
-}
 }
 function askDel(id){
   var ov=document.getElementById("cnfOv");
