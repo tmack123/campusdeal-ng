@@ -1689,7 +1689,20 @@ function editAd(id){
     openOv("sellOv");
   });
 }
-
+function dbDel(id){
+  if(confirm("Delete this ad?")){
+    if(fbReady&&db){
+      db.collection("ads").doc(id).delete()
+      .then(function(){
+        showToast("Ad deleted!","success");
+        goMyAds();
+      })
+      .catch(function(e){
+        showToast("Error: "+e.message);
+      });
+    }
+  }
+}
 function askDel(id){
   var ov=document.getElementById("cnfOv");
   ov.classList.add("on");
@@ -2103,7 +2116,7 @@ function loadDashboardTab(body){
         +"<div style='font-size:10px;color:rgba(255,255,255,0.4);margin-bottom:8px'>&#128205; "+(d.loc||"FUNAAB")+"</div>"
         +"<div style='display:flex;gap:6px'>"
         +"<button onclick=\"editAd('"+doc.id+"')\" style='background:rgba(255,215,0,0.1);color:#FFD700;border:1px solid rgba(255,215,0,0.3);padding:5px 10px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer'>Edit</button>"
-        +"<button onclick=\"askDel('"+doc.id+"')\" style='background:rgba(255,68,68,0.08);color:#ff4444;border:1px solid rgba(255,68,68,0.25);padding:5px 10px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer'>Delete</button>"
+        +"<button onclick=\"dbDel('"+doc.id+"')\" style='background:rgba(255,68,68,0.08);color:#ff4444;border:1px solid rgba(255,68,68,0.25);padding:5px 10px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer'>Delete</button>"
         +"</div></div></div>";
     }).join("");
   });
