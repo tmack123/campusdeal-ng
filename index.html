@@ -1608,7 +1608,7 @@ async function postAd(){
           if(btn) btn.textContent = "Saving...";
         }catch(e){
           console.log("Upload failed:", e);
-          imgUrl=uploadedImgs[0].dataUrl||"";
+         imgUrl=""; if(btn)btn.disabled=false; if(btn)btn.textContent="Post Ad - FREE"; showToast("Image too large! Please use a smaller photo under 1MB."); return;
           if(btn) btn.textContent = "Saving...";
         }
       } else if(uploadedImgs[0].dataUrl){
