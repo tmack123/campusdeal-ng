@@ -1612,7 +1612,10 @@ async function postAd(){
           if(btn) btn.textContent = "Saving...";
         }
       } else if(uploadedImgs[0].dataUrl){
-        imgUrl="";
+      imgUrl="";
+      showToast("Image upload failed! Please use a photo under 1MB.");
+      if(btn){btn.disabled=false;btn.textContent="Post Ad - FREE";}
+      return;
       }
     }
     if(!fbReady||!db)throw new Error("Firebase not ready");
