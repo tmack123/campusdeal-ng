@@ -1276,6 +1276,11 @@ function showTab(tab,tabEl){
   }
   var body=document.getElementById("accBody");
   var u=getUser();
+  if(tab==="dashboard"){
+    body.innerHTML="<div style='text-align:center;padding:1rem'><div class='spin'></div></div>";
+    loadDashboardTab(body);
+    return;
+  }
   if(tab==="profile"){
     body.innerHTML="<div style='background:rgba(255,255,255,0.04);border-radius:14px;padding:1.5rem;border:1px solid rgba(255,215,0,0.12);margin-bottom:1rem;text-align:center'>"
       +"<div style='width:72px;height:72px;border-radius:50%;background:#FFD700;color:#080f08;font-size:28px;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 12px'>"+(u?u.name.charAt(0).toUpperCase():"?")+"</div>"
@@ -1294,7 +1299,7 @@ function showTab(tab,tabEl){
       +"<button onclick='doLogout()' style='width:100%;background:rgba(255,68,68,0.08);color:#ff4444;border:1.5px solid rgba(255,68,68,0.25);padding:13px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer'>Logout</button>";
   } else if(tab==="myads"){
     body.innerHTML="<div style='text-align:center;padding:1rem'><div class='spin'></div></div>";
-    loadMyAds(body);
+    loadDashboardTab(body);
   } else if(tab==="post"){
     body.innerHTML="<button onclick='doSell()' style='width:100%;background:#FFD700;color:#080f08;border:none;padding:16px;border-radius:10px;font-size:16px;font-weight:900;cursor:pointer;margin-bottom:1rem'>Post New Ad</button>"
       +"<div style='background:rgba(255,255,255,0.04);border-radius:12px;padding:1rem;border:1px solid rgba(255,255,255,0.08)'>"
@@ -2046,7 +2051,6 @@ function loadDashboardTab(body){
   +"<div class='db-card'><div class='db-num' id='dbTotal'>...</div><div class='db-label'>My Ads</div></div>"
   +"<div class='db-card'><div id='dbBadge' style='font-size:13px;font-weight:800;color:#ff4444'>Not Verified</div><div class='db-label'>Badge Status</div></div></div>"
   +"<div style='display:flex;align-items:center;justify-content:space-between;margin-bottom:10px'>"
-  +"<div style='font-size:15px;font-weight:900;color:#fff'>My Ads</div>"
   +"<button onclick='doSell()' style='background:rgba(255,215,0,0.1);color:#FFD700;border:1px solid rgba(255,215,0,0.3);padding:5px 12px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer'>+ New Ad</button></div>"
   +"<div id='dbList'><div style='text-align:center;padding:2rem'><div class='spin'></div></div></div>";
   if(!fbReady||!db)return;
