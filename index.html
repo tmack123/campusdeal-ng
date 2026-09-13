@@ -1073,7 +1073,7 @@ function confirmReset(docId,expectedCode){
   db.collection("users").doc(docId).update({password:hashPass(newPass),resetCode:null}).then(function(){
     alert("Password reset! Please login with your new password.");
     switchAuthTab("login");
-  }).catch(function(e){alert("Error: "+e.message);});
+  }).catch(function(e){showToast("Error: "+e.message);});
 }
 
 function confirmResetLocal(foundPhone,expectedCode){
@@ -1132,7 +1132,7 @@ function doResetPass(){
       })
       .catch(function(e){
         if(btn){btn.textContent="Send Reset Code →";btn.disabled=false;}
-        alert("Error: "+e.message);
+        showToast("Error: "+e.message);
       });
   } else {
     // localStorage fallback
@@ -1324,9 +1324,9 @@ function showTab(tab,tabEl){
 function saveProfile(){
   var nn=(document.getElementById("epName").value||"").trim();
   var np=(document.getElementById("epPhone").value||"").trim();
-  if(!nn){alert("Please enter your name!");return;}
+  if(!nn){showToast("Please enter your name!");return;}
   var u=getUser();
-  if(u){u.name=nn;u.phone=np;setUser(u);refreshNav();showTab("profile",null);alert("Profile updated!");}
+  if(u){u.name=nn;u.phone=np;setUser(u);refreshNav();showTab("profile",null);showToast("Profile updated!","success");}
 }
 
 function loadMyAds(container){
@@ -1555,7 +1555,7 @@ async function postAd(){
   var seller=(document.getElementById("iName").value||"").trim();
   var wa=(document.getElementById("iWa").value||"").trim();
   var eid=document.getElementById("editId").value;
-  if(!title||!cat||!price||!seller||!wa){alert("Please fill all required fields!");return;}
+  if(!title||!cat||!price||!seller||!wa){showToast("Please fill all required fields!");return;}
   var btn=document.getElementById("sellBtn");
   if(btn){btn.disabled=true;btn.textContent="Saving...";}
   try{
@@ -1581,7 +1581,7 @@ async function postAd(){
     }
 
     if(!firebaseUid){
-      alert("Please login again to post an ad!");
+      showToast("Please login again to post an ad!");
       openLogin();
       if(btn){btn.disabled=false;btn.textContent="Post Ad - FREE";}
       return;
@@ -1631,11 +1631,11 @@ async function postAd(){
       userId:firebaseUid,
       createdAt:firebase.firestore.FieldValue.serverTimestamp()
     };
-    if(eid){await db.collection("ads").doc(eid).update(adData);closeOv("sellOv");alert("Ad updated!");}
+    if(eid){await db.collection("ads").doc(eid).update(adData);closeOv("sellOv");showToast("Ad updated!","success");}
     else{await db.collection("ads").add(adData);closeOv("sellOv");showPostSuccess();}
     uploadedImgs=[];
     document.getElementById("imgPrevs").innerHTML="";
-  }catch(e){alert("Error: "+e.message);}
+  }catch(e){showToast("Error: "+e.message);}
   if(btn){btn.disabled=false;btn.textContent=eid?"Save Changes":"Post Ad - FREE";}
 }
 
@@ -1675,7 +1675,7 @@ function askDel(id){
   ov.classList.add("on");
   document.getElementById("cnfYes").onclick=function(){
     ov.classList.remove("on");
-    if(fbReady&&db){db.collection("ads").doc(id).delete().then(function(){alert("Ad deleted!");goMyAds();}).catch(function(e){alert("Error: "+e.message);});}
+    if(fbReady&&db){db.collection("ads").doc(id).delete().then(function(){showToast("Ad deleted!","success");goMyAds();}).catch(function(e){showToast("Error: "+e.message);});}
   };
 }
 
@@ -2384,7 +2384,7 @@ function adminToggleFeat(btn){
     btn.style.background = isFeat ? "#f0f0f0" : "var(--go)";
     btn.textContent = isFeat ? "☆ Feat" : "★ Feat";
     loadAdminDashboard();
-  }).catch(function(e){alert("Error: "+e.message);});
+  }).catch(function(e){showToast("Error: "+e.message);});
 }
 
 function adminDeleteAd(btn){
@@ -2395,7 +2395,7 @@ function adminDeleteAd(btn){
     btn.closest("div[style]").remove();
     loadAdminDashboard();
     alert("✅ Ad deleted!");
-  }).catch(function(e){alert("Error: "+e.message);});
+  }).catch(function(e){showToast("Error: "+e.message);});
 }
 
 function waUser(wa, name){
@@ -2449,7 +2449,7 @@ function backupAds(){
     btn.disabled = false;
     setTimeout(function(){btn.textContent="⬇️ Download Ads Backup";},3000);
   }).catch(function(e){
-    alert("Error: "+e.message);
+    showToast("Error: "+e.message);
     btn.textContent = "⬇️ Download Ads Backup";
     btn.disabled = false;
   });
@@ -2476,7 +2476,7 @@ function backupUsers(){
     btn.disabled = false;
     setTimeout(function(){btn.textContent="⬇️ Download Users Backup";},3000);
   }).catch(function(e){
-    alert("Error: "+e.message);
+    showToast("Error: "+e.message);
     btn.textContent = "⬇️ Download Users Backup";
     btn.disabled = false;
   });
@@ -2511,7 +2511,7 @@ function backupAll(){
     btn.disabled = false;
     setTimeout(function(){btn.textContent="⬇️ Download Full Backup";},3000);
   }).catch(function(e){
-    alert("Error: "+e.message);
+    showToast("Error: "+e.message);
     btn.textContent = "⬇️ Download Full Backup";
     btn.disabled = false;
   });
