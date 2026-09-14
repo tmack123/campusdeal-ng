@@ -2298,9 +2298,8 @@ function openOrderForm(passedItem){
   }
 
   currentOrder.item = currentItem;
-  openOv('orderOv');
+  setTimeout(function(){ openOv('orderOv'); }, 300);
 }
-
 function submitOrder(){
   var name = (document.getElementById('orderName').value||'').trim();
   var phone = (document.getElementById('orderPhone').value||'').trim();
