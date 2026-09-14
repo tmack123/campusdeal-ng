@@ -1035,7 +1035,9 @@ function doRegisterVerified(nm){
           if(iN)iN.value=nm;
           if(iW)iW.value=ph;
           alert("Welcome to CampusDeal, "+nm+"! 🎉");
-          saveReferral(result.user.uid);
+         var manualRef = (document.getElementById('rRef').value||'').trim().toUpperCase();
+if(manualRef) localStorage.setItem('cd_ref', manualRef);
+saveReferral(result.user.uid);
         });
       })
       .catch(function(e){
