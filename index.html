@@ -2814,6 +2814,24 @@ function showAdminTab(tab, tabEl){
     }).catch(function(e){
       body.innerHTML = "<div class='emp'>Error: "+e.message+"</div>";
     });
+    } else if(tab === "backup"){
+    body.innerHTML = "<h3 style='font-size:15px;font-weight:900;margin-bottom:1rem;color:#fff'>&#128190; Backup Data</h3>"
+      +"<div style='background:rgba(255,255,255,0.04);border-radius:12px;padding:1.2rem;border:1px solid rgba(255,255,255,0.08);margin-bottom:1rem'>"
+      +"<h3 style='font-size:14px;font-weight:700;margin-bottom:10px;color:#fff'>Download Backups</h3>"
+      +"<button onclick='backupAds()' style='width:100%;background:#FFD700;color:#080f08;border:none;padding:13px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px'>&#11015;&#65039; Download Ads Backup</button>"
+      +"<button onclick='backupUsers()' style='width:100%;background:rgba(255,255,255,0.08);color:#fff;border:none;padding:13px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px'>&#11015;&#65039; Download Users Backup</button>"
+      +"<button onclick='backupAll()' style='width:100%;background:rgba(255,255,255,0.08);color:#fff;border:none;padding:13px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer'>&#11015;&#65039; Download Full Backup</button>"
+      +"</div>"
+      +"<div style='background:rgba(255,255,255,0.04);border-radius:12px;padding:1rem;border:1px solid rgba(255,255,255,0.08)'>"
+      +"<div style='font-size:12px;color:rgba(255,255,255,0.4);line-height:2'>"
+      +"&#9989; Backup weekly<br>"
+      +"&#9989; Store backups safely<br>"
+      +"&#9989; Download before making big changes"
+      +"</div></div>";
+
+  } else if(tab === "usage"){
+    body.innerHTML = "<div style='text-align:center;padding:1rem'><div class='spin'></div></div>";
+    showUsageTab(body);
     } else if(tab === "announce"){
     body.innerHTML = "<h3 style='font-size:15px;font-weight:900;margin-bottom:1rem;color:#fff'>📢 Send Announcement</h3>"
       +"<div style='background:rgba(255,255,255,0.04);border-radius:12px;padding:1.2rem;border:1px solid rgba(255,255,255,0.08)'>"
