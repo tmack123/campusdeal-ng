@@ -2856,7 +2856,11 @@ function startVerifyPayment(){
       if(res.status === 'successful' || res.status === 'completed'){
         var exp = new Date();
         exp.setDate(exp.getDate() + 30);
-        firebase.firestore().collection('users').doc(user.uid).update({
+        firebase.firestore().collection('users')
+.where('uid','==',user.uid).get()
+.then(function(snap){
+  if(!snap.empty){
+    snap.docs[0].ref.update({
           isVerified: true,
           verifiedUntil: exp.toISOString(),
           verifyRef: res.transaction_id
@@ -2871,10 +2875,14 @@ function startVerifyPayment(){
           document.getElementById('vStep1').style.display = 'none';
           document.getElementById('vStep2').style.display = 'block';
           document.getElementById('verifyBanner').style.display = 'none';
-        }).catch(function(){
+                }).catch(function(){
           document.getElementById('vStep1').style.display = 'none';
           document.getElementById('vStep2').style.display = 'block';
         });
+      }
+    }).catch(function(){
+      showToast('Error saving verification. Contact support.');
+    });
       } else {
         btn.disabled=false;
         btn.textContent='Pay N1,000 - Get Verified Now';
