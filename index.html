@@ -2121,6 +2121,32 @@ function loadDashboardTab(body){
     }).join("");
   });
 }
+  // ===== REFERRAL SYSTEM =====
+function trackReferral(){
+  var params = new URLSearchParams(window.location.search);
+  var ref = params.get('ref');
+  if(ref){
+    localStorage.setItem('cd_ref', ref.toUpperCase());
+    console.log('Referral tracked:', ref);
+  }
+}
+
+function getReferral(){
+  return localStorage.getItem('cd_ref') || '';
+}
+
+// Save referral when user registers
+function saveReferral(uid){
+  var ref = getReferral();
+  if(!ref || !uid || !fbReady || !db) return;
+  db.collection('referrals').add({
+    code: ref,
+    userId: uid,
+    createdAt: new Date().toISOString()
+  }).then(function(){
+    console.log('Referral saved:', ref);
+  });
+}
 function contactAdmin(){var u=getUser();var msg=u?"Hi CampusDeal Admin! My name is "+u.name+" and I need help.":"Hi CampusDeal Admin! I need help.";window.open("https://wa.me/2348033873918?text="+encodeURIComponent(msg));}
 
 // =============================================================
