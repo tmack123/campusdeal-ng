@@ -1031,6 +1031,7 @@ function doRegisterVerified(nm){
           if(iN)iN.value=nm;
           if(iW)iW.value=ph;
           alert("Welcome to CampusDeal, "+nm+"! 🎉");
+          saveReferral(result.user.uid);
         });
       })
       .catch(function(e){
