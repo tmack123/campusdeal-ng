@@ -1784,9 +1784,11 @@ window.addEventListener("load",function(){
           db.collection("users").where("uid","==",firebaseUser.uid).get().then(function(snap){
             if(!snap.empty){
               var ud = snap.docs[0].data();
-              var user = {name:ud.name, phone:ud.phone||"", email:firebaseUser.email, uid:firebaseUser.uid};
+              var isVerNow = ud.isVerified && ud.verifiedUntil && new Date(ud.verifiedUntil) > new Date();
+              var user = {name:ud.name, phone:ud.phone||"", email:firebaseUser.email, uid:firebaseUser.uid, isVerified:isVerNow};
               setUser(user);
               refreshNav();
+              updateHamburgerUser();
               var iN=document.getElementById("iName");
               var iW=document.getElementById("iWa");
               if(iN)iN.value=ud.name;
