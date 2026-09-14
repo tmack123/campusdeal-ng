@@ -285,7 +285,7 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
 .verify-pay-btn{width:100%;background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;border:none;padding:13px;border-radius:8px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;margin-top:12px}
 
 </style>
-<script src="https://js.paystack.co/v1/inline.js"></script>
+<script src="https://checkout.flutterwave.com/v3.js"></script>
 </head>
 <body>
 
@@ -2813,7 +2813,7 @@ window.addEventListener('appinstalled', function(){
 
 
 // VERIFIED BADGE
-var PSTACK_KEY = 'pk_test_aba9e89491dd40e2fe332ef46dfba51138de21db';
+var FLW_KEY = 'FLWPUBK_TEST-2e4aaf798f191c0142e837f77d69ba88-X';
 
 function openVerifyModal(){
   if(!fbReady || !auth){
