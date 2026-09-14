@@ -25,6 +25,22 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script>window.addEventListener("load",function(){trackReferral();
+  // Check verified status on load
+  setTimeout(function(){
+    var u = getUser();
+    if(u && u.uid && fbReady && db){
+      db.collection('users').where('uid','==',u.uid).get()
+      .then(function(snap){
+        if(snap.empty) return;
+        var data = snap.docs[0].data();
+        var banner = document.getElementById('verifyBanner');
+        if(data.isVerified && data.verifiedUntil &&
+           new Date(data.verifiedUntil) > new Date()){
+          if(banner) banner.style.display = 'none';
+        }
+      });
+    }
+  }, 3000);
   // Secret admin URL access
   // Admin secret URL - only trigger if not a page refresh
   if(window.location.search.includes("admin="+atob("c2VjcmV0MjAyNA=="))){
