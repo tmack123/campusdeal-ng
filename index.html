@@ -822,6 +822,64 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
     <button onclick="closeOv('adminLoginOv')" style="background:none;border:none;font-size:12px;color:rgba(255,255,255,0.35);cursor:pointer">Cancel</button>
   </div>
 </div>
+  <!-- ORDER FORM MODAL -->
+<div class="ov ovc" id="orderOv">
+  <div style="background:#0d1a0d;border:1px solid rgba(255,215,0,0.15);border-radius:18px;padding:0;width:92%;max-width:400px;max-height:90vh;overflow-y:auto">
+    <div style="padding:16px;border-bottom:1px solid rgba(255,215,0,0.1);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#0d1a0d;z-index:1">
+      <div style="font-size:16px;font-weight:900;color:#FFD700">&#128666; Order with Delivery</div>
+      <button onclick="closeOv('orderOv')" style="background:rgba(255,255,255,0.08);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:15px;cursor:pointer">&#10005;</button>
+    </div>
+    <div style="padding:16px">
+      <div id="orderItemInfo" style="background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.15);border-radius:10px;padding:12px;margin-bottom:16px"></div>
+      <div style="margin-bottom:12px">
+        <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);display:block;margin-bottom:5px">YOUR NAME *</label>
+        <input type="text" id="orderName" placeholder="Enter your full name" style="width:100%;padding:11px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:14px;outline:none;background:rgba(255,255,255,0.05);color:#fff;font-family:inherit">
+      </div>
+      <div style="margin-bottom:12px">
+        <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);display:block;margin-bottom:5px">WHATSAPP NUMBER *</label>
+        <input type="tel" id="orderPhone" placeholder="08012345678" style="width:100%;padding:11px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:14px;outline:none;background:rgba(255,255,255,0.05);color:#fff;font-family:inherit">
+      </div>
+      <div style="margin-bottom:12px">
+        <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);display:block;margin-bottom:5px">DELIVERY LOCATION *</label>
+        <select id="orderLocation" style="width:100%;padding:11px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:14px;outline:none;background:#0d1a0d;color:#fff;font-family:inherit">
+          <option value="">Select delivery location</option>
+          <option value="Camp|1000">Camp - N1,000</option>
+          <option value="FUNAAB Zoo|1000">FUNAAB Zoo - N1,000</option>
+          <option value="Harmony|1000">Harmony - N1,000</option>
+          <option value="Isolu|1000">Isolu - N1,000</option>
+          <option value="Kofesu|1000">Kofesu - N1,000</option>
+          <option value="Labuta|1000">Labuta - N1,000</option>
+          <option value="Ogun Osun|1000">Ogun Osun - N1,000</option>
+          <option value="Oluwo|1000">Oluwo - N1,000</option>
+          <option value="Odo Eran|1200">Odo Eran - N1,200</option>
+          <option value="Osiele|1200">Osiele - N1,200</option>
+          <option value="Kotopo|1300">Kotopo - N1,300</option>
+        </select>
+      </div>
+      <div style="margin-bottom:16px">
+        <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);display:block;margin-bottom:5px">ADDITIONAL NOTE (OPTIONAL)</label>
+        <textarea id="orderNote" placeholder="Any special instructions..." style="width:100%;padding:11px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:14px;outline:none;background:rgba(255,255,255,0.05);color:#fff;font-family:inherit;height:70px;resize:none"></textarea>
+      </div>
+      <div id="orderTotal" style="background:rgba(255,255,255,0.04);border-radius:8px;padding:12px;margin-bottom:16px;display:none">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <span style="font-size:13px;color:rgba(255,255,255,0.5)">Item Price</span>
+          <span style="font-size:13px;font-weight:700;color:#fff" id="orderItemPrice"></span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <span style="font-size:13px;color:rgba(255,255,255,0.5)">Delivery Fee</span>
+          <span style="font-size:13px;font-weight:700;color:#fff" id="orderDeliveryFee"></span>
+        </div>
+        <div style="height:1px;background:rgba(255,255,255,0.1);margin:8px 0"></div>
+        <div style="display:flex;justify-content:space-between">
+          <span style="font-size:14px;font-weight:700;color:#fff">Total</span>
+          <span style="font-size:14px;font-weight:900;color:#FFD700" id="orderTotalPrice"></span>
+        </div>
+      </div>
+      <button onclick="submitOrder()" style="width:100%;background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;border:none;padding:14px;border-radius:8px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit">Place Order & Pay &#8594;</button>
+      <div style="text-align:center;font-size:11px;color:rgba(255,255,255,0.3);margin-top:10px">&#128274; Secured by Flutterwave</div>
+    </div>
+  </div>
+</div>
 <!-- CONFIRM DIALOG -->
 <div class="cnf" id="cnfOv">
   <div class="cnfc">
