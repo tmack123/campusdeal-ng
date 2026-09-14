@@ -2249,6 +2249,141 @@ function saveReferral(uid){
     console.log('Referral saved:', ref);
   });
 }
+  // ===== ORDER SYSTEM =====
+var currentOrder = {};
+
+function openOrderForm(){
+  if(!currentItem){ return; }
+  var u = getUser();
+  if(!u){ openLogin(); return; }
+  
+  // Fill item info
+  var info = document.getElementById('orderItemInfo');
+  if(info){
+    info.innerHTML = "<div style='display:flex;gap:10px;align-items:center'>"
+      +(currentItem.img?"<img src='"+currentItem.img+"' style='width:60px;height:60px;border-radius:8px;object-fit:cover'>":"<div style='width:60px;height:60px;border-radius:8px;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font-size:24px'>"+(EMOS[currentItem.cat]||'📦')+"</div>")
+      +"<div><div style='font-size:13px;font-weight:700;color:#fff'>"+currentItem.title+"</div>"
+      +"<div style='font-size:16px;font-weight:900;color:#FFD700'>N"+Number(currentItem.price).toLocaleString()+"</div>"
+      +"<div style='font-size:11px;color:rgba(255,255,255,0.4)'>Seller: "+currentItem.seller+"</div></div></div>";
+  }
+
+  // Pre-fill user details
+  var nameEl = document.getElementById('orderName');
+  var phoneEl = document.getElementById('orderPhone');
+  if(nameEl && u.name) nameEl.value = u.name;
+  if(phoneEl && u.phone) phoneEl.value = u.phone.replace('234','0');
+
+  // Location change handler
+  var locEl = document.getElementById('orderLocation');
+  if(locEl){
+    locEl.onchange = function(){
+      var val = this.value;
+      if(!val){ document.getElementById('orderTotal').style.display='none'; return; }
+      var parts = val.split('|');
+      var deliveryFee = Number(parts[1]);
+      var itemPrice = Number(currentItem.price);
+      var total = itemPrice + deliveryFee;
+      document.getElementById('orderItemPrice').textContent = 'N'+itemPrice.toLocaleString();
+      document.getElementById('orderDeliveryFee').textContent = 'N'+deliveryFee.toLocaleString();
+      document.getElementById('orderTotalPrice').textContent = 'N'+total.toLocaleString();
+      document.getElementById('orderTotal').style.display = 'block';
+      currentOrder.deliveryFee = deliveryFee;
+      currentOrder.total = total;
+      currentOrder.location = parts[0];
+    };
+  }
+
+  currentOrder.item = currentItem;
+  openOv('orderOv');
+}
+
+function submitOrder(){
+  var name = (document.getElementById('orderName').value||'').trim();
+  var phone = (document.getElementById('orderPhone').value||'').trim();
+  var loc = document.getElementById('orderLocation').value;
+  var note = (document.getElementById('orderNote').value||'').trim();
+
+  if(!name){ showToast('Please enter your name!'); return; }
+  if(!phone){ showToast('Please enter your WhatsApp number!'); return; }
+  if(!loc){ showToast('Please select delivery location!'); return; }
+
+  var parts = loc.split('|');
+  var deliveryFee = Number(parts[1]);
+  var itemPrice = Number(currentOrder.item.price);
+  var total = itemPrice + deliveryFee;
+  var location = parts[0];
+
+  // Save order to Firebase
+  var orderData = {
+    itemTitle: currentOrder.item.title,
+    itemPrice: itemPrice,
+    sellerName: currentOrder.item.seller,
+    sellerWa: currentOrder.item.wa,
+    buyerName: name,
+    buyerPhone: phone,
+    deliveryLocation: location,
+    deliveryFee: deliveryFee,
+    totalAmount: total,
+    note: note,
+    status: 'pending',
+    createdAt: new Date().toISOString()
+  };
+
+  // Pay with Flutterwave
+  var u = getUser();
+  FlutterwaveCheckout({
+    public_key: FLW_KEY,
+    tx_ref: 'ORD_' + Date.now(),
+    amount: total,
+    currency: 'NGN',
+    payment_options: 'card,ussd,banktransfer',
+    customer: {
+      email: u ? u.email : 'customer@campusdeal.com.ng',
+      name: name,
+      phonenumber: phone
+    },
+    customizations: {
+      title: 'CampusDeal Order',
+      description: currentOrder.item.title + ' + Delivery to ' + location,
+    },
+    callback: function(res){
+      if(res.status === 'successful' || res.status === 'completed'){
+        orderData.paymentRef = res.transaction_id;
+        orderData.status = 'paid';
+        
+        // Save to Firebase
+        if(fbReady && db){
+          db.collection('orders').add(orderData).then(function(doc){
+            // Send WhatsApp notification to you
+            var waMsg = "🛍️ *NEW ORDER - CampusDeal*\n\n"
+              +"*Item:* "+orderData.itemTitle+"\n"
+              +"*Item Price:* N"+itemPrice.toLocaleString()+"\n"
+              +"*Delivery to:* "+location+"\n"
+              +"*Delivery Fee:* N"+deliveryFee.toLocaleString()+"\n"
+              +"*Total Paid:* N"+total.toLocaleString()+"\n\n"
+              +"*Buyer Name:* "+name+"\n"
+              +"*Buyer WhatsApp:* "+phone+"\n"
+              +(note?"*Note:* "+note+"\n":"")+"\n"
+              +"*Seller:* "+orderData.sellerName+"\n"
+              +"*Seller WhatsApp:* "+orderData.sellerWa+"\n\n"
+              +"*Order ID:* "+doc.id+"\n"
+              +"*Payment Ref:* "+res.transaction_id;
+            
+            window.open('https://wa.me/2348033873918?text='+encodeURIComponent(waMsg));
+            closeOv('orderOv');
+            closeOv('detOv');
+            showToast('Order placed successfully! 🎉', 'success');
+          });
+        }
+      } else {
+        showToast('Payment failed! Please try again.');
+      }
+    },
+    onclose: function(){
+      showToast('Payment cancelled.');
+    }
+  });
+}
 function contactAdmin(){var u=getUser();var msg=u?"Hi CampusDeal Admin! My name is "+u.name+" and I need help.":"Hi CampusDeal Admin! I need help.";window.open("https://wa.me/2348033873918?text="+encodeURIComponent(msg));}
 
 // =============================================================
