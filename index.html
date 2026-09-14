@@ -2428,6 +2428,7 @@ function submitOrder(){
       +'<div id="orderTotal2" style="background:rgba(255,255,255,0.04);border-radius:8px;padding:12px;margin-bottom:16px;display:none">'
       +'<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;color:rgba(255,255,255,0.5)">Item Price</span><span style="font-size:13px;font-weight:700;color:#fff" id="orderItemPrice2"></span></div>'
       +'<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;color:rgba(255,255,255,0.5)">Delivery Fee</span><span style="font-size:13px;font-weight:700;color:#fff" id="orderDeliveryFee2"></span></div>'
+     '<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;color:rgba(255,255,255,0.5)">Service Fee</span><span style="font-size:13px;font-weight:700;color:#fff">N300</span></div>'
       +'<div style="height:1px;background:rgba(255,255,255,0.1);margin:8px 0"></div>'
       +'<div style="display:flex;justify-content:space-between"><span style="font-size:14px;font-weight:700;color:#fff">Total</span><span style="font-size:14px;font-weight:900;color:#FFD700" id="orderTotalPrice2"></span></div>'
       +'</div>'
@@ -2464,7 +2465,8 @@ function submitOrder(){
       var pts = val.split('|');
       var df = Number(pts[1]);
       var ip = Number(currentItem.price);
-      var tot = ip + df;
+      var sf = 300;
+      var tot = ip + df + sf;
       document.getElementById('orderItemPrice2').textContent='N'+ip.toLocaleString();
       document.getElementById('orderDeliveryFee2').textContent='N'+df.toLocaleString();
       document.getElementById('orderTotalPrice2').textContent='N'+tot.toLocaleString();
@@ -2484,7 +2486,8 @@ function submitOrder2(){
   var pts=loc.split('|');
   var df=Number(pts[1]);
   var ip=Number(currentOrder.item.price);
-  var tot=ip+df;
+  var sf=300;
+  var tot=ip+df+sf;
   var location=pts[0];
   var u=getUser();
   FlutterwaveCheckout({
