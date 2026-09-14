@@ -2836,42 +2836,56 @@ function startVerifyPayment(){
   if(!user){ alert('Please login first!'); return; }
   var btn = document.getElementById('vPayBtn');
   btn.disabled = true;
-  btn.textContent = 'Loading...';
-  var handler = PaystackPop.setup({
-    key: PSTACK_KEY,
-    email: user.email,
-    amount: 100000,
+  btn.textContent = '⏳ Loading...';
+  FlutterwaveCheckout({
+    public_key: FLW_KEY,
+    tx_ref: 'VRF_' + Date.now(),
+    amount: 1000,
     currency: 'NGN',
-    ref: 'VRF_' + Date.now(),
-    onClose: function(){
-      btn.disabled = false;
-      btn.textContent = 'Pay N1,000 - Get Verified Now';
+    payment_options: 'card,ussd,banktransfer',
+    customer: {
+      email: user.email,
+      name: user.displayName || 'CampusDeal User',
     },
-    callback: function(res){
-      var exp = new Date();
-      exp.setDate(exp.getDate() + 30);
-      firebase.firestore().collection('users').doc(user.uid).update({
-        isVerified: true,
-        verifiedUntil: exp.toISOString(),
-        verifyRef: res.reference
-      }).then(function(){
-        firebase.firestore().collection('payments').add({
-          userId: user.uid,
-          amount: 1000,
-          type: 'verified_badge',
-          ref: res.reference,
-          createdAt: new Date().toISOString()
+    customizations: {
+      title: 'CampusDeal Verified Badge',
+      description: 'Get verified seller badge for 30 days',
+      logo: 'https://campusdeal.com.ng/icon.png',
+    },
+        callback: function(res){
+      if(res.status === 'successful' || res.status === 'completed'){
+        var exp = new Date();
+        exp.setDate(exp.getDate() + 30);
+        firebase.firestore().collection('users').doc(user.uid).update({
+          isVerified: true,
+          verifiedUntil: exp.toISOString(),
+          verifyRef: res.transaction_id
+        }).then(function(){
+          firebase.firestore().collection('payments').add({
+            userId: user.uid,
+            amount: 1000,
+            type: 'verified_badge',
+            ref: res.transaction_id,
+            createdAt: new Date().toISOString()
+          });
+          document.getElementById('vStep1').style.display = 'none';
+          document.getElementById('vStep2').style.display = 'block';
+          document.getElementById('verifyBanner').style.display = 'none';
+        }).catch(function(){
+          document.getElementById('vStep1').style.display = 'none';
+          document.getElementById('vStep2').style.display = 'block';
         });
-        document.getElementById('vStep1').style.display = 'none';
-        document.getElementById('vStep2').style.display = 'block';
-        document.getElementById('verifyBanner').style.display = 'none';
-      }).catch(function(){
-        document.getElementById('vStep1').style.display = 'none';
-        document.getElementById('vStep2').style.display = 'block';
-      });
+      } else {
+        btn.disabled=false;
+        btn.textContent='Pay N1,000 - Get Verified Now';
+        showToast('Payment failed! Please try again.');
+      }
+    },
+    onclose: function(){
+      btn.disabled=false;
+      btn.textContent='Pay N1,000 - Get Verified Now';
     }
   });
-  handler.openIframe();
 }
 
 </script>
