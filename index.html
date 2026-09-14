@@ -2682,10 +2682,21 @@ function loadAdminDashboard(){
   });
   // Load users count separately
   db.collection("users").get().then(function(snap){
+    // Filter out test accounts
+    var realUsers = snap.docs.filter(function(doc){
+      var d = doc.data();
+      var name = (d.name||'').toLowerCase();
+      var email = (d.email||'').toLowerCase();
+      return !name.includes('test') && 
+             !email.includes('test') &&
+             !name.includes('hehe') &&
+             !name.includes('behe') &&
+             d.name && d.name.length > 1;
+    });
     var sn2 = document.getElementById("statUsersNum");
-    if(sn2) sn2.textContent = snap.size;
+    if(sn2) sn2.textContent = realUsers.length;
     var el4 = document.getElementById("adminTotalUsers"); 
-    if(el4) el4.textContent = snap.size;
+    if(el4) el4.textContent = realUsers.length;
   });
   showAdminTab("ads", null);
 }
