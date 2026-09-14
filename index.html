@@ -2258,6 +2258,8 @@ function openOrderForm(passedItem){
     showToast('Please select an ad first!');
     return; 
   }
+  var u = getUser();
+  if(!u){ openLogin(); return; }
   // Fill item info
   var info = document.getElementById('orderItemInfo');
   if(info){
