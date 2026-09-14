@@ -976,16 +976,17 @@ setUser({name:name, phone:phone, email:em, uid:result.user.uid, isVerified:isVer
           if(iW&&phone)iW.value=phone.replace("234","0");
           askNotifAfterLogin(name);
           // Check verified status after login
-db.collection('users').where('uid','==',result.user.uid).get()
-.then(function(vSnap){
-  if(!vSnap.empty){
-    var vData = vSnap.docs[0].data();
-    var isVerNow = vData.isVerified && vData.verifiedUntil && new Date(vData.verifiedUntil) > new Date();
-    var u = getUser();
-    if(u){ u.isVerified = isVerNow; setUser(u); updateHamburgerUser(); }
-  }
-});
-        });
+          if(fbReady&&db){
+            db.collection('users').where('uid','==',result.user.uid).get()
+            .then(function(vSnap){
+              if(!vSnap.empty){
+                var vData=vSnap.docs[0].data();
+                var isVerNow=vData.isVerified&&vData.verifiedUntil&&new Date(vData.verifiedUntil)>new Date();
+                var cu=getUser();
+                if(cu){cu.isVerified=isVerNow;setUser(cu);updateHamburgerUser();}
+              }
+            });
+          }   });
       })
       .catch(function(e){
         if(btn){btn.textContent="Login →";btn.disabled=false;}
