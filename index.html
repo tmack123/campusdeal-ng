@@ -964,7 +964,10 @@ function doLogin(){
         db.collection("users").where("uid","==",result.user.uid).get().then(function(snap){
           var name = snap.empty ? em.split("@")[0] : snap.docs[0].data().name;
           var phone = snap.empty ? "" : (snap.docs[0].data().phone||"");
-          setUser({name:name, phone:phone, email:em, uid:result.user.uid});
+         var isVer = snap.empty ? false : (snap.docs[0].data().isVerified||false);
+var verUntil = snap.empty ? null : (snap.docs[0].data().verifiedUntil||null);
+var isVerifiedNow = isVer && verUntil && new Date(verUntil) > new Date();
+setUser({name:name, phone:phone, email:em, uid:result.user.uid, isVerified:isVerifiedNow});
           closeOv("loginOv");
           refreshNav();
           var iN=document.getElementById("iName");
