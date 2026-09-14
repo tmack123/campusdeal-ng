@@ -590,7 +590,7 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
         <button class="dwab" id="detWa">&#128153; WhatsApp Seller</button>
         <button class="dclb" onclick="closeOv('detOv')">&#10005;</button>
       </div>
-      <button onclick="openOrderForm(currentItem);setTimeout(function(){openOv('orderOv');},300)" style="width:100%;background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;border:none;padding:14px;border-radius:8px;font-size:15px;font-weight:800;cursor:pointer;margin-top:8px">&#128666; Order with Delivery</button>
+    <button onclick="currentOrder.item=currentItem;document.getElementById('orderOv').classList.add('on')" style="width:100%;background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;border:none;padding:14px;border-radius:8px;font-size:15px;font-weight:800;cursor:pointer;margin-top:8px">&#128666; Order with Delivery</button>
       <button onclick="reportAd()" style="width:100%;background:transparent;color:rgba(255,68,68,0.6);border:1px solid rgba(255,68,68,0.2);padding:8px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;margin-top:8px">&#128680; Report this ad</button>
     </div>
   </div>
