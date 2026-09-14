@@ -2746,6 +2746,37 @@ function showAdminTab(tab, tabEl){
             +"</div></div>";
         }).join("");
     });
+    } else if(tab === "orders"){
+    body.innerHTML = "<div style='text-align:center;padding:1rem'><div class='spin'></div></div>";
+    if(!db){ waitForFirebaseAndLoad(); return; }
+    db.collection("orders").orderBy("createdAt","desc").get().then(function(snap){
+      if(snap.empty){
+        body.innerHTML = "<div class='emp'><div class='empi'>&#128666;</div><p>No orders yet!</p></div>";
+        return;
+      }
+      body.innerHTML = "<h3 style='font-size:15px;font-weight:900;margin-bottom:1rem;color:#fff'>&#128666; Orders ("+snap.size+")</h3>"
+        +snap.docs.map(function(doc){
+          var d = doc.data();
+          var statusColor = d.status==='delivered'?'#22c55e':d.status==='paid'?'#FFD700':'#ff4444';
+          return "<div style='background:#0d1a0d;border-radius:10px;border:1px solid rgba(255,255,255,0.07);padding:12px;margin-bottom:10px'>"
+            +"<div style='display:flex;align-items:center;justify-content:space-between;margin-bottom:8px'>"
+            +"<div style='font-size:13px;font-weight:700;color:#fff'>"+d.itemTitle+"</div>"
+            +"<div style='background:"+statusColor+";color:#000;font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px'>"+( d.status||'pending').toUpperCase()+"</div>"
+            +"</div>"
+            +"<div style='font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px'>&#128100; "+d.buyerName+" · "+d.buyerPhone+"</div>"
+            +"<div style='font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px'>&#128205; "+d.deliveryLocation+"</div>"
+            +"<div style='font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px'>&#128179; Item: N"+Number(d.itemPrice).toLocaleString()+" + Delivery: N"+Number(d.deliveryFee).toLocaleString()+" = <strong style='color:#FFD700'>N"+Number(d.totalAmount).toLocaleString()+"</strong></div>"
+            +"<div style='font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:8px'>Seller: "+d.sellerName+" · "+d.sellerWa+"</div>"
+            +(d.note?"<div style='font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:8px'>Note: "+d.note+"</div>":"")
+            +"<div style='display:flex;gap:6px'>"
+            +"<button data-id='"+doc.id+"' onclick='markDelivered(this.dataset.id)' style='background:rgba(34,197,94,0.1);color:#22c55e;border:1px solid rgba(34,197,94,0.3);padding:5px 10px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer'>&#10003; Mark Delivered</button>"
+            +"<button onclick='window.open(\"https://wa.me/\"+\""+d.buyerPhone+"\")' style='background:rgba(37,211,102,0.1);color:#25D366;border:1px solid rgba(37,211,102,0.3);padding:5px 10px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer'>&#128153; WhatsApp Buyer</button>"
+            +"<button onclick='window.open(\"https://wa.me/\"+\""+d.sellerWa+"\")' style='background:rgba(255,215,0,0.1);color:#FFD700;border:1px solid rgba(255,215,0,0.3);padding:5px 10px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer'>&#128153; WhatsApp Seller</button>"
+            +"</div></div>";
+        }).join("");
+    }).catch(function(e){
+      body.innerHTML = "<div class='emp'>Error: "+e.message+"</div>";
+    });
     } else if(tab === "referrals"){
     body.innerHTML = "<div style='text-align:center;padding:1rem'><div class='spin'></div></div>";
     if(!db){ waitForFirebaseAndLoad(); return; }
@@ -2860,7 +2891,18 @@ function showUsageTab(body){
     if(el)el.innerHTML="<div style='color:rgba(255,255,255,0.4);font-size:13px;text-align:center'>Could not load stats</div>";
   });
 }
-
+function markDelivered(id){
+  if(!db) return;
+  db.collection('orders').doc(id).update({
+    status: 'delivered',
+    deliveredAt: new Date().toISOString()
+  }).then(function(){
+    showToast('Order marked as delivered!','success');
+    showAdminTab('orders', null);
+  }).catch(function(e){
+    showToast('Error: '+e.message);
+  });
+}
 function adminToggleFeat(btn){
   if(!db){alert("Firebase not ready!");return;}
   var id = btn.dataset.id;
