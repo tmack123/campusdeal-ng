@@ -123,6 +123,7 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
 .at{font-size:11px;color:rgba(255,255,255,0.7);margin:2px 0 5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .af{display:flex;align-items:center;justify-content:space-between}
 .al{font-size:9px;color:rgba(255,255,255,0.35)}
+  .vbadge{display:inline-flex;align-items:center;gap:3px;background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;font-size:9px;font-weight:800;padding:2px 6px;border-radius:10px;margin-left:4px}
 .aw{background:#FFD700;color:#080f08;border:none;padding:4px 8px;border-radius:10px;font-size:9px;font-weight:700;cursor:pointer}
 /* HOW */
 .how{background:rgba(255,255,255,0.02);margin:0 1rem 1rem;border-radius:12px;padding:1.2rem 1rem;border:1px solid rgba(255,255,255,0.07)}
@@ -1399,7 +1400,8 @@ function buildCard(item){
     +'<div class="ap">&#8358;'+pr+'</div>'
     +'<div class="at">'+titl+'</div>'
     +'<div class="af">'
-    +'<div class="al">'+loc+'</div>'
+   +'<div class="al">'+loc+(item.sellerVerified?'<span class="vbadge">&#11088; Verified</span>':'')+'</div>'
+
     +'<button class="aw" data-wa="'+wa+'" data-title="'+titl.replace(/"/g,'')+'" data-price="'+price+'" onclick="event.stopPropagation();waFromBtn(this)">WhatsApp</button>'
     +'</div></div></div>';
   return html;
