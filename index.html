@@ -2270,11 +2270,12 @@ function openOrderForm(passedItem){
       +"<div style='font-size:11px;color:rgba(255,255,255,0.4)'>Seller: "+currentItem.seller+"</div></div></div>";
   }
 
-  // Pre-fill user details
+ // Pre-fill user details
+  var u = getUser();
   var nameEl = document.getElementById('orderName');
   var phoneEl = document.getElementById('orderPhone');
-  if(nameEl && u.name) nameEl.value = u.name;
-  if(phoneEl && u.phone) phoneEl.value = u.phone.replace('234','0');
+  if(nameEl && u && u.name) nameEl.value = u.name;
+  if(phoneEl && u && u.phone) phoneEl.value = u.phone.replace('234','0');
 
   // Location change handler
   var locEl = document.getElementById('orderLocation');
