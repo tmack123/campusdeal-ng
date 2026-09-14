@@ -590,7 +590,7 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
         <button class="dwab" id="detWa">&#128153; WhatsApp Seller</button>
         <button class="dclb" onclick="closeOv('detOv')">&#10005;</button>
       </div>
-    <button onclick="currentOrder.item=currentItem;document.getElementById('orderOv').classList.add('on')" style="width:100%;background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;border:none;padding:14px;border-radius:8px;font-size:15px;font-weight:800;cursor:pointer;margin-top:8px">&#128666; Order with Delivery</button>
+    <button onclick="showOrderPage()" style="width:100%;background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;border:none;padding:14px;border-radius:8px;font-size:15px;font-weight:800;cursor:pointer;margin-top:8px">&#128666; Order with Delivery</button>
       <button onclick="reportAd()" style="width:100%;background:transparent;color:rgba(255,68,68,0.6);border:1px solid rgba(255,68,68,0.2);padding:8px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;margin-top:8px">&#128680; Report this ad</button>
     </div>
   </div>
@@ -2385,6 +2385,155 @@ function submitOrder(){
     onclose: function(){
       showToast('Payment cancelled.');
     }
+  });
+}
+  function showOrderPage(){
+  if(!currentItem) return;
+  currentOrder.item = currentItem;
+  closeOv('detOv');
+  var pg = document.getElementById('pg-order');
+  if(!pg){
+    pg = document.createElement('div');
+    pg.id = 'pg-order';
+    pg.className = 'pg';
+    pg.style.cssText = 'position:fixed;inset:0;background:#080f08;z-index:9999;overflow-y:auto;padding-bottom:80px';
+    pg.innerHTML = '<div style="background:#080f08;padding:14px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,215,0,0.12)">'
+      +'<button onclick="document.getElementById(\'pg-order\').style.display=\'none\'" style="background:rgba(255,215,0,0.1);border:none;color:#FFD700;width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer">&#8592;</button>'
+      +'<div style="font-size:16px;font-weight:900;color:#FFD700">&#128666; Order with Delivery</div>'
+      +'</div>'
+      +'<div style="padding:16px">'
+      +'<div id="orderItemInfo2" style="background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.15);border-radius:10px;padding:12px;margin-bottom:16px"></div>'
+      +'<div style="margin-bottom:12px"><label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);display:block;margin-bottom:5px">YOUR NAME *</label>'
+      +'<input type="text" id="orderName2" placeholder="Enter your full name" style="width:100%;padding:11px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:14px;outline:none;background:rgba(255,255,255,0.05);color:#fff;font-family:inherit"></div>'
+      +'<div style="margin-bottom:12px"><label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);display:block;margin-bottom:5px">WHATSAPP NUMBER *</label>'
+      +'<input type="tel" id="orderPhone2" placeholder="08012345678" style="width:100%;padding:11px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:14px;outline:none;background:rgba(255,255,255,0.05);color:#fff;font-family:inherit"></div>'
+      +'<div style="margin-bottom:12px"><label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);display:block;margin-bottom:5px">DELIVERY LOCATION *</label>'
+      +'<select id="orderLocation2" style="width:100%;padding:11px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:14px;outline:none;background:#0d1a0d;color:#fff;font-family:inherit">'
+      +'<option value="">Select delivery location</option>'
+      +'<option value="Camp|1000">Camp - N1,000</option>'
+      +'<option value="FUNAAB Zoo|1000">FUNAAB Zoo - N1,000</option>'
+      +'<option value="Harmony|1000">Harmony - N1,000</option>'
+      +'<option value="Isolu|1000">Isolu - N1,000</option>'
+      +'<option value="Kofesu|1000">Kofesu - N1,000</option>'
+      +'<option value="Labuta|1000">Labuta - N1,000</option>'
+      +'<option value="Ogun Osun|1000">Ogun Osun - N1,000</option>'
+      +'<option value="Oluwo|1000">Oluwo - N1,000</option>'
+      +'<option value="Odo Eran|1200">Odo Eran - N1,200</option>'
+      +'<option value="Osiele|1200">Osiele - N1,200</option>'
+      +'<option value="Kotopo|1300">Kotopo - N1,300</option>'
+      +'</select></div>'
+      +'<div style="margin-bottom:12px"><label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);display:block;margin-bottom:5px">NOTE (OPTIONAL)</label>'
+      +'<textarea id="orderNote2" placeholder="Any special instructions..." style="width:100%;padding:11px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:14px;outline:none;background:rgba(255,255,255,0.05);color:#fff;font-family:inherit;height:70px;resize:none"></textarea></div>'
+      +'<div id="orderTotal2" style="background:rgba(255,255,255,0.04);border-radius:8px;padding:12px;margin-bottom:16px;display:none">'
+      +'<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;color:rgba(255,255,255,0.5)">Item Price</span><span style="font-size:13px;font-weight:700;color:#fff" id="orderItemPrice2"></span></div>'
+      +'<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;color:rgba(255,255,255,0.5)">Delivery Fee</span><span style="font-size:13px;font-weight:700;color:#fff" id="orderDeliveryFee2"></span></div>'
+      +'<div style="height:1px;background:rgba(255,255,255,0.1);margin:8px 0"></div>'
+      +'<div style="display:flex;justify-content:space-between"><span style="font-size:14px;font-weight:700;color:#fff">Total</span><span style="font-size:14px;font-weight:900;color:#FFD700" id="orderTotalPrice2"></span></div>'
+      +'</div>'
+      +'<button onclick="submitOrder2()" style="width:100%;background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;border:none;padding:14px;border-radius:8px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit">Place Order & Pay &#8594;</button>'
+      +'<div style="text-align:center;font-size:11px;color:rgba(255,255,255,0.3);margin-top:10px">&#128274; Secured by Flutterwave</div>'
+      +'</div>';
+    document.body.appendChild(pg);
+  }
+
+  // Fill item info
+  pg.style.display = 'block';
+  var info = document.getElementById('orderItemInfo2');
+  if(info){
+    info.innerHTML = "<div style='display:flex;gap:10px;align-items:center'>"
+      +(currentItem.img?"<img src='"+currentItem.img+"' style='width:60px;height:60px;border-radius:8px;object-fit:cover'>":"<div style='width:60px;height:60px;border-radius:8px;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font-size:24px'>"+(EMOS[currentItem.cat]||'📦')+"</div>")
+      +"<div><div style='font-size:13px;font-weight:700;color:#fff'>"+currentItem.title+"</div>"
+      +"<div style='font-size:16px;font-weight:900;color:#FFD700'>N"+Number(currentItem.price).toLocaleString()+"</div>"
+      +"<div style='font-size:11px;color:rgba(255,255,255,0.4)'>Seller: "+currentItem.seller+"</div></div></div>";
+  }
+
+  // Pre-fill
+  var u = getUser();
+  var n = document.getElementById('orderName2');
+  var p = document.getElementById('orderPhone2');
+  if(n && u && u.name) n.value = u.name;
+  if(p && u && u.phone) p.value = u.phone.replace('234','0');
+
+  // Location handler
+  var loc = document.getElementById('orderLocation2');
+  if(loc){
+    loc.onchange = function(){
+      var val = this.value;
+      if(!val){ document.getElementById('orderTotal2').style.display='none'; return; }
+      var pts = val.split('|');
+      var df = Number(pts[1]);
+      var ip = Number(currentItem.price);
+      var tot = ip + df;
+      document.getElementById('orderItemPrice2').textContent='N'+ip.toLocaleString();
+      document.getElementById('orderDeliveryFee2').textContent='N'+df.toLocaleString();
+      document.getElementById('orderTotalPrice2').textContent='N'+tot.toLocaleString();
+      document.getElementById('orderTotal2').style.display='block';
+    };
+  }
+}
+
+function submitOrder2(){
+  var name=(document.getElementById('orderName2').value||'').trim();
+  var phone=(document.getElementById('orderPhone2').value||'').trim();
+  var loc=document.getElementById('orderLocation2').value;
+  var note=(document.getElementById('orderNote2').value||'').trim();
+  if(!name){showToast('Please enter your name!');return;}
+  if(!phone){showToast('Please enter your WhatsApp number!');return;}
+  if(!loc){showToast('Please select delivery location!');return;}
+  var pts=loc.split('|');
+  var df=Number(pts[1]);
+  var ip=Number(currentOrder.item.price);
+  var tot=ip+df;
+  var location=pts[0];
+  var u=getUser();
+  FlutterwaveCheckout({
+    public_key:FLW_KEY,
+    tx_ref:'ORD_'+Date.now(),
+    amount:tot,
+    currency:'NGN',
+    payment_options:'card,ussd,banktransfer',
+    customer:{email:u?u.email:'customer@campusdeal.com.ng',name:name,phonenumber:phone},
+    customizations:{title:'CampusDeal Order',description:currentOrder.item.title+' + Delivery to '+location},
+    callback:function(res){
+      if(res.status==='successful'||res.status==='completed'){
+        var orderData={
+          itemTitle:currentOrder.item.title,
+          itemPrice:ip,
+          sellerName:currentOrder.item.seller,
+          sellerWa:currentOrder.item.wa,
+          buyerName:name,
+          buyerPhone:phone,
+          deliveryLocation:location,
+          deliveryFee:df,
+          totalAmount:tot,
+          note:note,
+          status:'paid',
+          paymentRef:res.transaction_id,
+          createdAt:new Date().toISOString()
+        };
+        if(fbReady&&db){
+          db.collection('orders').add(orderData).then(function(doc){
+            var waMsg="🛍️ *NEW ORDER - CampusDeal*\n\n"
+              +"*Item:* "+orderData.itemTitle+"\n"
+              +"*Price:* N"+ip.toLocaleString()+"\n"
+              +"*Delivery:* "+location+" - N"+df.toLocaleString()+"\n"
+              +"*Total Paid:* N"+tot.toLocaleString()+"\n\n"
+              +"*Buyer:* "+name+"\n"
+              +"*Buyer WA:* "+phone+"\n"
+              +(note?"*Note:* "+note+"\n":"")+"\n"
+              +"*Seller:* "+orderData.sellerName+"\n"
+              +"*Seller WA:* "+orderData.sellerWa+"\n\n"
+              +"*Order ID:* "+doc.id;
+            window.open('https://wa.me/2348033873918?text='+encodeURIComponent(waMsg));
+            document.getElementById('pg-order').style.display='none';
+            showToast('Order placed! 🎉','success');
+          });
+        }
+      } else {
+        showToast('Payment failed! Try again.');
+      }
+    },
+    onclose:function(){showToast('Payment cancelled.');}
   });
 }
 function contactAdmin(){var u=getUser();var msg=u?"Hi CampusDeal Admin! My name is "+u.name+" and I need help.":"Hi CampusDeal Admin! I need help.";window.open("https://wa.me/2348033873918?text="+encodeURIComponent(msg));}
