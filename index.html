@@ -1754,15 +1754,12 @@ async function postAd(){
           }
           if(btn) btn.textContent = "Saving...";
         }catch(e){
-          console.log("Upload failed:", e);
-         imgUrl=""; if(btn)btn.disabled=false; if(btn)btn.textContent="Post Ad - FREE"; showToast("Image too large! Please use a smaller photo under 1MB."); return;
+         console.log("Cloudinary error:", data.error);
+            imgUrl=uploadedImgs[0].dataUrl||"";
           if(btn) btn.textContent = "Saving...";
         }
-      } else if(uploadedImgs[0].dataUrl){
-      imgUrl="";
-      showToast("Image upload failed! Please use a photo under 1MB.");
-      if(btn){btn.disabled=false;btn.textContent="Post Ad - FREE";}
-      return;
+     } else if(uploadedImgs[0].dataUrl){
+        imgUrl=uploadedImgs[0].dataUrl;
       }
     }
     if(!fbReady||!db)throw new Error("Firebase not ready");
