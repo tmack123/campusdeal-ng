@@ -351,8 +351,6 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
     <div style="height:1px;background:rgba(255,255,255,0.06);margin:8px 16px"></div>
     <div style="padding:8px 16px;font-size:10px;font-weight:700;color:rgba(255,215,0,0.4);letter-spacing:2px">INFO</div>
     <div class="hm-item" onclick="closeHamburger();contactAdmin()">&#128222; Contact Admin</div>
-    <div class="hm-item" onclick="closeHamburger();showAnnouncements()">&#128226; Announcements</div>
-<div class="hm-item" onclick="closeHamburger();showInbox()">&#128140; Inbox <span id="inboxBadge" style="display:none;background:#ff4444;color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;margin-left:4px">0</span></div>
     <div class="hm-item" onclick="closeHamburger();showAbout()">&#8505; About CampusDeal</div>
     <div style="height:1px;background:rgba(255,255,255,0.06);margin:8px 16px"></div>
     <div id="hmLogout" style="display:none" class="hm-item hm-red" onclick="closeHamburger();doLogout()">&#128682; Logout</div>
@@ -883,27 +881,6 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
     </div>
   </div>
 </div>
-  <!-- ANNOUNCEMENTS PAGE -->
-<div class="pg" id="pg-announcements" style="padding-bottom:80px">
-  <div style="background:#080f08;padding:14px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,215,0,0.12)">
-    <button onclick="goHome()" style="background:rgba(255,215,0,0.1);border:none;color:#FFD700;width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer">&#8592;</button>
-    <div style="font-size:16px;font-weight:900;color:#FFD700">&#128226; Announcements</div>
-  </div>
-  <div id="announcementsList" style="padding:14px">
-    <div style="text-align:center;padding:2rem"><div class="spin"></div></div>
-  </div>
-</div>
-
-<!-- INBOX PAGE -->
-<div class="pg" id="pg-inbox" style="padding-bottom:80px">
-  <div style="background:#080f08;padding:14px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,215,0,0.12)">
-    <button onclick="goHome()" style="background:rgba(255,215,0,0.1);border:none;color:#FFD700;width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer">&#8592;</button>
-    <div style="font-size:16px;font-weight:900;color:#FFD700">&#128140; Inbox</div>
-  </div>
-  <div id="inboxList" style="padding:14px">
-    <div style="text-align:center;padding:2rem"><div class="spin"></div></div>
-  </div>
-</div>
 <!-- CONFIRM DIALOG -->
 <div class="cnf" id="cnfOv">
   <div class="cnfc">
@@ -1066,13 +1043,10 @@ setUser({name:name, phone:phone, email:em, uid:result.user.uid, isVerified:isVer
                 var vData=vSnap.docs[0].data();
                 var isVerNow=vData.isVerified&&vData.verifiedUntil&&new Date(vData.verifiedUntil)>new Date();
                 var cu=getUser();
-               if(cu){cu.isVerified=isVerNow;setUser(cu);updateHamburgerUser();}
+                if(cu){cu.isVerified=isVerNow;setUser(cu);updateHamburgerUser();}
               }
             });
-          }
-          checkInboxCount();
-        });
-      })
+          }   });
       })
       .catch(function(e){
         if(btn){btn.textContent="Login →";btn.disabled=false;}
@@ -1754,20 +1728,22 @@ async function postAd(){
           var data=await res.json();
           if(data.secure_url){
             imgUrl=data.secure_url;
-           } else {
-            // Cloudinary returned error - use compressed base64
+          } else {
+            // Cloudinary returned error
             console.log("Cloudinary error:", data.error);
-            imgUrl=uploadedImgs[0].dataUrl||"";
+            imgUrl=""||"";
           }
           if(btn) btn.textContent = "Saving...";
-                }catch(e){
+        }catch(e){
           console.log("Upload failed:", e);
-          // Use compressed base64 as fallback
-          imgUrl=uploadedImgs[0].dataUrl||"";
+         imgUrl=""; if(btn)btn.disabled=false; if(btn)btn.textContent="Post Ad - FREE"; showToast("Image too large! Please use a smaller photo under 1MB."); return;
           if(btn) btn.textContent = "Saving...";
         }
       } else if(uploadedImgs[0].dataUrl){
-        imgUrl=uploadedImgs[0].dataUrl;
+      imgUrl="";
+      showToast("Image upload failed! Please use a photo under 1MB.");
+      if(btn){btn.disabled=false;btn.textContent="Post Ad - FREE";}
+      return;
       }
     }
     if(!fbReady||!db)throw new Error("Firebase not ready");
@@ -1783,9 +1759,8 @@ async function postAd(){
       img:imgUrl||"",
       feat:false,
       time:"Just now",
-     userId:firebaseUid,
-    sellerVerified: !!(getUser()&&getUser().isVerified),
-    createdAt:firebase.firestore.FieldValue.serverTimestamp()
+      userId:firebaseUid,
+      createdAt:firebase.firestore.FieldValue.serverTimestamp()
     };
     if(eid){await db.collection("ads").doc(eid).update(adData);closeOv("sellOv");showToast("Ad updated!","success");}
     else{await db.collection("ads").add(adData);closeOv("sellOv");showPostSuccess();}
@@ -2575,94 +2550,6 @@ function submitOrder2(){
     onclose:function(){showToast('Payment cancelled.');}
   });
 }
-  // ===== ANNOUNCEMENTS =====
-function showAnnouncements(){
-  showPg('announcements');
-  var list = document.getElementById('announcementsList');
-  if(!list) return;
-  if(!fbReady || !db){
-    list.innerHTML = "<div class='emp'><div class='empi'>&#128226;</div><p>Loading...</p></div>";
-    return;
-  }
-  db.collection('announcements').orderBy('createdAt','desc').get()
-  .then(function(snap){
-    if(snap.empty){
-      list.innerHTML = "<div class='emp'><div class='empi'>&#128226;</div><p>No announcements yet!</p></div>";
-      return;
-    }
-    list.innerHTML = snap.docs.map(function(doc){
-      var d = doc.data();
-      var date = d.createdAt ? new Date(d.createdAt).toLocaleDateString() : '';
-      return "<div style='background:#0d1a0d;border-radius:12px;padding:14px;margin-bottom:12px;border:1px solid rgba(255,215,0,0.12)'>"
-        +"<div style='display:flex;align-items:center;gap:8px;margin-bottom:8px'>"
-        +"<span style='font-size:20px'>&#128226;</span>"
-        +"<div style='font-size:14px;font-weight:800;color:#FFD700'>"+d.title+"</div>"
-        +"</div>"
-        +"<div style='font-size:13px;color:rgba(255,255,255,0.7);line-height:1.6;margin-bottom:8px'>"+d.message+"</div>"
-        +"<div style='font-size:10px;color:rgba(255,255,255,0.3)'>"+date+"</div>"
-        +"</div>";
-    }).join('');
-  }).catch(function(){
-    list.innerHTML = "<div class='emp'><div class='empi'>&#128226;</div><p>Could not load announcements</p></div>";
-  });
-}
-
-// ===== INBOX =====
-function showInbox(){
-  var u = getUser();
-  if(!u){ openLogin(); return; }
-  showPg('inbox');
-  var list = document.getElementById('inboxList');
-  if(!list) return;
-  if(!fbReady || !db){
-    list.innerHTML = "<div class='emp'><div class='empi'>&#128140;</div><p>Loading...</p></div>";
-    return;
-  }
-  // Show orders where seller WhatsApp matches user
-  db.collection('orders').where('sellerWa','==',u.phone).get()
-  .then(function(snap){
-    var html = "";
-    if(!snap.empty){
-      html += "<div style='font-size:13px;font-weight:700;color:#FFD700;margin-bottom:10px'>&#128666; Orders for your products</div>";
-      html += snap.docs.map(function(doc){
-        var d = doc.data();
-        var statusColor = d.status==='delivered'?'#22c55e':'#FFD700';
-        return "<div style='background:#0d1a0d;border-radius:12px;padding:14px;margin-bottom:10px;border:1px solid rgba(255,215,0,0.12)'>"
-          +"<div style='display:flex;align-items:center;justify-content:space-between;margin-bottom:8px'>"
-          +"<div style='font-size:14px;font-weight:800;color:#fff'>&#128666; New Order!</div>"
-          +"<div style='background:"+statusColor+";color:#000;font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px'>"+(d.status||'PAID').toUpperCase()+"</div>"
-          +"</div>"
-          +"<div style='font-size:13px;color:rgba(255,255,255,0.7);margin-bottom:4px'>&#128247; "+d.itemTitle+"</div>"
-          +"<div style='font-size:13px;color:#FFD700;font-weight:700;margin-bottom:4px'>N"+Number(d.itemPrice).toLocaleString()+"</div>"
-          +"<div style='font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px'>&#128100; Buyer: "+d.buyerName+"</div>"
-          +"<div style='font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px'>&#128205; Deliver to: "+d.deliveryLocation+"</div>"
-          +"<button onclick='window.open(\"https://wa.me/\"+\""+d.buyerPhone+"\")' style='background:rgba(37,211,102,0.1);color:#25D366;border:1px solid rgba(37,211,102,0.3);padding:6px 12px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer'>&#128153; WhatsApp Buyer</button>"
-          +"</div>";
-      }).join('');
-    }
-    if(!html){
-      list.innerHTML = "<div class='emp'><div class='empi'>&#128140;</div><p>No orders yet!</p><p style='font-size:12px;margin-top:8px'>When someone orders your product you'll see it here!</p></div>";
-    } else {
-      list.innerHTML = html;
-    }
-  }).catch(function(){
-    list.innerHTML = "<div class='emp'><div class='empi'>&#128140;</div><p>Could not load inbox</p></div>";
-  });
-}
-
-// Check inbox for unread orders
-function checkInboxCount(){
-  var u = getUser();
-  if(!u || !fbReady || !db) return;
-  db.collection('orders').where('sellerWa','==',u.phone).get()
-  .then(function(snap){
-    var badge = document.getElementById('inboxBadge');
-    if(badge && snap.size > 0){
-      badge.style.display = 'inline';
-      badge.textContent = snap.size;
-    }
-  }).catch(function(){});
-}
 function contactAdmin(){var u=getUser();var msg=u?"Hi CampusDeal Admin! My name is "+u.name+" and I need help.":"Hi CampusDeal Admin! I need help.";window.open("https://wa.me/2348033873918?text="+encodeURIComponent(msg));}
 
 // =============================================================
@@ -2973,10 +2860,8 @@ function showAdminTab(tab, tabEl){
     body.innerHTML = "<h3 style='font-size:15px;font-weight:900;margin-bottom:1rem;color:#fff'>📢 Send Announcement</h3>"
       +"<div style='background:rgba(255,255,255,0.04);border-radius:12px;padding:1.2rem;border:1px solid rgba(255,255,255,0.08)'>"
       +"<div style='margin-bottom:12px'><label style='font-size:12px;font-weight:700;display:block;margin-bottom:4px;color:rgba(255,255,255,0.6)'>Message</label>"
-      +"<div style='margin-bottom:12px'><label style='font-size:12px;font-weight:700;display:block;margin-bottom:4px;color:rgba(255,255,255,0.6)'>Title</label>"
-      +"<input type='text' id='announceTitle' placeholder='e.g. New Feature!' style='width:100%;padding:10px 12px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:14px;outline:none;font-family:inherit;background:rgba(255,255,255,0.05);color:#fff'></div>"
       +"<textarea id='announceMsg' style='width:100%;padding:10px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:14px;outline:none;font-family:inherit;height:100px;resize:none;background:rgba(255,255,255,0.05);color:#fff' placeholder='Type your announcement...'></textarea></div>"
-      +"<button onclick='sendAnnounce()' style='width:100%;background:#FFD700;color:#080f08;border:none;padding:13px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer'>&#128226; Send Announcement to All Users</button>"
+      +"<button onclick='sendAnnounce()' style='width:100%;background:#FFD700;color:#080f08;border:none;padding:13px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer'>Send via WhatsApp</button>"
       +"</div>"
       +"<div style='background:rgba(255,255,255,0.04);border-radius:12px;padding:1.2rem;border:1px solid rgba(255,255,255,0.08);margin-top:1rem'>"
       +"<h3 style='font-size:14px;font-weight:700;margin-bottom:10px;color:#fff'>Quick Actions</h3>"
@@ -3088,23 +2973,9 @@ function waUser(wa, name){
 }
 
 function sendAnnounce(){
-  var msg = (document.getElementById("announceMsg").value||"").trim();
-  var titleEl = document.getElementById("announceTitle");
-  var title = titleEl ? (titleEl.value||"CampusDeal Update").trim() : "CampusDeal Update";
-  if(!msg){showToast("Please type a message!");return;}
-  if(!title){showToast("Please enter a title!");return;}
-  if(!fbReady||!db){showToast("Firebase not ready!");return;}
-  db.collection('announcements').add({
-    title: title,
-    message: msg,
-    createdAt: new Date().toISOString()
-  }).then(function(){
-    showToast("Announcement sent to all users!","success");
-    if(titleEl) titleEl.value="";
-    document.getElementById("announceMsg").value="";
-  }).catch(function(e){
-    showToast("Error: "+e.message);
-  });
+  var msg = (document.getElementById("announceMsg").value || "").trim();
+  if(!msg){alert("Please type a message!");return;}
+  window.open("https://wa.me/2348033873918?text="+encodeURIComponent("CAMPUSDEAL ANNOUNCEMENT:\n\n"+msg));
 }
 
 function adminClearSamples(){
