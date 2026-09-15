@@ -2579,7 +2579,7 @@ function showAnnouncements(){
     list.innerHTML = "<div class='emp'><div class='empi'>&#128226;</div><p>Loading...</p></div>";
     return;
   }
-  db.collection('announcements').orderBy('createdAt','desc').get()
+  db.collection('announcements').get()
   .then(function(snap){
     if(snap.empty){
       list.innerHTML = "<div class='emp'><div class='empi'>&#128226;</div><p>No announcements yet!</p></div>";
