@@ -2950,6 +2950,7 @@ function showAdminTab(tab, tabEl){
     body.innerHTML = "<h3 style='font-size:15px;font-weight:900;margin-bottom:1rem;color:#fff'>📢 Send Announcement</h3>"
       +"<div style='background:rgba(255,255,255,0.04);border-radius:12px;padding:1.2rem;border:1px solid rgba(255,255,255,0.08)'>"
       +"<div style='margin-bottom:12px'><label style='font-size:12px;font-weight:700;display:block;margin-bottom:4px;color:rgba(255,255,255,0.6)'>Message</label>"
+      +"<div style='margin-bottom:12px'><label style='font-size:12px;font-weight:700;display:block;margin-bottom:4px;color:rgba(255,255,255,0.6)'>Title</label><input type='text' id='announceTitle' placeholder='e.g. New Feature!' style='width:100%;padding:10px 12px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:14px;outline:none;font-family:inherit;background:rgba(255,255,255,0.05);color:#fff'></div>"
       +"<textarea id='announceMsg' style='width:100%;padding:10px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:14px;outline:none;font-family:inherit;height:100px;resize:none;background:rgba(255,255,255,0.05);color:#fff' placeholder='Type your announcement...'></textarea></div>"
       +"<button onclick='sendAnnounce()' style='width:100%;background:#FFD700;color:#080f08;border:none;padding:13px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer'>Send via WhatsApp</button>"
       +"</div>"
@@ -3063,9 +3064,22 @@ function waUser(wa, name){
 }
 
 function sendAnnounce(){
-  var msg = (document.getElementById("announceMsg").value || "").trim();
-  if(!msg){alert("Please type a message!");return;}
-  window.open("https://wa.me/2348033873918?text="+encodeURIComponent("CAMPUSDEAL ANNOUNCEMENT:\n\n"+msg));
+  var msg = (document.getElementById("announceMsg").value||"").trim();
+  var titleEl = document.getElementById("announceTitle");
+  var title = titleEl ? (titleEl.value||"CampusDeal Update").trim() : "CampusDeal Update";
+  if(!msg){showToast("Please type a message!");return;}
+  if(!fbReady||!db){showToast("Firebase not ready!");return;}
+  db.collection('announcements').add({
+    title: title,
+    message: msg,
+    createdAt: new Date().toISOString()
+  }).then(function(){
+    showToast("Announcement sent!","success");
+    if(titleEl) titleEl.value="";
+    document.getElementById("announceMsg").value="";
+  }).catch(function(e){
+    showToast("Error: "+e.message);
+  });
 }
 
 function adminClearSamples(){
