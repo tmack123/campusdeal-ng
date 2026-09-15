@@ -1747,14 +1747,15 @@ async function postAd(){
           var data=await res.json();
           if(data.secure_url){
             imgUrl=data.secure_url;
-          } else {
-            // Cloudinary returned error
+                   } else {
+            // Cloudinary returned error - use compressed base64
             console.log("Cloudinary error:", data.error);
-            imgUrl=""||"";
+            imgUrl=uploadedImgs[0].dataUrl||"";
           }
           if(btn) btn.textContent = "Saving...";
         }catch(e){
-         console.log("Cloudinary error:", data.error);
+          console.log("Upload failed:", e);
+          // Use compressed base64 as fallback
             imgUrl=uploadedImgs[0].dataUrl||"";
           if(btn) btn.textContent = "Saving...";
         }
