@@ -3088,9 +3088,23 @@ function waUser(wa, name){
 }
 
 function sendAnnounce(){
-  var msg = (document.getElementById("announceMsg").value || "").trim();
-  if(!msg){alert("Please type a message!");return;}
-  window.open("https://wa.me/2348033873918?text="+encodeURIComponent("CAMPUSDEAL ANNOUNCEMENT:\n\n"+msg));
+  var msg = (document.getElementById("announceMsg").value||"").trim();
+  var titleEl = document.getElementById("announceTitle");
+  var title = titleEl ? (titleEl.value||"CampusDeal Update").trim() : "CampusDeal Update";
+  if(!msg){showToast("Please type a message!");return;}
+  if(!title){showToast("Please enter a title!");return;}
+  if(!fbReady||!db){showToast("Firebase not ready!");return;}
+  db.collection('announcements').add({
+    title: title,
+    message: msg,
+    createdAt: new Date().toISOString()
+  }).then(function(){
+    showToast("Announcement sent to all users!","success");
+    if(titleEl) titleEl.value="";
+    document.getElementById("announceMsg").value="";
+  }).catch(function(e){
+    showToast("Error: "+e.message);
+  });
 }
 
 function adminClearSamples(){
