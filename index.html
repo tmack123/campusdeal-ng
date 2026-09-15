@@ -1757,8 +1757,9 @@ async function postAd(){
       img:imgUrl||"",
       feat:false,
       time:"Just now",
-      userId:firebaseUid,
-      createdAt:firebase.firestore.FieldValue.serverTimestamp()
+     userId:firebaseUid,
+    sellerVerified: !!(getUser()&&getUser().isVerified),
+    createdAt:firebase.firestore.FieldValue.serverTimestamp()
     };
     if(eid){await db.collection("ads").doc(eid).update(adData);closeOv("sellOv");showToast("Ad updated!","success");}
     else{await db.collection("ads").add(adData);closeOv("sellOv");showPostSuccess();}
