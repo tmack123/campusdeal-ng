@@ -1586,6 +1586,16 @@ function openDetail(id){
   var dd=document.getElementById("detDesc");if(dd)dd.textContent=item.desc||"";
   var da=document.getElementById("detAv");if(da)da.textContent=item.seller.charAt(0).toUpperCase();
   var ds=document.getElementById("detSeller");if(ds)ds.textContent=item.seller;
+  var dv=document.getElementById("detVerified");
+  if(dv){
+    if(item.sellerVerified){
+      dv.innerHTML="&#11088; Verified";
+      dv.style.color="#FFD700";
+    } else {
+      dv.innerHTML="Member";
+      dv.style.color="rgba(255,255,255,0.4)";
+    }
+  }
   // Mask phone in detail view
   var detPhone = document.getElementById("detPhone");
   if(detPhone) detPhone.textContent = maskPhone(item.wa||"");
