@@ -2090,11 +2090,10 @@ function clearWishlist(){
 
 function showAbout(){
   closeHamburger();
-  showPg('about');
-  setTimeout(function(){
-    var pg = document.getElementById('pg-about');
-    if(pg) window.scrollTo(0, pg.offsetTop);
-  }, 100);
+  var pg = document.getElementById('pg-about');
+  if(pg){
+    pg.style.cssText = 'display:block;position:fixed;inset:0;background:#080f08;overflow-y:auto;z-index:9999;padding-bottom:80px';
+  }
 }
 
 // ============= WISHLIST =============
