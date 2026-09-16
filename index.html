@@ -2090,12 +2090,22 @@ function clearWishlist(){
 
 function showAbout(){
   closeHamburger();
-  showPg('about');
+  // Hide all pages
+  document.querySelectorAll('.pg').forEach(function(p){
+    p.style.display='none';
+    p.classList.remove('on');
+  });
+  // Show about page with forced styles
   var pg = document.getElementById('pg-about');
   if(pg){
-    pg.style.background = '#080f08';
-    pg.style.minHeight = '100vh';
+    pg.classList.add('on');
+    pg.style.display='block';
+    pg.style.minHeight='100vh';
+    pg.style.background='#080f08';
+    pg.style.paddingBottom='80px';
   }
+  window.scrollTo(0,0);
+  setActiveBn('');
 }
 
 // ============= WISHLIST =============
