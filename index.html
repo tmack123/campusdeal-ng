@@ -2090,7 +2090,22 @@ function clearWishlist(){
 
 function showAbout(){
   closeHamburger();
-  alert("CampusDeal 🎓\n\nNigeria's #1 Campus Marketplace!\n\n✅ Post ads FREE\n🚴 Campus delivery\n⭐ Verified badges\n💬 WhatsApp contact\n\nBuilt by Mordecai Adeleke\ncampusdeal.com.ng");
+  var d=document.createElement('div');
+  d.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px';
+  d.innerHTML='<div style="background:#0d1a0d;border:1px solid rgba(255,215,0,0.2);border-radius:16px;padding:24px;max-width:320px;width:100%;text-align:center">'
+    +'<div style="font-size:40px;margin-bottom:10px">🎓</div>'
+    +'<div style="font-size:20px;font-weight:900;color:#FFD700;margin-bottom:6px">CampusDeal</div>'
+    +'<div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:16px">Nigeria\'s #1 Campus Marketplace</div>'
+    +'<div style="text-align:left;margin-bottom:16px">'
+    +'<div style="font-size:13px;color:#fff;margin-bottom:8px">✅ Post ads FREE</div>'
+    +'<div style="font-size:13px;color:#fff;margin-bottom:8px">🚴 Campus delivery</div>'
+    +'<div style="font-size:13px;color:#fff;margin-bottom:8px">⭐ Verified seller badges</div>'
+    +'<div style="font-size:13px;color:#fff;margin-bottom:8px">💬 WhatsApp direct contact</div>'
+    +'</div>'
+    +'<div style="font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:16px">Built with ❤️ by Mordecai Adeleke</div>'
+    +'<button onclick="this.parentElement.parentElement.remove()" style="width:100%;background:#FFD700;color:#080f08;border:none;padding:12px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer">Close</button>'
+    +'</div>';
+  document.body.appendChild(d);
 }
 
 
