@@ -25,6 +25,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script>window.addEventListener("load",function(){trackReferral();
+  setTimeout(checkNewNotifications, 4000);
   // Check verified status on load
   setTimeout(function(){
     var u = getUser();
@@ -1982,6 +1983,7 @@ window.addEventListener("load",function(){
               var user = {name:ud.name, phone:ud.phone||"", email:firebaseUser.email, uid:firebaseUser.uid, isVerified:isVerNow};
               setUser(user);
               refreshNav();
+              checkNewNotifications();
               updateHamburgerUser();
               var iN=document.getElementById("iName");
               var iW=document.getElementById("iWa");
@@ -2885,6 +2887,35 @@ function showInbox(){
   }).catch(function(){
     list.innerHTML = "<div class='emp'><div class='empi'>&#128140;</div><p>Could not load inbox</p></div>";
   });
+}
+  function checkNewNotifications(){
+  if(!fbReady||!db) return;
+  var lastRead = Number(localStorage.getItem('cd_ann_read')||0);
+  
+  // Check new announcements
+  db.collection('announcements').get().then(function(snap){
+    var unread = snap.docs.filter(function(doc){
+      var d = doc.data();
+      return d.createdAt && new Date(d.createdAt).getTime() > lastRead;
+    }).length;
+    var badge = document.getElementById('annBadge');
+    if(badge){
+      badge.style.display = unread > 0 ? 'inline' : 'none';
+      badge.textContent = unread;
+    }
+  }).catch(function(){});
+
+  // Check inbox orders
+  var u = getUser();
+  if(!u||!u.phone) return;
+  db.collection('orders').where('sellerWa','==',u.phone).get()
+  .then(function(snap){
+    var badge = document.getElementById('inboxBadge');
+    if(badge){
+      badge.style.display = snap.size > 0 ? 'inline' : 'none';
+      badge.textContent = snap.size;
+    }
+  }).catch(function(){});
 }
 function contactAdmin(){var u=getUser();var msg=u?"Hi CampusDeal Admin! My name is "+u.name+" and I need help.":"Hi CampusDeal Admin! I need help.";window.open("https://wa.me/2348033873918?text="+encodeURIComponent(msg));}
 
