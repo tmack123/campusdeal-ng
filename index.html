@@ -1465,9 +1465,9 @@ function goAccount(){
 }
 
 function showPg(name){
-  document.querySelectorAll(".pg").forEach(function(p){p.classList.remove("on");});
+  document.querySelectorAll(".pg").forEach(function(p){p.classList.remove("on");p.style.zIndex="";});
   var el=document.getElementById("pg-"+name);
-  if(el)el.classList.add("on");
+  if(el){el.classList.add("on");el.style.zIndex="1";}
   window.scrollTo(0,0);
 }
 
