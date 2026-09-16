@@ -21,10 +21,26 @@
 <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=CD&background=006400&color=FFD700&size=512&font-size=0.4&bold=true&rounded=true">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="description" content="Buy and sell anything on FUNAAB Campus. Post ads FREE!">
-<meta name="version" content="1789211227">
+<meta name="version" content="1789518787">
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-<script>window.addEventListener("load",function(){
+<script>window.addEventListener("load",function(){trackReferral();
+  // Check verified status on load
+  setTimeout(function(){
+    var u = getUser();
+    if(u && u.uid && fbReady && db){
+      db.collection('users').where('uid','==',u.uid).get()
+      .then(function(snap){
+        if(snap.empty) return;
+        var data = snap.docs[0].data();
+        var banner = document.getElementById('verifyBanner');
+        if(data.isVerified && data.verifiedUntil &&
+           new Date(data.verifiedUntil) > new Date()){
+          if(banner) banner.style.display = 'none';
+        }
+      });
+    }
+  }, 3000);
   // Secret admin URL access
   // Admin secret URL - only trigger if not a page refresh
   if(window.location.search.includes("admin="+atob("c2VjcmV0MjAyNA=="))){
@@ -123,6 +139,7 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
 .at{font-size:11px;color:rgba(255,255,255,0.7);margin:2px 0 5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .af{display:flex;align-items:center;justify-content:space-between}
 .al{font-size:9px;color:rgba(255,255,255,0.35)}
+  .vbadge{display:inline-flex;align-items:center;gap:3px;background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;font-size:9px;font-weight:800;padding:2px 6px;border-radius:10px;margin-left:4px}
 .aw{background:#FFD700;color:#080f08;border:none;padding:4px 8px;border-radius:10px;font-size:9px;font-weight:700;cursor:pointer}
 /* HOW */
 .how{background:rgba(255,255,255,0.02);margin:0 1rem 1rem;border-radius:12px;padding:1.2rem 1rem;border:1px solid rgba(255,255,255,0.07)}
@@ -268,10 +285,17 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
 .fc-loc{font-size:9px;color:rgba(255,255,255,0.3)}
 .fc-badge{background:rgba(255,215,0,0.15);color:#FFD700;font-size:8px;font-weight:700;padding:2px 7px;border-radius:10px;display:inline-block;margin-bottom:4px}
 .empi{font-size:48px;margin-bottom:8px}
-
+/* DASHBOARD */
+.db-card{background:#0d1a0d;border-radius:12px;padding:14px;border:1px solid rgba(255,215,0,0.1);text-align:center;margin-bottom:10px}
+.db-num{font-size:28px;font-weight:900;color:#FFD700}
+.db-label{font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px}
+.db-ad{background:#0d1a0d;border-radius:10px;border:1px solid rgba(255,255,255,0.07);padding:12px;display:flex;gap:10px;margin-bottom:10px;align-items:flex-start}
+.db-ad-img{width:68px;height:68px;border-radius:8px;overflow:hidden;flex-shrink:0;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font-size:24px}
+.db-ad-img img{width:100%;height:100%;object-fit:cover}
 /* VERIFIED BADGE */
 .verify-banner{display:block;margin:10px 14px;background:linear-gradient(135deg,#FFD700,#FFA500);border-radius:10px;padding:14px 16px;cursor:pointer}
 .verify-banner-inner{display:flex;align-items:center;gap:10px}
+  .verified-badge{display:inline-flex;align-items:center;gap:3px;background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;font-size:10px;font-weight:800;padding:2px 8px;border-radius:12px;margin-left:6px;vertical-align:middle}
 .verify-modal-bg{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.85);align-items:center;justify-content:center;padding:20px}
 .verify-modal-bg.open{display:flex}
 .verify-box{background:#1a1a2e;border-radius:16px;padding:24px;max-width:360px;width:100%;border:1px solid rgba(255,215,0,0.2);position:relative}
@@ -279,7 +303,7 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
 .verify-pay-btn{width:100%;background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;border:none;padding:13px;border-radius:8px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;margin-top:12px}
 
 </style>
-<script src="https://js.paystack.co/v1/inline.js"></script>
+<script src="https://checkout.flutterwave.com/v3.js"></script>
 </head>
 <body>
 
@@ -292,7 +316,6 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
   </button>
   <div style="flex:1"></div>
   <span class="logo" onclick="logoTap()">Campus<span>Deal</span></span>
-  <button id="navVerifyBtn" onclick="openVerifyModal()" style="display:none;background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;border:none;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;flex-shrink:0">&#11088; Verified</button>
 </nav>
 <input type="hidden" id="si" value="">
 
@@ -328,6 +351,8 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
     <div style="height:1px;background:rgba(255,255,255,0.06);margin:8px 16px"></div>
     <div style="padding:8px 16px;font-size:10px;font-weight:700;color:rgba(255,215,0,0.4);letter-spacing:2px">INFO</div>
     <div class="hm-item" onclick="closeHamburger();contactAdmin()">&#128222; Contact Admin</div>
+    <div class="hm-item" onclick="closeHamburger();showAnnouncements()">&#128226; Announcements</div>
+<div class="hm-item" onclick="closeHamburger();showInbox()">&#128140; Inbox <span id="inboxBadge" style="display:none;background:#ff4444;color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;margin-left:4px">0</span></div>
     <div class="hm-item" onclick="closeHamburger();showAbout()">&#8505; About CampusDeal</div>
     <div style="height:1px;background:rgba(255,255,255,0.06);margin:8px 16px"></div>
     <div id="hmLogout" style="display:none" class="hm-item hm-red" onclick="closeHamburger();doLogout()">&#128682; Logout</div>
@@ -383,7 +408,7 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
     <span style="font-size:28px">&#11088;</span>
     <div>
       <div style="font-size:14px;font-weight:800;color:#000">Get Verified Seller Badge</div>
-      <div style="font-size:12px;color:rgba(0,0,0,0.7)">More buyers &middot; Top listing &middot; Only N500/month</div>
+      <div style="font-size:12px;color:rgba(0,0,0,0.7)">More buyers &middot; Top listing &middot; Only N1,000/month</div>
     </div>
     <span style="margin-left:auto;font-size:20px;color:#000;font-weight:800">&#8250;</span>
   </div>
@@ -403,10 +428,10 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
         <div style="font-size:13px;color:rgba(255,255,255,0.8);margin-bottom:8px">&#10003; Up to 3x more buyer contacts</div>
       </div>
       <div style="text-align:center;background:rgba(255,255,255,0.04);border-radius:8px;padding:14px;margin-bottom:14px">
-        <div style="font-size:36px;font-weight:800;color:#FFD700">N500</div>
+        <div style="font-size:36px;font-weight:800;color:#FFD700">N1,000</div>
         <div style="font-size:12px;color:rgba(255,255,255,0.5)">per month</div>
       </div>
-      <button class="verify-pay-btn" id="vPayBtn" onclick="startVerifyPayment()">Pay N500 - Get Verified Now</button>
+      <button class="verify-pay-btn" id="vPayBtn" onclick="startVerifyPayment()">Pay N1,000 - Get Verified Now</button>
       <div style="text-align:center;font-size:11px;color:rgba(255,255,255,0.3);margin-top:10px">Secured by Paystack</div>
     </div>
     <div id="vStep2" style="display:none;text-align:center;padding:20px 0">
@@ -498,6 +523,8 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
   <div style="display:flex;overflow-x:auto;border-bottom:1px solid rgba(255,255,255,0.06);padding:0 8px">
     <button class="atab on" onclick="showAdminTab('ads',this)" style="flex-shrink:0;padding:12px 16px;font-size:13px;font-weight:700;border:none;background:transparent;color:rgba(255,255,255,0.45);border-bottom:3px solid transparent;cursor:pointer">&#128203; All Ads</button>
     <button class="atab" onclick="showAdminTab('users',this)" style="flex-shrink:0;padding:12px 16px;font-size:13px;font-weight:700;border:none;background:transparent;color:rgba(255,255,255,0.45);border-bottom:3px solid transparent;cursor:pointer">&#128100; Users</button>
+    <button class="atab" onclick="showAdminTab('orders',this)" style="flex-shrink:0;padding:12px 16px;font-size:13px;font-weight:700;border:none;background:transparent;color:rgba(255,255,255,0.45);border-bottom:3px solid transparent;cursor:pointer">&#128666; Orders</button>
+    <button class="atab" onclick="showAdminTab('referrals',this)" style="flex-shrink:0;padding:12px 16px;font-size:13px;font-weight:700;border:none;background:transparent;color:rgba(255,255,255,0.45);border-bottom:3px solid transparent;cursor:pointer">&#128279; Referrals</button>
     <button class="atab" onclick="showAdminTab('announce',this)" style="flex-shrink:0;padding:12px 16px;font-size:13px;font-weight:700;border:none;background:transparent;color:rgba(255,255,255,0.45);border-bottom:3px solid transparent;cursor:pointer">&#128226; Announce</button>
     <button class="atab" onclick="showAdminTab('backup',this)" style="flex-shrink:0;padding:12px 16px;font-size:13px;font-weight:700;border:none;background:transparent;color:rgba(255,255,255,0.45);border-bottom:3px solid transparent;cursor:pointer">&#128190; Backup</button>
     <button class="atab" onclick="showAdminTab('usage',this)" style="flex-shrink:0;padding:12px 16px;font-size:13px;font-weight:700;border:none;background:transparent;color:rgba(255,255,255,0.45);border-bottom:3px solid transparent;cursor:pointer">&#128200; Usage</button>
@@ -561,11 +588,12 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
       <div class="dti" id="detTitle"></div>
       <div class="dch" id="detChips"></div>
       <div class="dde" id="detDesc"></div>
-      <div class="dsl"><div class="sav" id="detAv"></div><div><div style="font-size:13px;font-weight:700;color:#fff" id="detSeller"></div><div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px">Verified Member</div></div></div>
+      <div class="dsl"><div class="sav" id="detAv"></div><div><div style="font-size:13px;font-weight:700;color:#fff" id="detSeller"></div><div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px" id="detVerified">Member</div></div></div>
       <div class="dac">
         <button class="dwab" id="detWa">&#128153; WhatsApp Seller</button>
         <button class="dclb" onclick="closeOv('detOv')">&#10005;</button>
       </div>
+    <button onclick="showOrderPage()" style="width:100%;background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;border:none;padding:14px;border-radius:8px;font-size:15px;font-weight:800;cursor:pointer;margin-top:8px">&#128666; Order with Delivery</button>
       <button onclick="reportAd()" style="width:100%;background:transparent;color:rgba(255,68,68,0.6);border:1px solid rgba(255,68,68,0.2);padding:8px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;margin-top:8px">&#128680; Report this ad</button>
     </div>
   </div>
@@ -760,6 +788,10 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
           <button onclick="togglePwd('rPass2',this)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,0.3);cursor:pointer;font-size:15px;padding:4px;font-family:inherit">👁</button>
         </div>
       </div>
+      <div style="margin-bottom:10px">
+  <label style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.4);display:block;margin-bottom:5px;letter-spacing:1px">REFERRAL CODE (OPTIONAL)</label>
+  <input type="text" id="rRef" placeholder="Enter referral code" class="cd-input-style" style="text-transform:uppercase">
+</div>
       <button onclick="doRegister()" style="width:100%;background:linear-gradient(135deg,#FFD700,#FF8C00);color:#080f08;border:none;padding:13px;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit">Create Account →</button>
       <div style="text-align:center;margin-top:6px;font-size:9px;color:rgba(255,255,255,0.15)">Protected by reCAPTCHA</div>
       <button onclick="closeOv('loginOv')" style="background:none;border:none;font-size:11px;color:rgba(255,255,255,0.2);cursor:pointer;width:100%;text-align:center;margin-top:8px;padding:4px;font-family:inherit">✕ Maybe later</button>
@@ -793,7 +825,194 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
     <button onclick="closeOv('adminLoginOv')" style="background:none;border:none;font-size:12px;color:rgba(255,255,255,0.35);cursor:pointer">Cancel</button>
   </div>
 </div>
+  <!-- ORDER FORM MODAL -->
+<div class="ov ovc" id="orderOv" style="z-index:3000">
+  <div style="background:#0d1a0d;border:1px solid rgba(255,215,0,0.15);border-radius:18px;padding:0;width:92%;max-width:400px;max-height:90vh;overflow-y:auto">
+    <div style="padding:16px;border-bottom:1px solid rgba(255,215,0,0.1);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#0d1a0d;z-index:1">
+      <div style="font-size:16px;font-weight:900;color:#FFD700">&#128666; Order with Delivery</div>
+      <button onclick="closeOv('orderOv')" style="background:rgba(255,255,255,0.08);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:15px;cursor:pointer">&#10005;</button>
+    </div>
+    <div style="padding:16px">
+      <div id="orderItemInfo" style="background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.15);border-radius:10px;padding:12px;margin-bottom:16px"></div>
+      <div style="margin-bottom:12px">
+        <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);display:block;margin-bottom:5px">YOUR NAME *</label>
+        <input type="text" id="orderName" placeholder="Enter your full name" style="width:100%;padding:11px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:14px;outline:none;background:rgba(255,255,255,0.05);color:#fff;font-family:inherit">
+      </div>
+      <div style="margin-bottom:12px">
+        <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);display:block;margin-bottom:5px">WHATSAPP NUMBER *</label>
+        <input type="tel" id="orderPhone" placeholder="08012345678" style="width:100%;padding:11px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:14px;outline:none;background:rgba(255,255,255,0.05);color:#fff;font-family:inherit">
+      </div>
+      <div style="margin-bottom:12px">
+        <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);display:block;margin-bottom:5px">DELIVERY LOCATION *</label>
+        <select id="orderLocation" style="width:100%;padding:11px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:14px;outline:none;background:#0d1a0d;color:#fff;font-family:inherit">
+          <option value="">Select delivery location</option>
+          <option value="Camp|1000">Camp - N1,000</option>
+          <option value="FUNAAB Zoo|1000">FUNAAB Zoo - N1,000</option>
+          <option value="Harmony|1000">Harmony - N1,000</option>
+          <option value="Isolu|1000">Isolu - N1,000</option>
+          <option value="Kofesu|1000">Kofesu - N1,000</option>
+          <option value="Labuta|1000">Labuta - N1,000</option>
+          <option value="Ogun Osun|1000">Ogun Osun - N1,000</option>
+          <option value="Oluwo|1000">Oluwo - N1,000</option>
+          <option value="Odo Eran|1200">Odo Eran - N1,200</option>
+          <option value="Osiele|1200">Osiele - N1,200</option>
+          <option value="Kotopo|1300">Kotopo - N1,300</option>
+        </select>
+      </div>
+      <div style="margin-bottom:16px">
+        <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);display:block;margin-bottom:5px">ADDITIONAL NOTE (OPTIONAL)</label>
+        <textarea id="orderNote" placeholder="Any special instructions..." style="width:100%;padding:11px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:14px;outline:none;background:rgba(255,255,255,0.05);color:#fff;font-family:inherit;height:70px;resize:none"></textarea>
+      </div>
+      <div id="orderTotal" style="background:rgba(255,255,255,0.04);border-radius:8px;padding:12px;margin-bottom:16px;display:none">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <span style="font-size:13px;color:rgba(255,255,255,0.5)">Item Price</span>
+          <span style="font-size:13px;font-weight:700;color:#fff" id="orderItemPrice"></span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <span style="font-size:13px;color:rgba(255,255,255,0.5)">Delivery Fee</span>
+          <span style="font-size:13px;font-weight:700;color:#fff" id="orderDeliveryFee"></span>
+        </div>
+        <div style="height:1px;background:rgba(255,255,255,0.1);margin:8px 0"></div>
+        <div style="display:flex;justify-content:space-between">
+          <span style="font-size:14px;font-weight:700;color:#fff">Total</span>
+          <span style="font-size:14px;font-weight:900;color:#FFD700" id="orderTotalPrice"></span>
+        </div>
+      </div>
+      <button onclick="submitOrder()" style="width:100%;background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;border:none;padding:14px;border-radius:8px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit">Place Order & Pay &#8594;</button>
+      <div style="text-align:center;font-size:11px;color:rgba(255,255,255,0.3);margin-top:10px">&#128274; Secured by Flutterwave</div>
+    </div>
+  </div>
+</div>
+  <!-- ANNOUNCEMENTS PAGE -->
+<div class="pg" id="pg-announcements" style="padding-bottom:80px">
+  <div style="background:#080f08;padding:14px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,215,0,0.12)">
+    <button onclick="goHome()" style="background:rgba(255,215,0,0.1);border:none;color:#FFD700;width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer">&#8592;</button>
+    <div style="font-size:16px;font-weight:900;color:#FFD700">&#128226; Announcements</div>
+  </div>
+  <div id="announcementsList" style="padding:14px"></div>
+</div>
 
+<!-- INBOX PAGE -->
+<div class="pg" id="pg-inbox" style="padding-bottom:80px">
+  <div style="background:#080f08;padding:14px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,215,0,0.12)">
+    <button onclick="goHome()" style="background:rgba(255,215,0,0.1);border:none;color:#FFD700;width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer">&#8592;</button>
+    <div style="font-size:16px;font-weight:900;color:#FFD700">&#128140; Inbox</div>
+  </div>
+  <div id="inboxList" style="padding:14px"></div>
+</div>
+  <!-- ABOUT PAGE -->
+<div class="pg" id="pg-about" style="padding-bottom:80px">
+  <div style="background:#080f08;padding:14px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,215,0,0.12)">
+  <button onclick="document.getElementById('pg-home').style.display='';goHome()" style="background:rgba(255,215,0,0.1);border:none;color:#FFD700;width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer">&#8592;</button>
+    <div style="font-size:16px;font-weight:900;color:#FFD700">About CampusDeal</div>
+  </div>
+
+  <!-- Hero -->
+  <div style="background:radial-gradient(ellipse at top,rgba(0,80,0,0.4),transparent),#080f08;padding:2rem 1rem;text-align:center;border-bottom:1px solid rgba(255,215,0,0.1)">
+    <div style="font-size:48px;margin-bottom:12px">&#127891;</div>
+    <div style="font-size:24px;font-weight:900;color:#FFD700;margin-bottom:8px">CampusDeal</div>
+    <div style="font-size:14px;color:rgba(255,255,255,0.6);line-height:1.6;max-width:340px;margin:0 auto">Nigeria's Smartest Campus Marketplace — Buy, Sell & Get Delivery on Campus!</div>
+  </div>
+
+  <div style="padding:16px">
+
+    <!-- Mission -->
+    <div style="background:#0d1a0d;border-radius:12px;padding:16px;margin-bottom:14px;border:1px solid rgba(255,215,0,0.12)">
+      <div style="font-size:16px;font-weight:900;color:#FFD700;margin-bottom:8px">&#127919; Our Mission</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.8">CampusDeal was created to solve the everyday buying and selling problems faced by university students. We make it easy, fast and safe to trade on campus — no middlemen, no stress!</div>
+    </div>
+
+    <!-- Problems We Solve -->
+    <div style="background:#0d1a0d;border-radius:12px;padding:16px;margin-bottom:14px;border:1px solid rgba(255,215,0,0.12)">
+      <div style="font-size:16px;font-weight:900;color:#FFD700;margin-bottom:12px">&#128161; Problems We Solve</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="font-size:20px;flex-shrink:0">&#128241;</span>
+          <div><div style="font-size:13px;font-weight:700;color:#fff">Hard to find buyers</div><div style="font-size:12px;color:rgba(255,255,255,0.5)">We connect sellers directly to thousands of campus buyers instantly!</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="font-size:20px;flex-shrink:0">&#128666;</span>
+          <div><div style="font-size:13px;font-weight:700;color:#fff">No delivery service</div><div style="font-size:12px;color:rgba(255,255,255,0.5)">We deliver products across campus and nearby areas for you!</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="font-size:20px;flex-shrink:0">&#128272;</span>
+          <div><div style="font-size:13px;font-weight:700;color:#fff">Trust issues with sellers</div><div style="font-size:12px;color:rgba(255,255,255,0.5)">Our Verified Seller Badge helps buyers identify trusted sellers!</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="font-size:20px;flex-shrink:0">&#128176;</span>
+          <div><div style="font-size:13px;font-weight:700;color:#fff">Expensive platforms</div><div style="font-size:12px;color:rgba(255,255,255,0.5)">Post your ads completely FREE — no hidden charges!</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="font-size:20px;flex-shrink:0">&#127760;</span>
+          <div><div style="font-size:13px;font-weight:700;color:#fff">Limited to one campus</div><div style="font-size:12px;color:rgba(255,255,255,0.5)">We're expanding to all Nigerian universities soon!</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features -->
+    <div style="background:#0d1a0d;border-radius:12px;padding:16px;margin-bottom:14px;border:1px solid rgba(255,215,0,0.12)">
+      <div style="font-size:16px;font-weight:900;color:#FFD700;margin-bottom:12px">&#11088; What We Offer</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:10px;text-align:center">
+          <div style="font-size:24px;margin-bottom:4px">&#128247;</div>
+          <div style="font-size:11px;font-weight:700;color:#fff">Free Ads</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.4)">Post anything free</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:10px;text-align:center">
+          <div style="font-size:24px;margin-bottom:4px">&#128666;</div>
+          <div style="font-size:11px;font-weight:700;color:#fff">Delivery</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.4)">Campus delivery</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:10px;text-align:center">
+          <div style="font-size:24px;margin-bottom:4px">&#11088;</div>
+          <div style="font-size:11px;font-weight:700;color:#fff">Verified Badge</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.4)">Build trust</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:10px;text-align:center">
+          <div style="font-size:24px;margin-bottom:4px">&#128153;</div>
+          <div style="font-size:11px;font-weight:700;color:#fff">WhatsApp</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.4)">Direct contact</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div style="background:#0d1a0d;border-radius:12px;padding:16px;margin-bottom:14px;border:1px solid rgba(255,215,0,0.12)">
+      <div style="font-size:16px;font-weight:900;color:#FFD700;margin-bottom:12px">&#128200; CampusDeal in Numbers</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;text-align:center">
+        <div><div style="font-size:24px;font-weight:900;color:#FFD700">100+</div><div style="font-size:10px;color:rgba(255,255,255,0.4)">Active Ads</div></div>
+        <div><div style="font-size:24px;font-weight:900;color:#FFD700">50+</div><div style="font-size:10px;color:rgba(255,255,255,0.4)">Students</div></div>
+        <div><div style="font-size:24px;font-weight:900;color:#FFD700">FREE</div><div style="font-size:10px;color:rgba(255,255,255,0.4)">To Post</div></div>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div style="background:#0d1a0d;border-radius:12px;padding:16px;margin-bottom:14px;border:1px solid rgba(255,215,0,0.12)">
+      <div style="font-size:16px;font-weight:900;color:#FFD700;margin-bottom:12px">&#128222; Contact Us</div>
+      <button onclick="contactAdmin()" style="width:100%;background:#25D366;color:#fff;border:none;padding:13px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px">&#128153; WhatsApp Admin</button>
+      <div style="text-align:center;font-size:12px;color:rgba(255,255,255,0.4)">campusdeal.com.ng</div>
+    </div>
+
+    <!-- Built by -->
+    <div style="text-align:center;padding:1rem">
+      <div style="font-size:12px;color:rgba(255,255,255,0.3)">Built with &#10084;&#65039; by</div>
+      <div style="font-size:14px;font-weight:700;color:#FFD700">Mordecai Adeleke</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.3)">FUNAAB • 2026</div>
+    </div>
+
+  </div>
+</div>
+<!-- CONFIRM DIALOG -->
+<div class="cnf" id="cnfOv">
+  <div class="cnfc">
+    <h3>Delete Ad?</h3>
+    <p>This cannot be undone!</p>
+    <div class="cna">
+      <button class="cny" id="cnfYes">Delete</button>
+      <button class="cnn" onclick="document.getElementById('cnfOv').classList.remove('on')">Cancel</button>
+    </div>
+  </div>
+</div>
 <!-- BOTTOM NAV -->
 <div class="bnav">
   <button class="bn on" id="bn-home" onclick="goHome()">
@@ -812,7 +1031,7 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
     <div class="bnsl">Sell</div>
   </div>
   <button class="bn" id="bn-myads" onclick="goDashboard()">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
     <span>Dashboard</span>
   </button>
   
@@ -912,8 +1131,8 @@ function hashPass(pass){
 function doLogin(){
   var em=(document.getElementById("lEmail").value||"").trim();
   var pass=(document.getElementById("lPass").value||"").trim();
-  if(!em||!em.includes("@")){showToast("Please enter a valid email!");return;}
-  if(!pass){showToast("Please enter your password!");return;}
+  if(!em||!em.includes("@")){alert("Please enter a valid email!");return;}
+  if(!pass){alert("Please enter your password!");return;}
 
   var btn=document.querySelector("#loginForm button[onclick='doLogin()']");
   if(btn){btn.textContent="Logging in...";btn.disabled=true;}
@@ -926,7 +1145,10 @@ function doLogin(){
         db.collection("users").where("uid","==",result.user.uid).get().then(function(snap){
           var name = snap.empty ? em.split("@")[0] : snap.docs[0].data().name;
           var phone = snap.empty ? "" : (snap.docs[0].data().phone||"");
-          setUser({name:name, phone:phone, email:em, uid:result.user.uid});
+         var isVer = snap.empty ? false : (snap.docs[0].data().isVerified||false);
+var verUntil = snap.empty ? null : (snap.docs[0].data().verifiedUntil||null);
+var isVerifiedNow = isVer && verUntil && new Date(verUntil) > new Date();
+setUser({name:name, phone:phone, email:em, uid:result.user.uid, isVerified:isVerifiedNow});
           closeOv("loginOv");
           refreshNav();
           var iN=document.getElementById("iName");
@@ -934,19 +1156,28 @@ function doLogin(){
           if(iN)iN.value=name;
           if(iW&&phone)iW.value=phone.replace("234","0");
           askNotifAfterLogin(name);
-        });
+          // Check verified status after login
+          if(fbReady&&db){
+            db.collection('users').where('uid','==',result.user.uid).get()
+            .then(function(vSnap){
+              if(!vSnap.empty){
+                var vData=vSnap.docs[0].data();
+                var isVerNow=vData.isVerified&&vData.verifiedUntil&&new Date(vData.verifiedUntil)>new Date();
+                var cu=getUser();
+                if(cu){cu.isVerified=isVerNow;setUser(cu);updateHamburgerUser();}
+              }
+            });
+          }   });
       })
       .catch(function(e){
         if(btn){btn.textContent="Login →";btn.disabled=false;}
-        if(e.code==="auth/user-not-found"||e.code==="auth/invalid-credential"||e.code==="auth/invalid-login-credentials"){
-          alert("Invalid email or password!\nPlease check your details and try again.\n\nNew user? Click Create Account!");
+        if(e.code==="auth/user-not-found"||e.code==="auth/invalid-credential"){
+          alert("No account found with this email!\nPlease register first.");
           switchAuthTab("register");
         } else if(e.code==="auth/wrong-password"){
-          alert("Incorrect password!\nPlease try again or reset your password.");
-        } else if(e.code==="auth/too-many-requests"){
-          alert("Too many attempts! Please wait a few minutes and try again.");
+          alert("Incorrect password!\nTry again or reset your password.");
         } else {
-          showToast("Wrong email or password! Try again.");
+          showToast("Invalid email or password!");
         }
       });
   } else {
@@ -988,11 +1219,11 @@ function doRegisterVerified(nm){
   var em=(document.getElementById("rEmail").value||"").trim();
   var pass=(document.getElementById("rPass").value||"").trim();
   var pass2=(document.getElementById("rPass2").value||"").trim();
-  if(!nm){showToast("Please enter your full name!");return;}
-  if(!ph||ph.length<8){showToast("Please enter a valid WhatsApp number!");return;}
-  if(!em||!em.includes("@")){showToast("Please enter a valid email address!");return;}
+  if(!nm){alert("Please enter your full name!");return;}
+  if(!ph||ph.length<8){alert("Please enter a valid WhatsApp number!");return;}
+  if(!em||!em.includes("@")){alert("Please enter a valid email address!");return;}
   if(pass.length<6){alert("Password must be at least 6 characters!");return;}
-  if(pass!==pass2){showToast("Passwords do not match!");return;}
+  if(pass!==pass2){alert("Passwords do not match!");return;}
 
   var cleanPhone=ph.replace(/^0/,"234");
   var btn=document.querySelector("#registerForm button[onclick='doRegister()']");
@@ -1011,6 +1242,9 @@ function doRegisterVerified(nm){
         }).then(function(){
           if(btn){btn.textContent="Create Account →";btn.disabled=false;}
           setUser({name:nm,phone:ph,email:em,uid:result.user.uid});
+            var manualRef = (document.getElementById('rRef').value||'').trim().toUpperCase();
+if(manualRef) localStorage.setItem('cd_ref', manualRef);
+saveReferral(result.user.uid);
           closeOv("loginOv");
           refreshNav();
           var iN=document.getElementById("iName");
@@ -1023,10 +1257,10 @@ function doRegisterVerified(nm){
       .catch(function(e){
         if(btn){btn.textContent="Create Account →";btn.disabled=false;}
         if(e.code==="auth/email-already-in-use"){
-          showToast("Email already registered! Please Sign In.");
+          alert("This email is already registered!\nPlease login instead.");
           switchAuthTab("login");
         } else if(e.code==="auth/weak-password"){
-          showToast("Password too short! Use at least 6 characters.");
+          alert("Password is too weak!\nUse at least 6 characters.");
         } else {
           alert("Registration error: "+e.message);
         }
@@ -1070,7 +1304,7 @@ function confirmReset(docId,expectedCode){
   db.collection("users").doc(docId).update({password:hashPass(newPass),resetCode:null}).then(function(){
     alert("Password reset! Please login with your new password.");
     switchAuthTab("login");
-  }).catch(function(e){alert("Error: "+e.message);});
+  }).catch(function(e){showToast("Error: "+e.message);});
 }
 
 function confirmResetLocal(foundPhone,expectedCode){
@@ -1085,7 +1319,7 @@ function confirmResetLocal(foundPhone,expectedCode){
 
 function doResetPass(){
   var em=(document.getElementById("fEmail").value||"").trim();
-  if(!em||!em.includes("@")){showToast("Please enter a valid email address!");return;}
+  if(!em||!em.includes("@")){alert("Please enter a valid email address!");return;}
 
   var btn=document.querySelector("#forgotForm button");
   if(btn){btn.textContent="Sending...";btn.disabled=true;btn.style.opacity="0.7";}
@@ -1117,7 +1351,7 @@ function doResetPass(){
       .then(function(snap){
         if(snap.empty){
           if(btn){btn.textContent="Send Reset Code →";btn.disabled=false;}
-          showToast("No account found! Click Create Account to register.");
+          alert("No account found with this email!\nPlease register first.");
           return;
         }
         var ud=snap.docs[0].data();
@@ -1129,7 +1363,7 @@ function doResetPass(){
       })
       .catch(function(e){
         if(btn){btn.textContent="Send Reset Code →";btn.disabled=false;}
-        alert("Error: "+e.message);
+        showToast("Error: "+e.message);
       });
   } else {
     // localStorage fallback
@@ -1219,10 +1453,7 @@ function goHome(){
 function goMyAds(){
   if(!getUser()){openLogin();return;}
   showPg("account");
-  var tabs = document.querySelectorAll(".atab");
-  tabs.forEach(function(t){ t.classList.remove("on"); });
-  if(tabs[0]) tabs[0].classList.add("on");
-  showTab("dashboard", tabs[0]);
+  showTab("myads",null);
   setActiveBn("bn-myads");
 }
 
@@ -1234,9 +1465,17 @@ function goAccount(){
 }
 
 function showPg(name){
-  document.querySelectorAll(".pg").forEach(function(p){p.classList.remove("on");});
+  document.querySelectorAll(".pg").forEach(function(p){
+    p.classList.remove("on");
+    p.style.display="none";
+    p.style.zIndex="";
+  });
   var el=document.getElementById("pg-"+name);
-  if(el)el.classList.add("on");
+  if(el){
+    el.classList.add("on");
+    el.style.display="block";
+    el.style.zIndex="1";
+  }
   window.scrollTo(0,0);
 }
 
@@ -1276,11 +1515,6 @@ function showTab(tab,tabEl){
   }
   var body=document.getElementById("accBody");
   var u=getUser();
-  if(tab==="dashboard"){
-    body.innerHTML="<div style='text-align:center;padding:1rem'><div class='spin'></div></div>";
-    loadDashboardTab(body);
-    return;
-  }
   if(tab==="dashboard"){
     body.innerHTML="<div style='text-align:center;padding:1rem'><div class='spin'></div></div>";
     loadDashboardTab(body);
@@ -1329,9 +1563,9 @@ function showTab(tab,tabEl){
 function saveProfile(){
   var nn=(document.getElementById("epName").value||"").trim();
   var np=(document.getElementById("epPhone").value||"").trim();
-  if(!nn){alert("Please enter your name!");return;}
+  if(!nn){showToast("Please enter your name!");return;}
   var u=getUser();
-  if(u){u.name=nn;u.phone=np;setUser(u);refreshNav();showTab("profile",null);showToast("Profile updated!", "success");}
+  if(u){u.name=nn;u.phone=np;setUser(u);refreshNav();showTab("profile",null);showToast("Profile updated!","success");}
 }
 
 function loadMyAds(container){
@@ -1386,7 +1620,8 @@ function buildCard(item){
     +'<div class="ap">&#8358;'+pr+'</div>'
     +'<div class="at">'+titl+'</div>'
     +'<div class="af">'
-    +'<div class="al">'+loc+'</div>'
+   +'<div class="al">'+loc+(item.sellerVerified?'<span class="vbadge">&#11088; Verified</span>':'')+'</div>'
+
     +'<button class="aw" data-wa="'+wa+'" data-title="'+titl.replace(/"/g,'')+'" data-price="'+price+'" onclick="event.stopPropagation();waFromBtn(this)">WhatsApp</button>'
     +'</div></div></div>';
   return html;
@@ -1480,6 +1715,16 @@ function openDetail(id){
   var dd=document.getElementById("detDesc");if(dd)dd.textContent=item.desc||"";
   var da=document.getElementById("detAv");if(da)da.textContent=item.seller.charAt(0).toUpperCase();
   var ds=document.getElementById("detSeller");if(ds)ds.textContent=item.seller;
+  var dv=document.getElementById("detVerified");
+  if(dv){
+    if(item.sellerVerified){
+      dv.innerHTML="&#11088; Verified";
+      dv.style.color="#FFD700";
+    } else {
+      dv.innerHTML="Member";
+      dv.style.color="rgba(255,255,255,0.4)";
+    }
+  }
   // Mask phone in detail view
   var detPhone = document.getElementById("detPhone");
   if(detPhone) detPhone.textContent = maskPhone(item.wa||"");
@@ -1507,16 +1752,10 @@ function chatSeller(wa,title,price){
 // POST AD
 // =============================================================
 function handleImgs(e){
-  var allowedTypes = ["image/jpeg","image/jpg","image/png","image/webp","image/gif"];
-  var files = Array.from(e.target.files).slice(0,5).filter(function(f){
-    if(!allowedTypes.includes(f.type)){
-      alert("Only image files are allowed! (JPG, PNG, WEBP, GIF)");
-      return false;
-    }
-    if(f.size > 5 * 1024 * 1024){
-      alert("Image too large! Maximum size is 5MB per image.");
-      return false;
-    }
+  var allowedTypes=["image/jpeg","image/jpg","image/png","image/webp","image/gif"];
+  var files=Array.from(e.target.files).slice(0,5).filter(function(f){
+    if(!allowedTypes.includes(f.type)){showToast("Only JPG, PNG, WEBP allowed!");return false;}
+    if(f.size>5*1024*1024){showToast("Image too large! Max 5MB.");return false;}
     return true;
   });
   uploadedImgs=[];
@@ -1524,15 +1763,28 @@ function handleImgs(e){
   if(!prev)return;
   prev.innerHTML="";
   files.forEach(function(f,i){
-    var r=new FileReader();
-    r.onload=function(ev){
-      uploadedImgs[i]={file:f,dataUrl:ev.target.result};
-      var w=document.createElement("div");
-      w.className="ipw";
-      w.innerHTML="<img src='"+ev.target.result+"' class='ipv'><button class='rim' onclick='this.parentElement.remove()'>x</button>";
-      prev.appendChild(w);
+    var canvas=document.createElement("canvas");
+    var ctx=canvas.getContext("2d");
+    var img=new Image();
+    var reader=new FileReader();
+    reader.onload=function(ev){
+      img.onload=function(){
+        // Compress to max 800px width
+        var maxW=800;
+        var scale=Math.min(1,maxW/img.width);
+        canvas.width=img.width*scale;
+        canvas.height=img.height*scale;
+        ctx.drawImage(img,0,0,canvas.width,canvas.height);
+        var compressed=canvas.toDataURL("image/jpeg",0.7);
+        uploadedImgs[i]={file:f,dataUrl:compressed};
+        var w=document.createElement("div");
+        w.className="ipw";
+        w.innerHTML="<img src='"+compressed+"' class='ipv'><button class='rim' onclick='this.parentElement.remove()'>x</button>";
+        prev.appendChild(w);
+      };
+      img.src=ev.target.result;
     };
-    r.readAsDataURL(f);
+    reader.readAsDataURL(f);
   });
 }
 
@@ -1586,7 +1838,7 @@ async function postAd(){
     }
 
     if(!firebaseUid){
-      alert("Please login again to post an ad!");
+      showToast("Please login again to post an ad!");
       openLogin();
       if(btn){btn.disabled=false;btn.textContent="Post Ad - FREE";}
       return;
@@ -1605,18 +1857,19 @@ async function postAd(){
           var data=await res.json();
           if(data.secure_url){
             imgUrl=data.secure_url;
-          } else {
-            // Cloudinary returned error
+                   } else {
+            // Cloudinary returned error - use compressed base64
             console.log("Cloudinary error:", data.error);
             imgUrl=uploadedImgs[0].dataUrl||"";
           }
           if(btn) btn.textContent = "Saving...";
         }catch(e){
           console.log("Upload failed:", e);
-          imgUrl=uploadedImgs[0].dataUrl||"";
+          // Use compressed base64 as fallback
+            imgUrl=uploadedImgs[0].dataUrl||"";
           if(btn) btn.textContent = "Saving...";
         }
-      } else if(uploadedImgs[0].dataUrl){
+     } else if(uploadedImgs[0].dataUrl){
         imgUrl=uploadedImgs[0].dataUrl;
       }
     }
@@ -1633,14 +1886,15 @@ async function postAd(){
       img:imgUrl||"",
       feat:false,
       time:"Just now",
-      userId:firebaseUid,
+    userId:firebaseUid,
+      sellerVerified: !!(getUser()&&getUser().isVerified),
       createdAt:firebase.firestore.FieldValue.serverTimestamp()
     };
-    if(eid){await db.collection("ads").doc(eid).update(adData);closeOv("sellOv");alert("Ad updated!");}
+    if(eid){await db.collection("ads").doc(eid).update(adData);closeOv("sellOv");showToast("Ad updated!","success");}
     else{await db.collection("ads").add(adData);closeOv("sellOv");showPostSuccess();}
     uploadedImgs=[];
     document.getElementById("imgPrevs").innerHTML="";
-  }catch(e){alert("Error: "+e.message);}
+  }catch(e){showToast("Error: "+e.message);}
   if(btn){btn.disabled=false;btn.textContent=eid?"Save Changes":"Post Ad - FREE";}
 }
 
@@ -1674,13 +1928,26 @@ function editAd(id){
     openOv("sellOv");
   });
 }
-
+function dbDel(id){
+  if(confirm("Delete this ad?")){
+    if(fbReady&&db){
+      db.collection("ads").doc(id).delete()
+      .then(function(){
+        showToast("Ad deleted!","success");
+        goMyAds();
+      })
+      .catch(function(e){
+        showToast("Error: "+e.message);
+      });
+    }
+  }
+}
 function askDel(id){
   var ov=document.getElementById("cnfOv");
   ov.classList.add("on");
   document.getElementById("cnfYes").onclick=function(){
     ov.classList.remove("on");
-    if(fbReady&&db){db.collection("ads").doc(id).delete().then(function(){showToast("Ad deleted!", "success");goMyAds();}).catch(function(e){alert("Error: "+e.message);});}
+    if(fbReady&&db){db.collection("ads").doc(id).delete().then(function(){showToast("Ad deleted!","success");goMyAds();}).catch(function(e){showToast("Error: "+e.message);});}
   };
 }
 
@@ -1715,9 +1982,11 @@ window.addEventListener("load",function(){
           db.collection("users").where("uid","==",firebaseUser.uid).get().then(function(snap){
             if(!snap.empty){
               var ud = snap.docs[0].data();
-              var user = {name:ud.name, phone:ud.phone||"", email:firebaseUser.email, uid:firebaseUser.uid};
+              var isVerNow = ud.isVerified && ud.verifiedUntil && new Date(ud.verifiedUntil) > new Date();
+              var user = {name:ud.name, phone:ud.phone||"", email:firebaseUser.email, uid:firebaseUser.uid, isVerified:isVerNow};
               setUser(user);
               refreshNav();
+              updateHamburgerUser();
               var iN=document.getElementById("iName");
               var iW=document.getElementById("iWa");
               if(iN)iN.value=ud.name;
@@ -1811,7 +2080,7 @@ function updateHamburgerUser(){
     var ini = u.name ? u.name.charAt(0).toUpperCase() : "?";
     section.innerHTML = "<div style='display:flex;align-items:center;gap:10px'>"
       +"<div style='width:40px;height:40px;border-radius:50%;background:#FFD700;color:#080f08;font-size:16px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0'>"+ini+"</div>"
-      +"<div><div style='font-size:14px;font-weight:700;color:#fff'>"+(u.name||"User")+"</div>"
+     +"<div><div style='font-size:14px;font-weight:700;color:#fff'>"+(u.name||"User")+(u.isVerified?"<span class='verified-badge'>&#11088; Verified</span>":"")+"</div>"
       +"<div style='font-size:11px;color:rgba(255,255,255,0.4)'>"+(u.email||u.phone||"")+"</div></div></div>";
     if(logout) logout.style.display = "flex";
   } else {
@@ -1828,7 +2097,8 @@ function clearWishlist(){
 }
 
 function showAbout(){
-  alert("CampusDeal\n\nNigeria\'s #1 Campus Marketplace!\n\nBuy & Sell anything on FUNAAB campus. Post ads FREE and let buyers contact you on WhatsApp!\n\ncampusdeal.com.ng");
+  closeHamburger();
+  showPg('about');
 }
 
 // ============= WISHLIST =============
@@ -2027,108 +2297,465 @@ function showPostSuccess(){
   // Reload ads
   if(typeof loadAds === "function") loadAds();
 }
-
-
-function showToast(msg, type){
-  var t = document.getElementById('cdToast');
-  if(!t){
-    t = document.createElement('div');
-    t.id = 'cdToast';
-    document.body.appendChild(t);
-  }
-  t.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:'+(type==='success'?'#22c55e':'#ff4444')+';color:#fff;padding:12px 22px;border-radius:8px;font-size:13px;font-weight:700;z-index:99999;text-align:center;max-width:300px;box-shadow:0 4px 20px rgba(0,0,0,0.4);transition:opacity 0.3s;display:block;opacity:1';
-  t.textContent = msg;
-  clearTimeout(t._timer);
-  t._timer = setTimeout(function(){
-    t.style.opacity='0';
-    setTimeout(function(){ t.style.display='none'; }, 300);
-  }, 3000);
+function showToast(msg){var t=document.getElementById('cdToast');if(!t){t=document.createElement('div');t.id='cdToast';t.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#ff4444;color:#fff;padding:12px 20px;border-radius:8px;font-size:13px;font-weight:700;z-index:9999;text-align:center;max-width:280px;box-shadow:0 4px 20px rgba(0,0,0,0.3)';document.body.appendChild(t);}t.textContent=msg;t.style.display='block';t.style.opacity='1';setTimeout(function(){t.style.opacity='0';setTimeout(function(){t.style.display='none';},300);},3000);}
+function goDashboard(){
+  if(!getUser()){openLogin();return;}
+  showPg("account");
+  var tabs=document.querySelectorAll(".atab");
+  tabs.forEach(function(t){t.classList.remove("on");});
+  if(tabs[0])tabs[0].classList.add("on");
+  showTab("dashboard",tabs[0]);
+  setActiveBn("bn-myads");
 }
-
 
 function loadDashboardTab(body){
-  var u = getUser();
-  if(!u){ body.innerHTML="<div class='emp'>Please login first</div>"; return; }
-
-  body.innerHTML =
-    "<div style='background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.15);border-radius:12px;padding:14px;margin-bottom:14px;display:flex;align-items:center;gap:10px'>"
-    +"<div style='width:44px;height:44px;border-radius:50%;background:#FFD700;color:#080f08;font-size:18px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0'>"+(u.name?u.name.charAt(0).toUpperCase():"?")+"</div>"
-    +"<div style='flex:1'><div style='font-size:16px;font-weight:900;color:#fff'>Hello, "+(u.name||"Seller")+"!</div>"
-    +"<div style='font-size:12px;color:rgba(255,255,255,0.45)'>Seller Dashboard</div></div>"
-    +"<button onclick='doSell()' style='background:#FFD700;color:#080f08;border:none;padding:8px 12px;border-radius:20px;font-size:11px;font-weight:800;cursor:pointer;flex-shrink:0'>+ Post Ad</button>"
-    +"</div>"
-    +"<div id='dbVerifyBanner' onclick='openVerifyModal()' style='background:linear-gradient(135deg,#FFD700,#FFA500);border-radius:10px;padding:14px;margin-bottom:14px;cursor:pointer'>"
-    +"<div style='display:flex;align-items:center;gap:10px'>"
-    +"<span style='font-size:24px'>&#11088;</span>"
-    +"<div style='flex:1'><div style='font-size:14px;font-weight:800;color:#000'>Get Verified Seller Badge!</div>"
-    +"<div style='font-size:12px;color:rgba(0,0,0,0.7)'>3x more buyers - Only N500/month</div></div>"
-    +"<span style='font-size:20px;color:#000;font-weight:800'>&#8250;</span>"
-    +"</div></div>"
-    +"<div style='display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px'>"
-    +"<div style='background:#0d1a0d;border-radius:12px;padding:14px;border:1px solid rgba(255,215,0,0.1);text-align:center'>"
-    +"<div id='dbTotalAds' style='font-size:28px;font-weight:900;color:#FFD700'>...</div>"
-    +"<div style='font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px'>My Ads</div></div>"
-    +"<div style='background:#0d1a0d;border-radius:12px;padding:14px;border:1px solid rgba(255,215,0,0.1);text-align:center'>"
-    +"<div id='dbBadge' style='font-size:13px;font-weight:800;color:#ff4444'>Not Verified</div>"
-    +"<div style='font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px'>Badge Status</div></div>"
-    +"</div>"
-    +"<div style='display:flex;align-items:center;justify-content:space-between;margin-bottom:10px'>"
-    +"<div style='font-size:15px;font-weight:900;color:#fff'>My Ads</div>"
-    +"<button onclick='doSell()' style='background:rgba(255,215,0,0.1);color:#FFD700;border:1px solid rgba(255,215,0,0.3);padding:5px 12px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer'>+ New Ad</button>"
-    +"</div>"
-    +"<div id='dbAdsList'><div style='text-align:center;padding:2rem'><div class='spin'></div></div></div>";
-
-  if(fbReady && db && u.uid){
-    db.collection("users").doc(u.uid).get().then(function(doc){
-      var data = (doc && doc.exists && doc.data()) || {};
-      var badge = document.getElementById("dbBadge");
-      var banner = document.getElementById("dbVerifyBanner");
-      if(data.isVerified && data.verifiedUntil && new Date(data.verifiedUntil) > new Date()){
-        var days = Math.ceil((new Date(data.verifiedUntil) - new Date())/(1000*60*60*24));
-        if(badge){ badge.textContent = "Verified ("+days+"d)"; badge.style.color="#FFD700"; }
-        if(banner) banner.style.display = "none";
-      }
-    }).catch(function(){});
-
-    db.collection("ads").where("userId","==",u.uid).get().then(function(snap){
-      var totalEl = document.getElementById("dbTotalAds");
-      if(totalEl) totalEl.textContent = snap.size;
-      var listEl = document.getElementById("dbAdsList");
-      if(!listEl) return;
-      if(snap.empty){
-        listEl.innerHTML = "<div class='emp'><div class='empi'>&#128241;</div><p>No ads yet!</p><button onclick='doSell()' style='margin-top:10px;background:#FFD700;color:#080f08;border:none;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer'>Post Your First Ad</button></div>";
-        return;
-      }
-      listEl.innerHTML = snap.docs.map(function(doc){
-        var d = doc.data();
-        var em = EMOS[d.cat]||"&#128230;";
-        return "<div style='background:#0d1a0d;border-radius:10px;border:1px solid rgba(255,255,255,0.07);padding:12px;display:flex;gap:10px;margin-bottom:10px;align-items:flex-start'>"
-          +"<div style='width:68px;height:68px;border-radius:8px;overflow:hidden;flex-shrink:0;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font-size:24px'>"
-          +(d.img?"<img src='"+d.img+"' style='width:100%;height:100%;object-fit:cover'>":em)
-          +"</div>"
-          +"<div style='flex:1;min-width:0'>"
-          +"<div style='font-size:13px;font-weight:700;color:#fff;margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap'>"+d.title+"</div>"
-          +"<div style='font-size:15px;font-weight:900;color:#FFD700;margin-bottom:6px'>N"+Number(d.price).toLocaleString()+"</div>"
-          +"<div style='font-size:10px;color:rgba(255,255,255,0.4);margin-bottom:8px'>&#128205; "+(d.loc||"FUNAAB Campus")+"</div>"
-          +"<div style='display:flex;gap:6px'>"
-          +"<button data-id='"+doc.id+"' onclick='editAd(this.dataset.id)' style='background:rgba(255,215,0,0.1);color:#FFD700;border:1px solid rgba(255,215,0,0.3);padding:5px 10px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer'>Edit</button>"
-          +"<button data-id='"+doc.id+"' onclick='askDel(this.dataset.id)' style='background:rgba(255,68,68,0.08);color:#ff4444;border:1px solid rgba(255,68,68,0.25);padding:5px 10px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer'>Delete</button>"
-          +"</div></div></div>";
-      }).join("");
-    }).catch(function(e){
-      var listEl = document.getElementById("dbAdsList");
-      if(listEl) listEl.innerHTML = "<div class='emp'>Error loading ads</div>";
-    });
+  var u=getUser();
+  if(!u){body.innerHTML="<div class='emp'>Please login</div>";return;}
+ body.innerHTML=
+  "<div style='background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.15);border-radius:12px;padding:14px;margin-bottom:14px;display:flex;align-items:center;gap:10px'>"
+  +"<div style='width:44px;height:44px;border-radius:50%;background:#FFD700;color:#080f08;font-size:18px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0'>"+(u.name?u.name.charAt(0).toUpperCase():"?")+"</div>"
+  +"<div style='flex:1'><div style='font-size:16px;font-weight:900;color:#fff'>Hello, "+(u.name||"Seller")+"!"+(u.isVerified?"<span class='verified-badge'>&#11088; Verified</span>":"")+"</div>"
+  +"<div style='font-size:12px;color:rgba(255,255,255,0.45)'>Seller Dashboard</div></div>"
+  +"<button onclick='doSell()' style='background:#FFD700;color:#080f08;border:none;padding:8px 12px;border-radius:20px;font-size:11px;font-weight:800;cursor:pointer;flex-shrink:0'>+ Post Ad</button></div>"
+  +"<div onclick='openVerifyModal()' id='dbVerifyBanner' style='background:linear-gradient(135deg,#FFD700,#FFA500);border-radius:10px;padding:14px;margin-bottom:14px;cursor:pointer'>"
+  +"<div style='display:flex;align-items:center;gap:10px'><span style='font-size:24px'>&#11088;</span>"
+  +"<div style='flex:1'><div style='font-size:14px;font-weight:800;color:#000'>Get Verified Seller Badge!</div>"
+  +"<div style='font-size:12px;color:rgba(0,0,0,0.7)'>3x more buyers - Only N1,000/month</div></div>"
+  +"<span style='font-size:20px;color:#000;font-weight:800'>&#8250;</span></div></div>"
+  +"<div style='display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px'>"
+  +"<div class='db-card'><div class='db-num' id='dbTotal'>...</div><div class='db-label'>My Ads</div></div>"
+  +"<div class='db-card'><div id='dbBadge' style='font-size:13px;font-weight:800;color:#ff4444'>Not Verified</div><div class='db-label'>Badge Status</div></div></div>"
+  +"<div style='display:flex;align-items:center;justify-content:space-between;margin-bottom:10px'>"
+  +"<button onclick='doSell()' style='background:rgba(255,215,0,0.1);color:#FFD700;border:1px solid rgba(255,215,0,0.3);padding:5px 12px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer'>+ New Ad</button></div>"
+  +"<div id='dbList'><div style='text-align:center;padding:2rem'><div class='spin'></div></div></div>";
+  if(!fbReady||!db)return;
+  db.collection("users").doc(u.uid).get().then(function(doc){
+    var d=(doc&&doc.exists&&doc.data())||{};
+    if(d.isVerified&&d.verifiedUntil&&new Date(d.verifiedUntil)>new Date()){
+      var days=Math.ceil((new Date(d.verifiedUntil)-new Date())/(1000*60*60*24));
+      var b=document.getElementById("dbBadge");
+      var banner=document.getElementById("dbVerifyBanner");
+      if(b){b.textContent="Verified ("+days+"d)";b.style.color="#FFD700";}
+      if(banner)banner.style.display="none";
+    }
+  });
+  db.collection("ads").where("userId","==",u.uid).get().then(function(snap){
+    var t=document.getElementById("dbTotal");
+    if(t)t.textContent=snap.size;
+    var l=document.getElementById("dbList");
+    if(!l)return;
+    if(snap.empty){
+      l.innerHTML="<div class='emp'><div class='empi'>&#128241;</div><p>No ads yet!</p><button onclick='doSell()' style='margin-top:10px;background:#FFD700;color:#080f08;border:none;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer'>Post First Ad</button></div>";
+      return;
+    }
+    l.innerHTML=snap.docs.map(function(doc){
+      var d=doc.data();
+      var em=EMOS[d.cat]||"&#128230;";
+      return "<div class='db-ad'><div class='db-ad-img'>"+(d.img?"<img src='"+d.img+"'>":em)+"</div>"
+        +"<div style='flex:1;min-width:0'>"
+        +"<div style='font-size:13px;font-weight:700;color:#fff;margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap'>"+d.title+"</div>"
+        +"<div style='font-size:15px;font-weight:900;color:#FFD700;margin-bottom:6px'>N"+Number(d.price).toLocaleString()+"</div>"
+        +"<div style='font-size:10px;color:rgba(255,255,255,0.4);margin-bottom:8px'>&#128205; "+(d.loc||"FUNAAB")+"</div>"
+        +"<div style='display:flex;gap:6px'>"
+        +"<button onclick=\"editAd('"+doc.id+"')\" style='background:rgba(255,215,0,0.1);color:#FFD700;border:1px solid rgba(255,215,0,0.3);padding:5px 10px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer'>Edit</button>"
+        +"<button onclick=\"dbDel('"+doc.id+"')\" style='background:rgba(255,68,68,0.08);color:#ff4444;border:1px solid rgba(255,68,68,0.25);padding:5px 10px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer'>Delete</button>"
+        +"</div></div></div>";
+    }).join("");
+  });
+}
+  // ===== REFERRAL SYSTEM =====
+function trackReferral(){
+  var params = new URLSearchParams(window.location.search);
+  var ref = params.get('ref');
+  if(ref){
+    localStorage.setItem('cd_ref', ref.toUpperCase());
+    console.log('Referral tracked:', ref);
   }
 }
 
+function getReferral(){
+  return localStorage.getItem('cd_ref') || '';
+}
 
+// Save referral when user registers
+function saveReferral(uid){
+  var ref = getReferral();
+  if(!ref || !uid || !fbReady || !db) return;
+  db.collection('referrals').add({
+    code: ref,
+    userId: uid,
+    createdAt: new Date().toISOString()
+  }).then(function(){
+    console.log('Referral saved:', ref);
+  });
+}
+  // ===== ORDER SYSTEM =====
+var currentOrder = {};
+
+function openOrderForm(passedItem){
+  if(passedItem) currentItem = passedItem;
+  if(!currentItem){ 
+    showToast('Please select an ad first!');
+    return; 
+  }
+  var u = getUser();
+  if(!u){ openLogin(); return; }
+  // Fill item info
+  var info = document.getElementById('orderItemInfo');
+  if(info){
+    info.innerHTML = "<div style='display:flex;gap:10px;align-items:center'>"
+      +(currentItem.img?"<img src='"+currentItem.img+"' style='width:60px;height:60px;border-radius:8px;object-fit:cover'>":"<div style='width:60px;height:60px;border-radius:8px;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font-size:24px'>"+(EMOS[currentItem.cat]||'📦')+"</div>")
+      +"<div><div style='font-size:13px;font-weight:700;color:#fff'>"+currentItem.title+"</div>"
+      +"<div style='font-size:16px;font-weight:900;color:#FFD700'>N"+Number(currentItem.price).toLocaleString()+"</div>"
+      +"<div style='font-size:11px;color:rgba(255,255,255,0.4)'>Seller: "+currentItem.seller+"</div></div></div>";
+  }
+
+ // Pre-fill user details
+  var u = getUser();
+  var nameEl = document.getElementById('orderName');
+  var phoneEl = document.getElementById('orderPhone');
+  if(nameEl && u && u.name) nameEl.value = u.name;
+  if(phoneEl && u && u.phone) phoneEl.value = u.phone.replace('234','0');
+
+  // Location change handler
+  var locEl = document.getElementById('orderLocation');
+  if(locEl){
+    locEl.onchange = function(){
+      var val = this.value;
+      if(!val){ document.getElementById('orderTotal').style.display='none'; return; }
+      var parts = val.split('|');
+      var deliveryFee = Number(parts[1]);
+      var itemPrice = Number(currentItem.price);
+      var total = itemPrice + deliveryFee;
+      document.getElementById('orderItemPrice').textContent = 'N'+itemPrice.toLocaleString();
+      document.getElementById('orderDeliveryFee').textContent = 'N'+deliveryFee.toLocaleString();
+      document.getElementById('orderTotalPrice').textContent = 'N'+total.toLocaleString();
+      document.getElementById('orderTotal').style.display = 'block';
+      currentOrder.deliveryFee = deliveryFee;
+      currentOrder.total = total;
+      currentOrder.location = parts[0];
+    };
+  }
+
+  currentOrder.item = currentItem;
+  setTimeout(function(){ openOv('orderOv'); }, 300);
+}
+function submitOrder(){
+  var name = (document.getElementById('orderName').value||'').trim();
+  var phone = (document.getElementById('orderPhone').value||'').trim();
+  var loc = document.getElementById('orderLocation').value;
+  var note = (document.getElementById('orderNote').value||'').trim();
+
+  if(!name){ showToast('Please enter your name!'); return; }
+  if(!phone){ showToast('Please enter your WhatsApp number!'); return; }
+  if(!loc){ showToast('Please select delivery location!'); return; }
+
+  var parts = loc.split('|');
+  var deliveryFee = Number(parts[1]);
+  var itemPrice = Number(currentOrder.item.price);
+  var total = itemPrice + deliveryFee;
+  var location = parts[0];
+
+  // Save order to Firebase
+  var orderData = {
+    itemTitle: currentOrder.item.title,
+    itemPrice: itemPrice,
+    sellerName: currentOrder.item.seller,
+    sellerWa: currentOrder.item.wa,
+    buyerName: name,
+    buyerPhone: phone,
+    deliveryLocation: location,
+    deliveryFee: deliveryFee,
+    totalAmount: total,
+    note: note,
+    status: 'pending',
+    createdAt: new Date().toISOString()
+  };
+
+  // Pay with Flutterwave
+  var u = getUser();
+  FlutterwaveCheckout({
+    public_key: FLW_KEY,
+    tx_ref: 'ORD_' + Date.now(),
+    amount: total,
+    currency: 'NGN',
+    payment_options: 'card,ussd,banktransfer',
+    customer: {
+      email: u ? u.email : 'customer@campusdeal.com.ng',
+      name: name,
+      phonenumber: phone
+    },
+    customizations: {
+      title: 'CampusDeal Order',
+      description: currentOrder.item.title + ' + Delivery to ' + location,
+    },
+    callback: function(res){
+      if(res.status === 'successful' || res.status === 'completed'){
+        orderData.paymentRef = res.transaction_id;
+        orderData.status = 'paid';
+        
+        // Save to Firebase
+        if(fbReady && db){
+          db.collection('orders').add(orderData).then(function(doc){
+            // Send WhatsApp notification to you
+            var waMsg = "🛍️ *NEW ORDER - CampusDeal*\n\n"
+              +"*Item:* "+orderData.itemTitle+"\n"
+              +"*Item Price:* N"+itemPrice.toLocaleString()+"\n"
+              +"*Delivery to:* "+location+"\n"
+              +"*Delivery Fee:* N"+deliveryFee.toLocaleString()+"\n"
+              +"*Total Paid:* N"+total.toLocaleString()+"\n\n"
+              +"*Buyer Name:* "+name+"\n"
+              +"*Buyer WhatsApp:* "+phone+"\n"
+              +(note?"*Note:* "+note+"\n":"")+"\n"
+              +"*Seller:* "+orderData.sellerName+"\n"
+              +"*Seller WhatsApp:* "+orderData.sellerWa+"\n\n"
+              +"*Order ID:* "+doc.id+"\n"
+              +"*Payment Ref:* "+res.transaction_id;
+            
+            window.open('https://wa.me/2348033873918?text='+encodeURIComponent(waMsg));
+            closeOv('orderOv');
+            closeOv('detOv');
+            showToast('Order placed successfully! 🎉', 'success');
+          });
+        }
+      } else {
+        showToast('Payment failed! Please try again.');
+      }
+    },
+    onclose: function(){
+      showToast('Payment cancelled.');
+    }
+  });
+}
+  function showOrderPage(){
+  if(!currentItem) return;
+  currentOrder.item = currentItem;
+  closeOv('detOv');
+  var pg = document.getElementById('pg-order');
+  if(!pg){
+    pg = document.createElement('div');
+    pg.id = 'pg-order';
+    pg.className = 'pg';
+    pg.style.cssText = 'position:fixed;inset:0;background:#080f08;z-index:9999;overflow-y:auto;padding-bottom:80px';
+    pg.innerHTML = '<div style="background:#080f08;padding:14px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,215,0,0.12)">'
+      +'<button onclick="document.getElementById(\'pg-order\').style.display=\'none\'" style="background:rgba(255,215,0,0.1);border:none;color:#FFD700;width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer">&#8592;</button>'
+      +'<div style="font-size:16px;font-weight:900;color:#FFD700">&#128666; Order with Delivery</div>'
+      +'</div>'
+      +'<div style="padding:16px">'
+      +'<div id="orderItemInfo2" style="background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.15);border-radius:10px;padding:12px;margin-bottom:16px"></div>'
+      +'<div style="margin-bottom:12px"><label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);display:block;margin-bottom:5px">YOUR NAME *</label>'
+      +'<input type="text" id="orderName2" placeholder="Enter your full name" style="width:100%;padding:11px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:14px;outline:none;background:rgba(255,255,255,0.05);color:#fff;font-family:inherit"></div>'
+      +'<div style="margin-bottom:12px"><label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);display:block;margin-bottom:5px">WHATSAPP NUMBER *</label>'
+      +'<input type="tel" id="orderPhone2" placeholder="08012345678" style="width:100%;padding:11px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:14px;outline:none;background:rgba(255,255,255,0.05);color:#fff;font-family:inherit"></div>'
+      +'<div style="margin-bottom:12px"><label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);display:block;margin-bottom:5px">DELIVERY LOCATION *</label>'
+      +'<select id="orderLocation2" style="width:100%;padding:11px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:14px;outline:none;background:#0d1a0d;color:#fff;font-family:inherit">'
+      +'<option value="">Select delivery location</option>'
+      +'<option value="Camp|1000">Camp - N1,000</option>'
+      +'<option value="FUNAAB Zoo|1000">FUNAAB Zoo - N1,000</option>'
+      +'<option value="Harmony|1000">Harmony - N1,000</option>'
+      +'<option value="Isolu|1000">Isolu - N1,000</option>'
+      +'<option value="Kofesu|1000">Kofesu - N1,000</option>'
+      +'<option value="Labuta|1000">Labuta - N1,000</option>'
+      +'<option value="Ogun Osun|1000">Ogun Osun - N1,000</option>'
+      +'<option value="Oluwo|1000">Oluwo - N1,000</option>'
+      +'<option value="Odo Eran|1200">Odo Eran - N1,200</option>'
+      +'<option value="Osiele|1200">Osiele - N1,200</option>'
+      +'<option value="Kotopo|1300">Kotopo - N1,300</option>'
+      +'</select></div>'
+      +'<div style="margin-bottom:12px"><label style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.5);display:block;margin-bottom:5px">NOTE (OPTIONAL)</label>'
+      +'<textarea id="orderNote2" placeholder="Any special instructions..." style="width:100%;padding:11px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:14px;outline:none;background:rgba(255,255,255,0.05);color:#fff;font-family:inherit;height:70px;resize:none"></textarea></div>'
+      +'<div id="orderTotal2" style="background:rgba(255,255,255,0.04);border-radius:8px;padding:12px;margin-bottom:16px;display:none">'
+      +'<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;color:rgba(255,255,255,0.5)">Item Price</span><span style="font-size:13px;font-weight:700;color:#fff" id="orderItemPrice2"></span></div>'
+      +'<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;color:rgba(255,255,255,0.5)">Delivery Fee</span><span style="font-size:13px;font-weight:700;color:#fff" id="orderDeliveryFee2"></span></div>'
+      +'<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;color:rgba(255,255,255,0.5)">Service Fee</span><span style="font-size:13px;font-weight:700;color:#fff">N300</span></div>'
+      +'<div style="height:1px;background:rgba(255,255,255,0.1);margin:8px 0"></div>'
+      +'<div style="display:flex;justify-content:space-between"><span style="font-size:14px;font-weight:700;color:#fff">Total</span><span style="font-size:14px;font-weight:900;color:#FFD700" id="orderTotalPrice2"></span></div>'
+      +'</div>'
+      +'<button onclick="submitOrder2()" style="width:100%;background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;border:none;padding:14px;border-radius:8px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit">Place Order & Pay &#8594;</button>'
+      +'<div style="text-align:center;font-size:11px;color:rgba(255,255,255,0.3);margin-top:10px">&#128274; Secured by Flutterwave</div>'
+      +'</div>';
+    document.body.appendChild(pg);
+  }
+
+  // Fill item info
+  pg.style.display = 'block';
+  var info = document.getElementById('orderItemInfo2');
+  if(info){
+    info.innerHTML = "<div style='display:flex;gap:10px;align-items:center'>"
+      +(currentItem.img?"<img src='"+currentItem.img+"' style='width:60px;height:60px;border-radius:8px;object-fit:cover'>":"<div style='width:60px;height:60px;border-radius:8px;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font-size:24px'>"+(EMOS[currentItem.cat]||'📦')+"</div>")
+      +"<div><div style='font-size:13px;font-weight:700;color:#fff'>"+currentItem.title+"</div>"
+      +"<div style='font-size:16px;font-weight:900;color:#FFD700'>N"+Number(currentItem.price).toLocaleString()+"</div>"
+      +"<div style='font-size:11px;color:rgba(255,255,255,0.4)'>Seller: "+currentItem.seller+"</div></div></div>";
+  }
+
+  // Pre-fill
+  var u = getUser();
+  var n = document.getElementById('orderName2');
+  var p = document.getElementById('orderPhone2');
+  if(n && u && u.name) n.value = u.name;
+  if(p && u && u.phone) p.value = u.phone.replace('234','0');
+
+  // Location handler
+  var loc = document.getElementById('orderLocation2');
+  if(loc){
+    loc.onchange = function(){
+      var val = this.value;
+      if(!val){ document.getElementById('orderTotal2').style.display='none'; return; }
+      var pts = val.split('|');
+      var df = Number(pts[1]);
+      var ip = Number(currentItem.price);
+      var sf = 300;
+      var tot = ip + df + sf;
+      document.getElementById('orderItemPrice2').textContent='N'+ip.toLocaleString();
+      document.getElementById('orderDeliveryFee2').textContent='N'+df.toLocaleString();
+      document.getElementById('orderTotalPrice2').textContent='N'+tot.toLocaleString();
+      document.getElementById('orderTotal2').style.display='block';
+    };
+  }
+}
+
+function submitOrder2(){
+  var name=(document.getElementById('orderName2').value||'').trim();
+  var phone=(document.getElementById('orderPhone2').value||'').trim();
+  var loc=document.getElementById('orderLocation2').value;
+  var note=(document.getElementById('orderNote2').value||'').trim();
+  if(!name){showToast('Please enter your name!');return;}
+  if(!phone){showToast('Please enter your WhatsApp number!');return;}
+  if(!loc){showToast('Please select delivery location!');return;}
+  var pts=loc.split('|');
+  var df=Number(pts[1]);
+  var ip=Number(currentOrder.item.price);
+  var sf=300;
+  var tot=ip+df+sf;
+  var location=pts[0];
+  var u=getUser();
+  FlutterwaveCheckout({
+    public_key:FLW_KEY,
+    tx_ref:'ORD_'+Date.now(),
+    amount:tot,
+    currency:'NGN',
+    payment_options:'card,ussd,banktransfer',
+    customer:{email:u?u.email:'customer@campusdeal.com.ng',name:name,phonenumber:phone},
+    customizations:{title:'CampusDeal Order',description:currentOrder.item.title+' + Delivery to '+location},
+    callback:function(res){
+      if(res.status==='successful'||res.status==='completed'){
+        var orderData={
+          itemTitle:currentOrder.item.title,
+          itemPrice:ip,
+          sellerName:currentOrder.item.seller,
+          sellerWa:currentOrder.item.wa,
+          buyerName:name,
+          buyerPhone:phone,
+          deliveryLocation:location,
+          deliveryFee:df,
+          totalAmount:tot,
+          note:note,
+          status:'paid',
+          paymentRef:res.transaction_id,
+          createdAt:new Date().toISOString()
+        };
+        if(fbReady&&db){
+          db.collection('orders').add(orderData).then(function(doc){
+            var waMsg="🛍️ *NEW ORDER - CampusDeal*\n\n"
+              +"*Item:* "+orderData.itemTitle+"\n"
+              +"*Price:* N"+ip.toLocaleString()+"\n"
+              +"*Delivery:* "+location+" - N"+df.toLocaleString()+"\n"
+              +"*Total Paid:* N"+tot.toLocaleString()+"\n\n"
+              +"*Buyer:* "+name+"\n"
+              +"*Buyer WA:* "+phone+"\n"
+              +(note?"*Note:* "+note+"\n":"")+"\n"
+              +"*Seller:* "+orderData.sellerName+"\n"
+              +"*Seller WA:* "+orderData.sellerWa+"\n\n"
+              +"*Order ID:* "+doc.id;
+            window.open('https://wa.me/2348033873918?text='+encodeURIComponent(waMsg));
+            document.getElementById('pg-order').style.display='none';
+            showToast('Order placed! 🎉','success');
+          });
+        }
+      } else {
+        showToast('Payment failed! Try again.');
+      }
+    },
+    onclose:function(){showToast('Payment cancelled.');}
+  });
+}
+  // ===== ANNOUNCEMENTS & INBOX =====
+function showAnnouncements(){
+  showPg('announcements');
+  var list = document.getElementById('announcementsList');
+  if(!list) return;
+  list.innerHTML = "<div style='text-align:center;padding:2rem'><div class='spin'></div></div>";
+  if(!fbReady||!db){
+    list.innerHTML = "<div class='emp'><div class='empi'>&#128226;</div><p>Loading...</p></div>";
+    return;
+  }
+  db.collection('announcements').get()
+  .then(function(snap){
+    if(snap.empty){
+      list.innerHTML = "<div class='emp'><div class='empi'>&#128226;</div><p>No announcements yet!</p></div>";
+      return;
+    }
+    list.innerHTML = snap.docs.map(function(doc){
+      var d = doc.data();
+      var date = d.createdAt ? new Date(d.createdAt).toLocaleDateString() : '';
+      return "<div style='background:#0d1a0d;border-radius:12px;padding:14px;margin-bottom:12px;border:1px solid rgba(255,215,0,0.12)'>"
+        +"<div style='display:flex;align-items:center;gap:8px;margin-bottom:8px'>"
+        +"<span style='font-size:20px'>&#128226;</span>"
+        +"<div style='font-size:14px;font-weight:800;color:#FFD700'>"+d.title+"</div>"
+        +"</div>"
+        +"<div style='font-size:13px;color:rgba(255,255,255,0.7);line-height:1.6;margin-bottom:8px'>"+d.message+"</div>"
+        +"<div style='font-size:10px;color:rgba(255,255,255,0.3)'>"+date+"</div>"
+        +"</div>";
+    }).join('');
+  }).catch(function(){
+    list.innerHTML = "<div class='emp'><div class='empi'>&#128226;</div><p>Could not load</p></div>";
+  });
+}
+
+function showInbox(){
+  var u = getUser();
+  if(!u){ openLogin(); return; }
+  showPg('inbox');
+  var list = document.getElementById('inboxList');
+  if(!list) return;
+  list.innerHTML = "<div style='text-align:center;padding:2rem'><div class='spin'></div></div>";
+  if(!fbReady||!db){
+    list.innerHTML = "<div class='emp'><div class='empi'>&#128140;</div><p>Loading...</p></div>";
+    return;
+  }
+  db.collection('orders').where('sellerWa','==',u.phone).get()
+  .then(function(snap){
+    if(snap.empty){
+      list.innerHTML = "<div class='emp'><div class='empi'>&#128140;</div><p>No orders yet!</p>"
+        +"<p style='font-size:12px;margin-top:8px;color:rgba(255,255,255,0.4)'>When someone orders your product you will see it here!</p></div>";
+      return;
+    }
+    list.innerHTML = "<div style='font-size:13px;font-weight:700;color:#FFD700;margin-bottom:10px'>&#128666; Orders for your products</div>"
+      +snap.docs.map(function(doc){
+        var d = doc.data();
+        var statusColor = d.status==='delivered'?'#22c55e':'#FFD700';
+        return "<div style='background:#0d1a0d;border-radius:12px;padding:14px;margin-bottom:10px;border:1px solid rgba(255,215,0,0.12)'>"
+          +"<div style='display:flex;align-items:center;justify-content:space-between;margin-bottom:8px'>"
+          +"<div style='font-size:14px;font-weight:800;color:#fff'>&#128666; New Order!</div>"
+          +"<div style='background:"+statusColor+";color:#000;font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px'>"+(d.status||'PAID').toUpperCase()+"</div>"
+          +"</div>"
+          +"<div style='font-size:13px;color:rgba(255,255,255,0.7);margin-bottom:4px'>&#128247; "+d.itemTitle+"</div>"
+          +"<div style='font-size:13px;color:#FFD700;font-weight:700;margin-bottom:4px'>N"+Number(d.itemPrice).toLocaleString()+"</div>"
+          +"<div style='font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px'>&#128100; Buyer: "+d.buyerName+"</div>"
+          +"<div style='font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px'>&#128205; Deliver to: "+d.deliveryLocation+"</div>"
+          +"<button onclick='window.open(\"https://wa.me/\"+\""+d.buyerPhone+"\")' style='background:rgba(37,211,102,0.1);color:#25D366;border:1px solid rgba(37,211,102,0.3);padding:6px 12px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer'>&#128153; WhatsApp Buyer</button>"
+          +"</div>";
+      }).join('');
+  }).catch(function(){
+    list.innerHTML = "<div class='emp'><div class='empi'>&#128140;</div><p>Could not load inbox</p></div>";
+  });
+}
 function contactAdmin(){var u=getUser();var msg=u?"Hi CampusDeal Admin! My name is "+u.name+" and I need help.":"Hi CampusDeal Admin! I need help.";window.open("https://wa.me/2348033873918?text="+encodeURIComponent(msg));}
 
 // =============================================================
 // ADMIN DASHBOARD
 // =============================================================
-var ADMIN_PWD_HASH = "bf91bfd76d6d2457c3ba57ac887023f2edd6f79d984e290d273fd11b15465315";
+var ADMIN_PWD_HASH = "5f2353e51b0d82ceeeb7bbaa57dc6d09a5ddc09c0f9889aae107bdcda92292ef";
 var isAdmin = false;
 
 function openAdmin(){
@@ -2141,7 +2768,7 @@ function openAdmin(){
     }
     var pwd = prompt("Enter Admin Password:");
     if(pwd === null) return;
-    if(pwd === atob("TXJBZGVsZWtlQGFkbWlu")){
+    if(pwd === atob("dHJ5aGFja21l")){
       isAdmin = true;
       showPg("admin");
       waitForFirebaseAndLoad();
@@ -2222,7 +2849,7 @@ async function checkAdminPwd(){
   }catch(e){}
   
   // Fallback check for older browsers
-  if(!correct && pwd === atob("TXJBZGVsZWtlQGFkbWlu")) correct = true;
+  if(!correct && pwd === atob("dHJ5aGFja21l")) correct = true;
 
   if(correct){
     isAdmin = true;
@@ -2268,10 +2895,21 @@ function loadAdminDashboard(){
   });
   // Load users count separately
   db.collection("users").get().then(function(snap){
+    // Filter out test accounts
+    var realUsers = snap.docs.filter(function(doc){
+      var d = doc.data();
+      var name = (d.name||'').toLowerCase();
+      var email = (d.email||'').toLowerCase();
+      return !name.includes('test') && 
+             !email.includes('test') &&
+             !name.includes('hehe') &&
+             !name.includes('behe') &&
+             d.name && d.name.length > 1;
+    });
     var sn2 = document.getElementById("statUsersNum");
-    if(sn2) sn2.textContent = snap.size;
+    if(sn2) sn2.textContent = realUsers.length;
     var el4 = document.getElementById("adminTotalUsers"); 
-    if(el4) el4.textContent = snap.size;
+    if(el4) el4.textContent = realUsers.length;
   });
   showAdminTab("ads", null);
 }
@@ -2332,12 +2970,99 @@ function showAdminTab(tab, tabEl){
             +"</div></div>";
         }).join("");
     });
+    } else if(tab === "orders"){
+    body.innerHTML = "<div style='text-align:center;padding:1rem'><div class='spin'></div></div>";
+    if(!db){ waitForFirebaseAndLoad(); return; }
+    db.collection("orders").orderBy("createdAt","desc").get().then(function(snap){
+      if(snap.empty){
+        body.innerHTML = "<div class='emp'><div class='empi'>&#128666;</div><p>No orders yet!</p></div>";
+        return;
+      }
+      body.innerHTML = "<h3 style='font-size:15px;font-weight:900;margin-bottom:1rem;color:#fff'>&#128666; Orders ("+snap.size+")</h3>"
+        +snap.docs.map(function(doc){
+          var d = doc.data();
+          var statusColor = d.status==='delivered'?'#22c55e':d.status==='paid'?'#FFD700':'#ff4444';
+          return "<div style='background:#0d1a0d;border-radius:10px;border:1px solid rgba(255,255,255,0.07);padding:12px;margin-bottom:10px'>"
+            +"<div style='display:flex;align-items:center;justify-content:space-between;margin-bottom:8px'>"
+            +"<div style='font-size:13px;font-weight:700;color:#fff'>"+d.itemTitle+"</div>"
+            +"<div style='background:"+statusColor+";color:#000;font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px'>"+( d.status||'pending').toUpperCase()+"</div>"
+            +"</div>"
+            +"<div style='font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px'>&#128100; "+d.buyerName+" · "+d.buyerPhone+"</div>"
+            +"<div style='font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px'>&#128205; "+d.deliveryLocation+"</div>"
+            +"<div style='font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px'>&#128179; Item: N"+Number(d.itemPrice).toLocaleString()+" + Delivery: N"+Number(d.deliveryFee).toLocaleString()+" = <strong style='color:#FFD700'>N"+Number(d.totalAmount).toLocaleString()+"</strong></div>"
+            +"<div style='font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:8px'>Seller: "+d.sellerName+" · "+d.sellerWa+"</div>"
+            +(d.note?"<div style='font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:8px'>Note: "+d.note+"</div>":"")
+            +"<div style='display:flex;gap:6px'>"
+            +"<button data-id='"+doc.id+"' onclick='markDelivered(this.dataset.id)' style='background:rgba(34,197,94,0.1);color:#22c55e;border:1px solid rgba(34,197,94,0.3);padding:5px 10px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer'>&#10003; Mark Delivered</button>"
+            +"<button onclick='window.open(\"https://wa.me/\"+\""+d.buyerPhone+"\")' style='background:rgba(37,211,102,0.1);color:#25D366;border:1px solid rgba(37,211,102,0.3);padding:5px 10px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer'>&#128153; WhatsApp Buyer</button>"
+            +"<button onclick='window.open(\"https://wa.me/\"+\""+d.sellerWa+"\")' style='background:rgba(255,215,0,0.1);color:#FFD700;border:1px solid rgba(255,215,0,0.3);padding:5px 10px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer'>&#128153; WhatsApp Seller</button>"
+            +"</div></div>";
+        }).join("");
+    }).catch(function(e){
+      body.innerHTML = "<div class='emp'>Error: "+e.message+"</div>";
+    });
+    } else if(tab === "referrals"){
+    body.innerHTML = "<div style='text-align:center;padding:1rem'><div class='spin'></div></div>";
+    if(!db){ waitForFirebaseAndLoad(); return; }
+    db.collection("referrals").get().then(function(snap){
+      if(snap.empty){
+        body.innerHTML = "<div class='emp'><div class='empi'>&#128279;</div><p>No referrals yet!</p></div>";
+        return;
+      }
+      // Count per code
+      var counts = {};
+      snap.docs.forEach(function(doc){
+        var code = doc.data().code || "UNKNOWN";
+        counts[code] = (counts[code]||0) + 1;
+      });
+      // Sort by most referrals
+      var sorted = Object.keys(counts).sort(function(a,b){
+        return counts[b]-counts[a];
+      });
+      body.innerHTML = "<h3 style='font-size:15px;font-weight:900;margin-bottom:1rem;color:#fff'>&#128279; Referral Stats</h3>"
+        +"<div style='background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.15);border-radius:10px;overflow:hidden'>"
+        +sorted.map(function(code, i){
+          return "<div style='display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,0.05)'>"
+            +"<div style='display:flex;align-items:center;gap:10px'>"
+            +"<div style='width:28px;height:28px;border-radius:50%;background:#FFD700;color:#080f08;font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:center'>"+(i+1)+"</div>"
+            +"<div style='font-size:14px;font-weight:700;color:#fff'>"+code+"</div>"
+            +"</div>"
+            +"<div style='background:rgba(255,215,0,0.1);color:#FFD700;padding:4px 12px;border-radius:20px;font-size:13px;font-weight:700'>"+counts[code]+" users</div>"
+            +"</div>";
+        }).join("")
+        +"</div>"
+        +"<div style='margin-top:14px;background:rgba(255,255,255,0.04);border-radius:10px;padding:12px;text-align:center'>"
+        +"<div style='font-size:24px;font-weight:900;color:#FFD700'>"+snap.size+"</div>"
+        +"<div style='font-size:11px;color:rgba(255,255,255,0.4)'>Total Referrals</div>"
+        +"</div>";
+    }).catch(function(e){
+      body.innerHTML = "<div class='emp'>Error: "+e.message+"</div>";
+    });
+    } else if(tab === "backup"){
+    body.innerHTML = "<h3 style='font-size:15px;font-weight:900;margin-bottom:1rem;color:#fff'>&#128190; Backup Data</h3>"
+      +"<div style='background:rgba(255,255,255,0.04);border-radius:12px;padding:1.2rem;border:1px solid rgba(255,255,255,0.08);margin-bottom:1rem'>"
+      +"<h3 style='font-size:14px;font-weight:700;margin-bottom:10px;color:#fff'>Download Backups</h3>"
+      +"<button onclick='backupAds()' style='width:100%;background:#FFD700;color:#080f08;border:none;padding:13px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px'>&#11015;&#65039; Download Ads Backup</button>"
+      +"<button onclick='backupUsers()' style='width:100%;background:rgba(255,255,255,0.08);color:#fff;border:none;padding:13px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px'>&#11015;&#65039; Download Users Backup</button>"
+      +"<button onclick='backupAll()' style='width:100%;background:rgba(255,255,255,0.08);color:#fff;border:none;padding:13px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer'>&#11015;&#65039; Download Full Backup</button>"
+      +"</div>"
+      +"<div style='background:rgba(255,255,255,0.04);border-radius:12px;padding:1rem;border:1px solid rgba(255,255,255,0.08)'>"
+      +"<div style='font-size:12px;color:rgba(255,255,255,0.4);line-height:2'>"
+      +"&#9989; Backup weekly<br>"
+      +"&#9989; Store backups safely<br>"
+      +"&#9989; Download before making big changes"
+      +"</div></div>";
+
+  } else if(tab === "usage"){
+    body.innerHTML = "<div style='text-align:center;padding:1rem'><div class='spin'></div></div>";
+    showUsageTab(body);
     } else if(tab === "announce"){
     body.innerHTML = "<h3 style='font-size:15px;font-weight:900;margin-bottom:1rem;color:#fff'>📢 Send Announcement</h3>"
       +"<div style='background:rgba(255,255,255,0.04);border-radius:12px;padding:1.2rem;border:1px solid rgba(255,255,255,0.08)'>"
       +"<div style='margin-bottom:12px'><label style='font-size:12px;font-weight:700;display:block;margin-bottom:4px;color:rgba(255,255,255,0.6)'>Message</label>"
+      +"<div style='margin-bottom:12px'><label style='font-size:12px;font-weight:700;display:block;margin-bottom:4px;color:rgba(255,255,255,0.6)'>Title</label><input type='text' id='announceTitle' placeholder='e.g. New Feature!' style='width:100%;padding:10px 12px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:14px;outline:none;font-family:inherit;background:rgba(255,255,255,0.05);color:#fff'></div>"
       +"<textarea id='announceMsg' style='width:100%;padding:10px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:14px;outline:none;font-family:inherit;height:100px;resize:none;background:rgba(255,255,255,0.05);color:#fff' placeholder='Type your announcement...'></textarea></div>"
-      +"<button onclick='sendAnnounce()' style='width:100%;background:#FFD700;color:#080f08;border:none;padding:13px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer'>Send via WhatsApp</button>"
+      +"<button onclick='sendAnnounce()' style='width:100%;background:#FFD700;color:#080f08;border:none;padding:13px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer'>&#128226; Send Announcement to All Users</button>"
       +"</div>"
       +"<div style='background:rgba(255,255,255,0.04);border-radius:12px;padding:1.2rem;border:1px solid rgba(255,255,255,0.08);margin-top:1rem'>"
       +"<h3 style='font-size:14px;font-weight:700;margin-bottom:10px;color:#fff'>Quick Actions</h3>"
@@ -2409,7 +3134,18 @@ function showUsageTab(body){
     if(el)el.innerHTML="<div style='color:rgba(255,255,255,0.4);font-size:13px;text-align:center'>Could not load stats</div>";
   });
 }
-
+function markDelivered(id){
+  if(!db) return;
+  db.collection('orders').doc(id).update({
+    status: 'delivered',
+    deliveredAt: new Date().toISOString()
+  }).then(function(){
+    showToast('Order marked as delivered!','success');
+    showAdminTab('orders', null);
+  }).catch(function(e){
+    showToast('Error: '+e.message);
+  });
+}
 function adminToggleFeat(btn){
   if(!db){alert("Firebase not ready!");return;}
   var id = btn.dataset.id;
@@ -2419,7 +3155,7 @@ function adminToggleFeat(btn){
     btn.style.background = isFeat ? "#f0f0f0" : "var(--go)";
     btn.textContent = isFeat ? "☆ Feat" : "★ Feat";
     loadAdminDashboard();
-  }).catch(function(e){alert("Error: "+e.message);});
+  }).catch(function(e){showToast("Error: "+e.message);});
 }
 
 function adminDeleteAd(btn){
@@ -2430,7 +3166,7 @@ function adminDeleteAd(btn){
     btn.closest("div[style]").remove();
     loadAdminDashboard();
     alert("✅ Ad deleted!");
-  }).catch(function(e){alert("Error: "+e.message);});
+  }).catch(function(e){showToast("Error: "+e.message);});
 }
 
 function waUser(wa, name){
@@ -2438,9 +3174,22 @@ function waUser(wa, name){
 }
 
 function sendAnnounce(){
-  var msg = (document.getElementById("announceMsg").value || "").trim();
-  if(!msg){alert("Please type a message!");return;}
-  window.open("https://wa.me/2348033873918?text="+encodeURIComponent("CAMPUSDEAL ANNOUNCEMENT:\n\n"+msg));
+  var msg = (document.getElementById("announceMsg").value||"").trim();
+  var titleEl = document.getElementById("announceTitle");
+  var title = titleEl ? (titleEl.value||"CampusDeal Update").trim() : "CampusDeal Update";
+  if(!msg){showToast("Please type a message!");return;}
+  if(!fbReady||!db){showToast("Firebase not ready!");return;}
+  db.collection('announcements').add({
+    title: title,
+    message: msg,
+    createdAt: new Date().toISOString()
+  }).then(function(){
+    showToast("Announcement sent!","success");
+    if(titleEl) titleEl.value="";
+    document.getElementById("announceMsg").value="";
+  }).catch(function(e){
+    showToast("Error: "+e.message);
+  });
 }
 
 function adminClearSamples(){
@@ -2484,7 +3233,7 @@ function backupAds(){
     btn.disabled = false;
     setTimeout(function(){btn.textContent="⬇️ Download Ads Backup";},3000);
   }).catch(function(e){
-    alert("Error: "+e.message);
+    showToast("Error: "+e.message);
     btn.textContent = "⬇️ Download Ads Backup";
     btn.disabled = false;
   });
@@ -2511,7 +3260,7 @@ function backupUsers(){
     btn.disabled = false;
     setTimeout(function(){btn.textContent="⬇️ Download Users Backup";},3000);
   }).catch(function(e){
-    alert("Error: "+e.message);
+    showToast("Error: "+e.message);
     btn.textContent = "⬇️ Download Users Backup";
     btn.disabled = false;
   });
@@ -2546,7 +3295,7 @@ function backupAll(){
     btn.disabled = false;
     setTimeout(function(){btn.textContent="⬇️ Download Full Backup";},3000);
   }).catch(function(e){
-    alert("Error: "+e.message);
+    showToast("Error: "+e.message);
     btn.textContent = "⬇️ Download Full Backup";
     btn.disabled = false;
   });
@@ -2744,7 +3493,7 @@ window.addEventListener('appinstalled', function(){
 
 
 // VERIFIED BADGE
-var PSTACK_KEY = 'pk_test_aba9e89491dd40e2fe332ef46dfba51138de21db';
+var FLW_KEY = 'FLWPUBK-5204cf12abd28b38264e7255630d047e-X';
 
 function openVerifyModal(){
   if(!fbReady || !auth){
@@ -2767,172 +3516,70 @@ function startVerifyPayment(){
   if(!user){ alert('Please login first!'); return; }
   var btn = document.getElementById('vPayBtn');
   btn.disabled = true;
-  btn.textContent = 'Loading...';
-  var handler = PaystackPop.setup({
-    key: PSTACK_KEY,
-    email: user.email,
-    amount: 50000,
+  btn.textContent = '⏳ Loading...';
+  FlutterwaveCheckout({
+    public_key: FLW_KEY,
+    tx_ref: 'VRF_' + Date.now(),
+    amount: 1000,
     currency: 'NGN',
-    ref: 'VRF_' + Date.now(),
-    onClose: function(){
-      btn.disabled = false;
-      btn.textContent = 'Pay N500 - Get Verified Now';
+    payment_options: 'card,ussd,banktransfer',
+    customer: {
+      email: user.email,
+      name: user.displayName || 'CampusDeal User',
     },
-    callback: function(res){
-      var exp = new Date();
-      exp.setDate(exp.getDate() + 30);
-      firebase.firestore().collection('users').doc(user.uid).update({
-        isVerified: true,
-        verifiedUntil: exp.toISOString(),
-        verifyRef: res.reference
-      }).then(function(){
-        firebase.firestore().collection('payments').add({
-          userId: user.uid,
-          amount: 500,
-          type: 'verified_badge',
-          ref: res.reference,
-          createdAt: new Date().toISOString()
-        });
-        document.getElementById('vStep1').style.display = 'none';
-        document.getElementById('vStep2').style.display = 'block';
-        document.getElementById('verifyBanner').style.display = 'none';
-      }).catch(function(){
-        document.getElementById('vStep1').style.display = 'none';
-        document.getElementById('vStep2').style.display = 'block';
-      });
-    }
+    customizations: {
+      title: 'CampusDeal Verified Badge',
+      description: 'Get verified seller badge for 30 days',
+      logo: 'https://campusdeal.com.ng/icon.png',
+    },
+        callback: function(res){
+      if(res.status === 'successful' || res.status === 'completed'){
+        var exp = new Date();
+        exp.setDate(exp.getDate() + 30);
+        firebase.firestore().collection('users')
+.where('uid','==',user.uid).get()
+.then(function(snap){
+  if(!snap.empty){
+    snap.docs[0].ref.update({
+          isVerified: true,
+          verifiedUntil: exp.toISOString(),
+          verifyRef: res.transaction_id
+        }).then(function(){
+      // Update all user ads with verified status
+db.collection('ads').where('userId','==',user.uid).get()
+.then(function(adSnap){
+  adSnap.docs.forEach(function(adDoc){
+    adDoc.ref.update({sellerVerified: true});
   });
-  handler.openIframe();
-}
-
-
-// ===== DASHBOARD TAB =====
-function goDashboard(){
-  if(!getUser()){ openLogin(); return; }
-  showPg("account");
-  var tabs = document.querySelectorAll(".atab");
-  tabs.forEach(function(t){ t.classList.remove("on"); });
-  tabs[0].classList.add("on");
-  showTab("dashboard", tabs[0]);
-  setActiveBn("bn-myads");
-}
-
-function loadDashboardTab(body){
-  var u = getUser();
-  if(!u){ body.innerHTML="<div class='emp'>Please login</div>"; return; }
-
-  // Show nav verify button
-  checkNavVerify(u);
-
-  body.innerHTML =
-    // Welcome
-    "<div style='background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.15);border-radius:12px;padding:14px;margin-bottom:14px;display:flex;align-items:center;gap:10px'>"
-    +"<div style='width:44px;height:44px;border-radius:50%;background:#FFD700;color:#080f08;font-size:18px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0'>"+(u.name?u.name.charAt(0).toUpperCase():"?")+"</div>"
-    +"<div><div style='font-size:16px;font-weight:900;color:#fff'>Hello, "+(u.name||"Seller")+"!</div>"
-    +"<div style='font-size:12px;color:rgba(255,255,255,0.45)'>Here is your seller dashboard</div></div>"
-    +"<button onclick='doSell()' style='margin-left:auto;background:#FFD700;color:#080f08;border:none;padding:8px 12px;border-radius:20px;font-size:11px;font-weight:800;cursor:pointer;flex-shrink:0'>+ Post Ad</button>"
-    +"</div>"
-
-    // Stats
-    +"<div style='display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px'>"
-    +"<div style='background:#0d1a0d;border-radius:12px;padding:14px;border:1px solid rgba(255,215,0,0.1);text-align:center'>"
-    +"<div id='dTotalAds' style='font-size:28px;font-weight:900;color:#FFD700'>...</div>"
-    +"<div style='font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px'>My Ads</div></div>"
-    +"<div style='background:#0d1a0d;border-radius:12px;padding:14px;border:1px solid rgba(255,215,0,0.1);text-align:center'>"
-    +"<div id='dBadge' style='font-size:13px;font-weight:800;color:#ff4444'>Not Verified</div>"
-    +"<div style='font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px'>Badge Status</div></div>"
-    +"</div>"
-
-    // Verify prompt
-    +"<div id='dbVerifyBanner' onclick='openVerifyModal()' style='display:block;background:linear-gradient(135deg,#FFD700,#FFA500);border-radius:10px;padding:14px;margin-bottom:14px;cursor:pointer'>"
-    +"<div style='display:flex;align-items:center;gap:10px'>"
-    +"<span style='font-size:24px'>&#11088;</span>"
-    +"<div><div style='font-size:14px;font-weight:800;color:#000'>Get Verified Seller Badge!</div>"
-    +"<div style='font-size:12px;color:rgba(0,0,0,0.7)'>3x more buyers - Only N500/month</div></div>"
-    +"<span style='margin-left:auto;font-size:20px;color:#000;font-weight:800'>&#8250;</span>"
-    +"</div></div>"
-
-    // My ads list
-    +"<div style='font-size:15px;font-weight:900;color:#fff;margin-bottom:10px'>My Ads</div>"
-    +"<div id='dAdsList'><div style='text-align:center;padding:2rem'><div class='spin'></div></div></div>";
-
-  // Load data from firebase
-  if(fbReady && db && u.uid){
-    // Check verified status
-    db.collection("users").doc(u.uid).get().then(function(doc){
-      var data = (doc && doc.exists && doc.data()) || {};
-      var badgeEl = document.getElementById("dBadge");
-      var verifyBanner = document.getElementById("dbVerifyBanner");
-      var navBtn = document.getElementById("navVerifyBtn");
-      if(data.isVerified && data.verifiedUntil && new Date(data.verifiedUntil) > new Date()){
-        var exp = new Date(data.verifiedUntil);
-        var days = Math.ceil((exp - new Date())/(1000*60*60*24));
-        if(badgeEl){ badgeEl.textContent = "Verified ("+days+"d)"; badgeEl.style.color="#FFD700"; }
-        if(verifyBanner) verifyBanner.style.display = "none";
-        if(navBtn){ navBtn.style.display="flex"; navBtn.textContent="&#11088; Verified"; navBtn.style.background="rgba(255,215,0,0.15)"; navBtn.style.color="#FFD700"; navBtn.style.border="1px solid rgba(255,215,0,0.3)"; }
-      } else {
-        if(navBtn){ navBtn.style.display="flex"; navBtn.onclick=openVerifyModal; }
+});
+          firebase.firestore().collection('payments').add({
+            userId: user.uid,
+            amount: 1000,
+            type: 'verified_badge',
+            ref: res.transaction_id,
+            createdAt: new Date().toISOString()
+          });
+          document.getElementById('vStep1').style.display = 'none';
+          document.getElementById('vStep2').style.display = 'block';
+          document.getElementById('verifyBanner').style.display = 'none';
+                }).catch(function(){
+          document.getElementById('vStep1').style.display = 'none';
+          document.getElementById('vStep2').style.display = 'block';
+        });
       }
-    }).catch(function(){});
-
-    // Load ads
-    db.collection("ads").where("userId","==",u.uid).get().then(function(snap){
-      var totalEl = document.getElementById("dTotalAds");
-      if(totalEl) totalEl.textContent = snap.size;
-      var listEl = document.getElementById("dAdsList");
-      if(!listEl) return;
-      if(snap.empty){
-        listEl.innerHTML = "<div class='emp'><div class='empi'>&#128241;</div><p>No ads yet!</p><button onclick='doSell()' style='margin-top:10px;background:#FFD700;color:#080f08;border:none;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer'>Post Your First Ad</button></div>";
-        return;
-      }
-      listEl.innerHTML = snap.docs.map(function(doc){
-        var d = doc.data();
-        var em = EMOS[d.cat]||"&#128230;";
-        var clicks = d.clicks||0;
-        var views = d.views||0;
-        return "<div style='background:#0d1a0d;border-radius:10px;border:1px solid rgba(255,255,255,0.07);padding:12px;display:flex;gap:10px;margin-bottom:10px;align-items:flex-start'>"
-          +"<div style='width:68px;height:68px;border-radius:8px;overflow:hidden;flex-shrink:0;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font-size:24px'>"+(d.img?"<img src='"+d.img+"' style='width:100%;height:100%;object-fit:cover' onerror='this.parentElement.innerHTML=""+em+""'>":em)+"</div>"
-          +"<div style='flex:1;min-width:0'>"
-          +"<div style='font-size:13px;font-weight:700;color:#fff;margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap'>"+d.title+"</div>"
-          +"<div style='font-size:15px;font-weight:900;color:#FFD700;margin-bottom:6px'>N"+Number(d.price).toLocaleString()+"</div>"
-          +"<div style='display:flex;gap:12px;margin-bottom:8px'>"
-          +"<span style='font-size:10px;color:rgba(255,255,255,0.4)'>&#128065; "+views+" views</span>"
-          +"<span style='font-size:10px;color:rgba(255,255,255,0.4)'>&#128172; "+clicks+" chats</span>"
-          +"<span style='font-size:10px;color:rgba(255,255,255,0.4)'>&#128205; "+(d.loc||"")+"</span>"
-          +"</div>"
-          +"<div style='display:flex;gap:6px'>"
-          +"<button data-id='"+doc.id+"' onclick='editAd(this.dataset.id)' style='background:rgba(255,215,0,0.1);color:#FFD700;border:1px solid rgba(255,215,0,0.3);padding:5px 10px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer'>Edit</button>"
-          +"<button data-id='"+doc.id+"' onclick='askDel(this.dataset.id)' style='background:rgba(255,68,68,0.08);color:#ff4444;border:1px solid rgba(255,68,68,0.25);padding:5px 10px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer'>Delete</button>"
-          +"</div>"
-          +"</div></div>";
-      }).join("");
-    }).catch(function(e){
-      var listEl = document.getElementById("dAdsList");
-      if(listEl) listEl.innerHTML = "<div class='emp'>Error loading ads</div>";
+    }).catch(function(){
+      showToast('Error saving verification. Contact support.');
     });
-  }
-}
-
-function checkNavVerify(u){
-  if(!u || !fbReady || !db) return;
-  var btn = document.getElementById("navVerifyBtn");
-  if(!btn) return;
-  db.collection("users").doc(u.uid).get().then(function(doc){
-    var data = (doc && doc.exists && doc.data()) || {};
-    if(data.isVerified && data.verifiedUntil && new Date(data.verifiedUntil) > new Date()){
-      btn.style.display = "flex";
-      btn.textContent = "Verified";
-      btn.style.background = "rgba(255,215,0,0.15)";
-      btn.style.color = "#FFD700";
-      btn.style.border = "1px solid rgba(255,215,0,0.3)";
-      btn.onclick = function(){};
-    } else {
-      btn.style.display = "flex";
-      btn.onclick = openVerifyModal;
+      } else {
+        btn.disabled=false;
+        btn.textContent='Pay N1,000 - Get Verified Now';
+        showToast('Payment failed! Please try again.');
+      }
+    },
+    onclose: function(){
+      btn.disabled=false;
+      btn.textContent='Pay N1,000 - Get Verified Now';
     }
-  }).catch(function(){
-    btn.style.display = "flex";
-    btn.onclick = openVerifyModal;
   });
 }
 
