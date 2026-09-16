@@ -2750,6 +2750,8 @@ function submitOrder2(){
   // ===== ANNOUNCEMENTS & INBOX =====
 function showAnnouncements(){
   closeHamburger();
+  var existing = document.getElementById('annModal');
+  if(existing) existing.remove();
   if(!fbReady||!db){showToast('Loading...');return;}
   db.collection('announcements').get().then(function(snap){
     var d=document.createElement('div');
@@ -2776,6 +2778,7 @@ function showAnnouncements(){
       +'<button onclick="this.parentElement.parentElement.remove()" style="width:100%;background:#FFD700;color:#080f08;border:none;padding:12px;border-radius:8px;font-size:14px;font-weight:800;cursor:pointer;margin-top:8px">Close</button>'
       +'</div>';
     document.body.appendChild(d);
+    d.id = 'annModal';
     // Mark as read
     localStorage.setItem('cd_ann_read', Date.now());
     updateInboxBadge();
