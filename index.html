@@ -2091,23 +2091,79 @@ function clearWishlist(){
 function showAbout(){
   closeHamburger();
   var d=document.createElement('div');
-  d.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px';
-  d.innerHTML='<div style="background:#0d1a0d;border:1px solid rgba(255,215,0,0.2);border-radius:16px;padding:24px;max-width:320px;width:100%;text-align:center">'
-    +'<div style="font-size:40px;margin-bottom:10px">🎓</div>'
-    +'<div style="font-size:20px;font-weight:900;color:#FFD700;margin-bottom:6px">CampusDeal</div>'
-    +'<div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:16px">Nigeria\'s #1 Campus Marketplace</div>'
-    +'<div style="text-align:left;margin-bottom:16px">'
-    +'<div style="font-size:13px;color:#fff;margin-bottom:8px">✅ Post ads FREE</div>'
-    +'<div style="font-size:13px;color:#fff;margin-bottom:8px">🚴 Campus delivery</div>'
-    +'<div style="font-size:13px;color:#fff;margin-bottom:8px">⭐ Verified seller badges</div>'
-    +'<div style="font-size:13px;color:#fff;margin-bottom:8px">💬 WhatsApp direct contact</div>'
+  d.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:99999;display:flex;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto';
+  d.innerHTML='<div style="background:#0d1a0d;border:1px solid rgba(255,215,0,0.2);border-radius:16px;padding:24px;max-width:360px;width:100%;margin:auto">'
+
+    // Header
+    +'<div style="text-align:center;margin-bottom:20px">'
+    +'<div style="font-size:44px;margin-bottom:8px">🎓</div>'
+    +'<div style="font-size:22px;font-weight:900;color:#FFD700;margin-bottom:4px">CampusDeal</div>'
+    +'<div style="font-size:12px;color:rgba(255,255,255,0.4)">Nigeria\'s Smartest Campus Marketplace</div>'
     +'</div>'
-    +'<div style="font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:16px">Built with ❤️ by Mordecai Adeleke</div>'
-    +'<button onclick="this.parentElement.parentElement.remove()" style="width:100%;background:#FFD700;color:#080f08;border:none;padding:12px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer">Close</button>'
+
+    // What we offer
+    +'<div style="background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.15);border-radius:10px;padding:14px;margin-bottom:14px">'
+    +'<div style="font-size:13px;font-weight:800;color:#FFD700;margin-bottom:10px">⭐ What We Offer</div>'
+    +'<div style="font-size:12px;color:rgba(255,255,255,0.7);line-height:2">'
+    +'✅ Post ads completely FREE<br>'
+    +'🚴 Fast campus delivery service<br>'
+    +'⭐ Verified seller badge system<br>'
+    +'💬 Direct WhatsApp contact<br>'
+    +'🔒 Secured payments via Flutterwave<br>'
+    +'📢 Announcements & seller inbox'
+    +'</div></div>'
+
+    // Problems we solve
+    +'<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:14px;margin-bottom:14px">'
+    +'<div style="font-size:13px;font-weight:800;color:#FFD700;margin-bottom:10px">💡 Problems We Solve</div>'
+    +'<div style="font-size:12px;color:rgba(255,255,255,0.7);line-height:2">'
+    +'📱 Hard to find campus buyers? → We connect you instantly!<br>'
+    +'🚚 No delivery? → Our bikemen deliver for you!<br>'
+    +'😰 Fake sellers? → Our verified badge builds trust!<br>'
+    +'💸 Expensive platforms? → We are 100% FREE to post!'
+    +'</div></div>'
+
+    // Trusted sellers
+    +'<div style="background:rgba(255,215,0,0.05);border:1px solid rgba(255,215,0,0.15);border-radius:10px;padding:14px;margin-bottom:14px">'
+    +'<div style="font-size:13px;font-weight:800;color:#FFD700;margin-bottom:10px">🛡️ Trusted Sellers</div>'
+    +'<div style="font-size:12px;color:rgba(255,255,255,0.7);line-height:1.8">'
+    +'Our <strong style="color:#FFD700">⭐ Verified Badge</strong> system ensures buyers can identify trusted sellers. Verified sellers have been screened and pay a monthly subscription — giving buyers more confidence to purchase!'
+    +'</div></div>'
+
+    // Secured payment
+    +'<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:14px;margin-bottom:14px">'
+    +'<div style="font-size:13px;font-weight:800;color:#FFD700;margin-bottom:10px">🔒 Secured Payment</div>'
+    +'<div style="font-size:12px;color:rgba(255,255,255,0.7);line-height:1.8">'
+    +'All payments on CampusDeal are processed securely by <strong style="color:#FFD700">Flutterwave</strong> — a CBN licensed payment processor. Your card details are never stored on our servers.'
+    +'</div></div>'
+
+    // Refund policy
+    +'<div style="background:rgba(255,68,68,0.05);border:1px solid rgba(255,68,68,0.15);border-radius:10px;padding:14px;margin-bottom:14px">'
+    +'<div style="font-size:13px;font-weight:800;color:#ff4444;margin-bottom:10px">↩️ Refund Policy</div>'
+    +'<div style="font-size:12px;color:rgba(255,255,255,0.7);line-height:1.8">'
+    +'• Delivery orders: Refund available if item is not delivered within 24 hours<br>'
+    +'• Verified badge: Non-refundable once activated<br>'
+    +'• For disputes contact us on WhatsApp within 24 hours of purchase<br>'
+    +'• Refunds processed within 3-5 business days'
+    +'</div></div>'
+
+    // Contact
+    +'<div style="text-align:center;margin-bottom:16px">'
+    +'<div style="font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:8px">Need help? Contact us:</div>'
+    +'<button onclick="contactAdmin()" style="background:#25D366;color:#fff;border:none;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:10px">💙 WhatsApp Support</button>'
+    +'<div style="font-size:10px;color:rgba(255,255,255,0.2)">campusdeal.com.ng</div>'
+    +'</div>'
+
+    // Built by
+    +'<div style="text-align:center;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);margin-bottom:16px">'
+    +'<div style="font-size:11px;color:rgba(255,255,255,0.2)">Built with ❤️ by</div>'
+    +'<div style="font-size:13px;font-weight:700;color:#FFD700">Mordecai Adeleke • FUNAAB 2026</div>'
+    +'</div>'
+
+    +'<button onclick="this.parentElement.parentElement.remove()" style="width:100%;background:#FFD700;color:#080f08;border:none;padding:13px;border-radius:8px;font-size:14px;font-weight:800;cursor:pointer">Close</button>'
     +'</div>';
   document.body.appendChild(d);
 }
-
 
 // ============= WISHLIST =============
 function getWishlist(){
