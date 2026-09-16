@@ -2746,9 +2746,9 @@ function submitOrder2(){
 }
   // ===== ANNOUNCEMENTS & INBOX =====
 function showAnnouncements(){
-  document.querySelectorAll('.pg').forEach(function(p){p.style.display='none';});
+  document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on');});
   var pg=document.getElementById('pg-announcements');
-  if(pg)pg.style.display='block';
+  if(pg){pg.classList.add('on');pg.style.display='block';}
   window.scrollTo(0,0);
   var list = document.getElementById('announcementsList');
   if(!list) return;
@@ -2783,9 +2783,9 @@ function showAnnouncements(){
 function showInbox(){
   var u = getUser();
   if(!u){ openLogin(); return; }
-  document.querySelectorAll('.pg').forEach(function(p){p.style.display='none';});
-  var pg = document.getElementById('pg-inbox');
-  if(pg) pg.style.display='block';
+  document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on');});
+  var pg=document.getElementById('pg-inbox');
+  if(pg){pg.classList.add('on');pg.style.display='block';}
   window.scrollTo(0,0);
   var list = document.getElementById('inboxList');
   if(!list) return;
