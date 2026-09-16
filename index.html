@@ -2816,7 +2816,42 @@ function showAnnouncements(){
 function showInbox(){
   var u = getUser();
   if(!u){ openLogin(); return; }
-    showPg('inbox');
+  closeHamburger();
+  var existing = document.getElementById('inboxModal');
+  if(existing) existing.remove();
+  if(!fbReady||!db){showToast('Loading...');return;}
+  db.collection('orders').where('sellerWa','==',u.phone).get()
+  .then(function(snap){
+    var d=document.createElement('div');
+    d.id='inboxModal';
+    d.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:99999;display:flex;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto';
+    var items = snap.empty
+      ? '<div style="text-align:center;padding:2rem;color:rgba(255,255,255,0.4)">&#128140; No orders yet!<br><small style="font-size:11px">When someone orders your product it shows here</small></div>'
+      : snap.docs.map(function(doc){
+          var od=doc.data();
+          var sc=od.status==='delivered'?'#22c55e':'#FFD700';
+          return '<div style="background:#0d1a0d;border-radius:12px;padding:14px;margin-bottom:10px;border:1px solid rgba(255,215,0,0.12)">'
+            +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">'
+            +'<div style="font-size:14px;font-weight:800;color:#fff">&#128666; New Order!</div>'
+            +'<div style="background:'+sc+';color:#000;font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px">'+(od.status||'PAID').toUpperCase()+'</div>'
+            +'</div>'
+            +'<div style="font-size:13px;color:rgba(255,255,255,0.7);margin-bottom:4px">'+od.itemTitle+'</div>'
+            +'<div style="font-size:13px;color:#FFD700;font-weight:700;margin-bottom:4px">N'+Number(od.itemPrice).toLocaleString()+'</div>'
+            +'<div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px">&#128100; '+od.buyerName+'</div>'
+            +'<div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px">&#128205; '+od.deliveryLocation+'</div>'
+            +'<button onclick=\'window.open("https://wa.me/'+od.buyerPhone+'")\' style="background:rgba(37,211,102,0.1);color:#25D366;border:1px solid rgba(37,211,102,0.3);padding:6px 12px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer">&#128153; WhatsApp Buyer</button>'
+            +'</div>';
+        }).join('');
+    d.innerHTML='<div style="background:#0d1a0d;border:1px solid rgba(255,215,0,0.2);border-radius:16px;padding:24px;max-width:360px;width:100%;margin:auto">'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">'
+      +'<div style="font-size:18px;font-weight:900;color:#FFD700">&#128140; Inbox</div>'
+      +'<button onclick="this.parentElement.parentElement.parentElement.remove()" style="background:rgba(255,255,255,0.08);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:15px;cursor:pointer">&#10005;</button>'
+      +'</div>'
+      +items
+      +'<button onclick="this.parentElement.parentElement.remove()" style="width:100%;background:#FFD700;color:#080f08;border:none;padding:12px;border-radius:8px;font-size:14px;font-weight:800;cursor:pointer;margin-top:8px">Close</button>'
+      +'</div>';
+    document.body.appendChild(d);
+  }).catch(function(){showToast('Could not load inbox');});
   var list = document.getElementById('inboxList');
   if(!list) return;
   list.innerHTML = "<div style='text-align:center;padding:2rem'><div class='spin'></div></div>";
