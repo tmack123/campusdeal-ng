@@ -351,7 +351,7 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
     <div style="height:1px;background:rgba(255,255,255,0.06);margin:8px 16px"></div>
     <div style="padding:8px 16px;font-size:10px;font-weight:700;color:rgba(255,215,0,0.4);letter-spacing:2px">INFO</div>
     <div class="hm-item" onclick="closeHamburger();contactAdmin()">&#128222; Contact Admin</div>
-    <div class="hm-item" onclick="closeHamburger();showAnnouncements()">&#128226; Announcements</div>
+    <div class="hm-item" onclick="closeHamburger();showAnnouncements()">&#128226; Announcements <span id="annBadge" style="display:none;background:#ff4444;color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;margin-left:4px">0</span></div>
 <div class="hm-item" onclick="closeHamburger();showInbox()">&#128140; Inbox <span id="inboxBadge" style="display:none;background:#ff4444;color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;margin-left:4px">0</span></div>
     <div class="hm-item" onclick="closeHamburger();showAbout()">&#8505; About CampusDeal</div>
     <div style="height:1px;background:rgba(255,255,255,0.06);margin:8px 16px"></div>
@@ -2749,7 +2749,37 @@ function submitOrder2(){
 }
   // ===== ANNOUNCEMENTS & INBOX =====
 function showAnnouncements(){
-  showPg('announcements');
+  closeHamburger();
+  if(!fbReady||!db){showToast('Loading...');return;}
+  db.collection('announcements').get().then(function(snap){
+    var d=document.createElement('div');
+    d.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:99999;display:flex;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto';
+    var items = snap.empty ? '<div style="text-align:center;padding:2rem;color:rgba(255,255,255,0.4)">&#128226; No announcements yet!</div>'
+      : snap.docs.map(function(doc){
+        var a=doc.data();
+        var date=a.createdAt?new Date(a.createdAt).toLocaleDateString():'';
+        return '<div style="background:#0d1a0d;border-radius:12px;padding:14px;margin-bottom:12px;border:1px solid rgba(255,215,0,0.12)">'
+          +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">'
+          +'<span style="font-size:20px">&#128226;</span>'
+          +'<div style="font-size:14px;font-weight:800;color:#FFD700">'+a.title+'</div>'
+          +'</div>'
+          +'<div style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.6;margin-bottom:6px">'+a.message+'</div>'
+          +'<div style="font-size:10px;color:rgba(255,255,255,0.3)">'+date+'</div>'
+          +'</div>';
+      }).join('');
+    d.innerHTML='<div style="background:#0d1a0d;border:1px solid rgba(255,215,0,0.2);border-radius:16px;padding:24px;max-width:360px;width:100%;margin:auto">'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">'
+      +'<div style="font-size:18px;font-weight:900;color:#FFD700">&#128226; Announcements</div>'
+      +'<button onclick="this.parentElement.parentElement.parentElement.remove()" style="background:rgba(255,255,255,0.08);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:15px;cursor:pointer">&#10005;</button>'
+      +'</div>'
+      +items
+      +'<button onclick="this.parentElement.parentElement.remove()" style="width:100%;background:#FFD700;color:#080f08;border:none;padding:12px;border-radius:8px;font-size:14px;font-weight:800;cursor:pointer;margin-top:8px">Close</button>'
+      +'</div>';
+    document.body.appendChild(d);
+    // Mark as read
+    localStorage.setItem('cd_ann_read', Date.now());
+    updateInboxBadge();
+  }).catch(function(){showToast('Could not load announcements');});
   var list = document.getElementById('announcementsList');
   if(!list) return;
   list.innerHTML = "<div style='text-align:center;padding:2rem'><div class='spin'></div></div>";
