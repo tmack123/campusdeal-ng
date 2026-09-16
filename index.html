@@ -2090,9 +2090,11 @@ function clearWishlist(){
 
 function showAbout(){
   closeHamburger();
+  showPg('about');
   var pg = document.getElementById('pg-about');
   if(pg){
-    pg.style.cssText = 'display:block;position:fixed;inset:0;background:#080f08;overflow-y:auto;z-index:9999;padding-bottom:80px';
+    pg.style.background = '#080f08';
+    pg.style.minHeight = '100vh';
   }
 }
 
