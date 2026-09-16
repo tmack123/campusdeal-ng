@@ -2055,9 +2055,17 @@ function toggleHamburger(){
     ov.style.display = "block";
     setTimeout(function(){ menu.classList.add("open"); }, 10);
     updateHamburgerUser();
+    refreshHamburgerBadges();
   }
 }
-
+function refreshHamburgerBadges(){
+  var annUnread = Number(localStorage.getItem('cd_ann_unread')||0);
+  var badge = document.getElementById('annBadge');
+  if(badge){
+    badge.style.display = annUnread > 0 ? 'inline' : 'none';
+    badge.textContent = annUnread;
+  }
+}
 function closeHamburger(){
   var menu = document.getElementById("hamburgerMenu");
   var ov = document.getElementById("hamburgerOv");
@@ -2782,8 +2790,9 @@ function showAnnouncements(){
     document.body.appendChild(d);
     d.id = 'annModal';
     // Mark as read
-    localStorage.setItem('cd_ann_read', Date.now());
-    updateInboxBadge();
+        localStorage.setItem('cd_ann_read', Date.now());
+    localStorage.setItem('cd_ann_unread', 0);
+    refreshHamburgerBadges();
   }).catch(function(){showToast('Could not load announcements');});
   var list = document.getElementById('announcementsList');
   if(!list) return;
@@ -2891,21 +2900,21 @@ function showInbox(){
 
 function checkNewNotifications(){
   if(!fbReady||!db) return;
-  var lastRead = Number(localStorage.getItem('cd_ann_read')||0);
-  
-  // Check new announcements
+  localStorage.removeItem('cd_ann_read');
+  var lastRead = 0;
   db.collection('announcements').get().then(function(snap){
     var unread = snap.docs.filter(function(doc){
       var d = doc.data();
       return d.createdAt && new Date(d.createdAt).getTime() > lastRead;
     }).length;
-    var badge = document.getElementById('annBadge');
-    if(badge){
+    // Update all badges including hidden ones
+    document.querySelectorAll('#annBadge').forEach(function(badge){
       badge.style.display = unread > 0 ? 'inline' : 'none';
       badge.textContent = unread;
-    }
+    });
+    // Store count for when menu opens
+    localStorage.setItem('cd_ann_unread', unread);
   }).catch(function(){});
-
   // Check inbox orders
   var u = getUser();
   if(!u||!u.phone) return;
