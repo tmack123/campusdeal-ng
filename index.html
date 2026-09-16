@@ -1466,9 +1466,14 @@ function goAccount(){
 }
 
 function showPg(name){
-  document.querySelectorAll(".pg").forEach(function(p){p.classList.remove("on");p.style.zIndex="";});
+  document.querySelectorAll(".pg").forEach(function(p){
+    p.classList.remove("on");
+    p.style.display="";
+  });
   var el=document.getElementById("pg-"+name);
-  if(el){el.classList.add("on");el.style.zIndex="1";}
+  if(el){
+    el.classList.add("on");
+  }
   window.scrollTo(0,0);
 }
 
@@ -2746,10 +2751,7 @@ function submitOrder2(){
 }
   // ===== ANNOUNCEMENTS & INBOX =====
 function showAnnouncements(){
-  document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on');});
-  var pg=document.getElementById('pg-announcements');
-  if(pg){pg.classList.add('on');pg.style.display='block';}
-  window.scrollTo(0,0);
+  showPg('announcements');
   var list = document.getElementById('announcementsList');
   if(!list) return;
   list.innerHTML = "<div style='text-align:center;padding:2rem'><div class='spin'></div></div>";
@@ -2783,10 +2785,7 @@ function showAnnouncements(){
 function showInbox(){
   var u = getUser();
   if(!u){ openLogin(); return; }
-  document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on');});
-  var pg=document.getElementById('pg-inbox');
-  if(pg){pg.classList.add('on');pg.style.display='block';}
-  window.scrollTo(0,0);
+    showPg('inbox');
   var list = document.getElementById('inboxList');
   if(!list) return;
   list.innerHTML = "<div style='text-align:center;padding:2rem'><div class='spin'></div></div>";
