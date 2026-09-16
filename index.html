@@ -901,7 +901,7 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
   <div id="inboxList" style="padding:14px"></div>
 </div>
   <!-- ABOUT PAGE -->
-<div id="pg-about" style="display:none;padding-bottom:80px;background:#080f08;min-height:100vh;overflow-y:auto;position:fixed;inset:0;z-index:9000;overflow-y:auto">
+<div class="pg" id="pg-about" style="padding-bottom:80px">
   <div style="background:#080f08;padding:14px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,215,0,0.12)">
   <button onclick="document.getElementById('pg-about').style.display='none';goHome()" style="background:rgba(255,215,0,0.1);border:none;color:#FFD700;width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer">&#8592;</button>
     <div style="font-size:16px;font-weight:900;color:#FFD700">About CampusDeal</div>
@@ -2090,8 +2090,7 @@ function clearWishlist(){
 
 function showAbout(){
   closeHamburger();
-  var pg = document.getElementById('pg-about');
-  if(pg) pg.style.display='block';
+  showPg('about');
 }
 
 // ============= WISHLIST =============
