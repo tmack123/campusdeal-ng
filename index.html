@@ -2884,11 +2884,12 @@ function showInbox(){
           +"<button onclick='window.open(\"https://wa.me/\"+\""+d.buyerPhone+"\")' style='background:rgba(37,211,102,0.1);color:#25D366;border:1px solid rgba(37,211,102,0.3);padding:6px 12px;border-radius:14px;font-size:11px;font-weight:700;cursor:pointer'>&#128153; WhatsApp Buyer</button>"
           +"</div>";
       }).join('');
-  }).catch(function(){
+    }).catch(function(){
     list.innerHTML = "<div class='emp'><div class='empi'>&#128140;</div><p>Could not load inbox</p></div>";
   });
 }
-  function checkNewNotifications(){
+
+function checkNewNotifications(){
   if(!fbReady||!db) return;
   var lastRead = Number(localStorage.getItem('cd_ann_read')||0);
   
