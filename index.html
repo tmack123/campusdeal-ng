@@ -2745,7 +2745,10 @@ function submitOrder2(){
 }
   // ===== ANNOUNCEMENTS & INBOX =====
 function showAnnouncements(){
-  showPg('announcements');
+  document.querySelectorAll('.pg').forEach(function(p){p.style.display='none';});
+  var pg=document.getElementById('pg-announcements');
+  if(pg)pg.style.display='block';
+  window.scrollTo(0,0);
   var list = document.getElementById('announcementsList');
   if(!list) return;
   list.innerHTML = "<div style='text-align:center;padding:2rem'><div class='spin'></div></div>";
@@ -2779,7 +2782,10 @@ function showAnnouncements(){
 function showInbox(){
   var u = getUser();
   if(!u){ openLogin(); return; }
-  showPg('inbox');
+  document.querySelectorAll('.pg').forEach(function(p){p.style.display='none';});
+  var pg = document.getElementById('pg-inbox');
+  if(pg) pg.style.display='block';
+  window.scrollTo(0,0);
   var list = document.getElementById('inboxList');
   if(!list) return;
   list.innerHTML = "<div style='text-align:center;padding:2rem'><div class='spin'></div></div>";
