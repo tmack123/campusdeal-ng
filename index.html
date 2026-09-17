@@ -435,11 +435,20 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
       <button class="verify-pay-btn" id="vPayBtn" onclick="startVerifyPayment()">Pay N1,000 - Get Verified Now</button>
       <div style="text-align:center;font-size:11px;color:rgba(255,255,255,0.3);margin-top:10px">Secured by Paystack</div>
     </div>
-    <div id="vStep2" style="display:none;text-align:center;padding:20px 0">
-      <div style="font-size:52px;margin-bottom:12px">&#127881;</div>
-      <div style="font-size:20px;font-weight:800;color:#FFD700;margin-bottom:8px">You are Verified!</div>
-      <div style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:16px">Your badge is active for 30 days!</div>
-      <button class="verify-pay-btn" onclick="closeVerifyModal()">Done! Start Selling</button>
+        <div id="vStep2" style="display:none;text-align:center;padding:20px 0">
+      <div style="font-size:52px;margin-bottom:12px">⏳</div>
+      <div style="font-size:20px;font-weight:800;color:#FFD700;margin-bottom:8px">Payment Received!</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:8px">Your verification request is under review!</div>
+      <div style="background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.15);border-radius:8px;padding:12px;margin-bottom:16px;text-align:left">
+        <div style="font-size:12px;color:rgba(255,255,255,0.7);line-height:2">
+          ✅ Payment confirmed<br>
+          ⏳ Admin reviewing your request<br>
+          📱 Check your WhatsApp for next steps<br>
+          🕐 Approval within 24 hours
+        </div>
+      </div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:14px">Our admin may contact you on WhatsApp to verify your identity before approving your badge.</div>
+      <button class="verify-pay-btn" onclick="closeVerifyModal()">OK, I'll wait!</button>
     </div>
   </div>
 </div>
