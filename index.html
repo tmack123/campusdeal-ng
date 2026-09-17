@@ -21,7 +21,7 @@
 <link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=CD&background=006400&color=FFD700&size=512&font-size=0.4&bold=true&rounded=true">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="description" content="Buy and sell anything on FUNAAB Campus. Post ads FREE!">
-<meta name="version" content="1789671377">
+<meta name="version" content="1789205102">
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script>window.addEventListener("load",function(){trackReferral();
@@ -435,20 +435,11 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
       <button class="verify-pay-btn" id="vPayBtn" onclick="startVerifyPayment()">Pay N1,000 - Get Verified Now</button>
       <div style="text-align:center;font-size:11px;color:rgba(255,255,255,0.3);margin-top:10px">Secured by Paystack</div>
     </div>
-        <div id="vStep2" style="display:none;text-align:center;padding:20px 0">
-      <div style="font-size:52px;margin-bottom:12px">⏳</div>
-      <div style="font-size:20px;font-weight:800;color:#FFD700;margin-bottom:8px">Payment Received!</div>
-      <div style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:8px">Your verification request is under review!</div>
-      <div style="background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.15);border-radius:8px;padding:12px;margin-bottom:16px;text-align:left">
-        <div style="font-size:12px;color:rgba(255,255,255,0.7);line-height:2">
-          ✅ Payment confirmed<br>
-          ⏳ Admin reviewing your request<br>
-          📱 Check your WhatsApp for next steps<br>
-          🕐 Approval within 24 hours
-        </div>
-      </div>
-      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:14px">Our admin may contact you on WhatsApp to verify your identity before approving your badge.</div>
-      <button class="verify-pay-btn" onclick="closeVerifyModal()">OK, I'll wait!</button>
+    <div id="vStep2" style="display:none;text-align:center;padding:20px 0">
+      <div style="font-size:52px;margin-bottom:12px">&#127881;</div>
+      <div style="font-size:20px;font-weight:800;color:#FFD700;margin-bottom:8px">You are Verified!</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:16px">Your badge is active for 30 days!</div>
+      <button class="verify-pay-btn" onclick="closeVerifyModal()">Done! Start Selling</button>
     </div>
   </div>
 </div>
@@ -537,8 +528,7 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
     <button class="atab" onclick="showAdminTab('referrals',this)" style="flex-shrink:0;padding:12px 16px;font-size:13px;font-weight:700;border:none;background:transparent;color:rgba(255,255,255,0.45);border-bottom:3px solid transparent;cursor:pointer">&#128279; Referrals</button>
     <button class="atab" onclick="showAdminTab('announce',this)" style="flex-shrink:0;padding:12px 16px;font-size:13px;font-weight:700;border:none;background:transparent;color:rgba(255,255,255,0.45);border-bottom:3px solid transparent;cursor:pointer">&#128226; Announce</button>
     <button class="atab" onclick="showAdminTab('backup',this)" style="flex-shrink:0;padding:12px 16px;font-size:13px;font-weight:700;border:none;background:transparent;color:rgba(255,255,255,0.45);border-bottom:3px solid transparent;cursor:pointer">&#128190; Backup</button>
-        <button class="atab" onclick="showAdminTab('usage',this)" style="flex-shrink:0;padding:12px 16px;font-size:13px;font-weight:700;border:none;background:transparent;color:rgba(255,255,255,0.45);border-bottom:3px solid transparent;cursor:pointer">&#128200; Usage</button>
-    <button class="atab" onclick="showAdminTab('verifications',this)" style="flex-shrink:0;padding:12px 16px;font-size:13px;font-weight:700;border:none;background:transparent;color:rgba(255,255,255,0.45);border-bottom:3px solid transparent;cursor:pointer">&#11088; Verify</button>
+    <button class="atab" onclick="showAdminTab('usage',this)" style="flex-shrink:0;padding:12px 16px;font-size:13px;font-weight:700;border:none;background:transparent;color:rgba(255,255,255,0.45);border-bottom:3px solid transparent;cursor:pointer">&#128200; Usage</button>
   </div>
   <div id="adminBody" style="padding:1rem"></div>
 </div>
@@ -3255,41 +3245,8 @@ function showAdminTab(tab, tabEl){
   } else if(tab === "usage"){
     body.innerHTML = "<div style='text-align:center;padding:1rem'><div class='spin'></div></div>";
     showUsageTab(body);
-      } else if(tab === "verifications"){
-    body.innerHTML = "<div style='text-align:center;padding:1rem'><div class='spin'></div></div>";
-    if(!db){ waitForFirebaseAndLoad(); return; }
-    db.collection('payments').where('type','==','verified_badge').orderBy('createdAt','desc').get().then(function(snap){
-      if(snap.empty){
-        body.innerHTML = "<div class='emp'><div class='empi'>&#11088;</div><p>No verification requests yet!</p></div>";
-        return;
-      }
-      body.innerHTML = "<h3 style='font-size:15px;font-weight:900;margin-bottom:1rem;color:#fff'>&#11088; Verification Requests ("+snap.size+")</h3>"
-        +snap.docs.map(function(doc){
-          var d = doc.data();
-          var statusColor = d.status==='approved'?'#22c55e':d.status==='rejected'?'#ff4444':'#FFD700';
-          var statusText = d.status==='approved'?'APPROVED':d.status==='rejected'?'REJECTED':'PENDING';
-          return "<div style='background:#0d1a0d;border-radius:12px;padding:14px;margin-bottom:12px;border:1px solid rgba(255,215,0,0.12)'>"
-            +"<div style='display:flex;align-items:center;justify-content:space-between;margin-bottom:10px'>"
-            +"<div style='font-size:14px;font-weight:800;color:#fff'>"+( d.userName||'Unknown')+"</div>"
-            +"<div style='background:"+statusColor+";color:#000;font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px'>"+statusText+"</div>"
-            +"</div>"
-            +"<div style='font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px'>📧 "+(d.userEmail||'')+"</div>"
-            +"<div style='font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px'>📱 "+(d.userPhone||'')+"</div>"
-            +"<div style='font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px'>💰 N"+Number(d.amount||0).toLocaleString()+"</div>"
-            +"<div style='font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px'>🔖 Ref: "+(d.ref||'')+"</div>"
-            +"<div style='font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:10px'>📅 "+(d.createdAt?new Date(d.createdAt).toLocaleString():'')+"</div>"
-            +(d.status==='pending'?"<div style='display:flex;gap:8px'>"
-            +"<button onclick=\"approveVerification('"+doc.id+"','"+d.userId+"','"+( d.userName||'')+"','"+( d.userPhone||'')+"')\" style='flex:1;background:rgba(34,197,94,0.1);color:#22c55e;border:1px solid rgba(34,197,94,0.3);padding:8px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer'>✅ Approve</button>"
-            +"<button onclick=\"window.open('https://wa.me/"+(d.userPhone||'')+"')\" style='background:rgba(37,211,102,0.1);color:#25D366;border:1px solid rgba(37,211,102,0.3);padding:8px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer'>💬 WhatsApp</button>"
-            +"<button onclick=\"rejectVerification('"+doc.id+"','"+d.userId+"','"+( d.userName||'')+"','"+( d.userPhone||'')+"')\" style='flex:1;background:rgba(255,68,68,0.1);color:#ff4444;border:1px solid rgba(255,68,68,0.3);padding:8px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer'>❌ Reject</button>"
-            +"</div>":"")
-            +"</div>";
-        }).join('');
-    }).catch(function(e){
-      body.innerHTML = "<div class='emp'>Error: "+e.message+"</div>";
-    });
-  } else if(tab === "announce"){
-        body.innerHTML = "<h3 style='font-size:15px;font-weight:900;margin-bottom:1rem;color:#fff'>📢 Send Announcement</h3>"
+    } else if(tab === "announce"){
+    body.innerHTML = "<h3 style='font-size:15px;font-weight:900;margin-bottom:1rem;color:#fff'>📢 Send Announcement</h3>"
       +"<div style='background:rgba(255,255,255,0.04);border-radius:12px;padding:1.2rem;border:1px solid rgba(255,255,255,0.08)'>"
       +"<div style='margin-bottom:12px'><label style='font-size:12px;font-weight:700;display:block;margin-bottom:4px;color:rgba(255,255,255,0.6)'>Message</label>"
       +"<div style='margin-bottom:12px'><label style='font-size:12px;font-weight:700;display:block;margin-bottom:4px;color:rgba(255,255,255,0.6)'>Title</label><input type='text' id='announceTitle' placeholder='e.g. New Feature!' style='width:100%;padding:10px 12px;border:1.5px solid rgba(255,255,255,0.1);border-radius:8px;font-size:14px;outline:none;font-family:inherit;background:rgba(255,255,255,0.05);color:#fff'></div>"
@@ -3366,78 +3323,7 @@ function showUsageTab(body){
     if(el)el.innerHTML="<div style='color:rgba(255,255,255,0.4);font-size:13px;text-align:center'>Could not load stats</div>";
   });
 }
-function approveVerification(payId, userId, userName, userPhone){
-  if(!db) return;
-  var exp = new Date();
-  exp.setDate(exp.getDate() + 30);
-  // Update payment status
-  db.collection('payments').doc(payId).update({
-    status: 'approved',
-    approvedAt: new Date().toISOString()
-  }).then(function(){
-    // Update user as verified
-    db.collection('users').where('uid','==',userId).get().then(function(snap){
-      if(!snap.empty){
-        snap.docs[0].ref.update({
-          isVerified: true,
-          verifiedUntil: exp.toISOString()
-        });
-      }
-    });
-    // Update all user ads
-    db.collection('ads').where('userId','==',userId).get().then(function(snap){
-      snap.docs.forEach(function(doc){
-        doc.ref.update({sellerVerified: true});
-      });
-    });
-    // WhatsApp seller
-    var msg = "🎉 *CampusDeal Verified Badge Approved!*\n\n"
-      +"Hi "+userName+"! Your verified seller badge has been approved!\n\n"
-      +"✅ Your badge is now active for 30 days\n"
-      +"⭐ You will appear as a Verified Seller\n"
-      +"📈 Expect more buyers to contact you!\n\n"
-      +"Thank you for joining CampusDeal! 🚀";
-    window.open('https://wa.me/'+userPhone+'?text='+encodeURIComponent(msg));
-    showToast('Verification approved!','success');
-    showAdminTab('verifications', null);
-  }).catch(function(e){ showToast('Error: '+e.message); });
-}
-
-function rejectVerification(payId, userId, userName, userPhone){
-  if(!db) return;
-  if(!confirm('Reject this verification request?')) return;
-  db.collection('payments').doc(payId).update({
-    status: 'rejected',
-    rejectedAt: new Date().toISOString()
-  }).then(function(){
-    // Remove verified status
-    db.collection('users').where('uid','==',userId).get().then(function(snap){
-      if(!snap.empty){
-        snap.docs[0].ref.update({
-          isVerified: false,
-          verifiedUntil: null
-        });
-      }
-    });
-    // Update all user ads
-    db.collection('ads').where('userId','==',userId).get().then(function(snap){
-      snap.docs.forEach(function(doc){
-        doc.ref.update({sellerVerified: false});
-      });
-    });
-    // WhatsApp seller
-    var msg = "❌ *CampusDeal Verification Update*\n\n"
-      +"Hi "+userName+", your verification request was not approved at this time.\n\n"
-      +"This could be due to:\n"
-      +"• Incomplete identity verification\n"
-      +"• Unable to confirm your identity\n\n"
-      +"Please contact us on WhatsApp to resolve this.\n"
-      +"📞 +2348033873918";
-    window.open('https://wa.me/'+userPhone+'?text='+encodeURIComponent(msg));
-    showToast('Verification rejected!');
-    showAdminTab('verifications', null);
-  }).catch(function(e){ showToast('Error: '+e.message); });
-}
+function markDelivered(id){
   if(!db) return;
   db.collection('orders').doc(id).update({
     status: 'delivered',
@@ -3847,31 +3733,25 @@ function startVerifyPayment(){
           isVerified: true,
           verifiedUntil: exp.toISOString(),
           verifyRef: res.transaction_id
-                }).then(function(){
-          // Save as PENDING - not verified yet!
+        }).then(function(){
+      // Update all user ads with verified status
+db.collection('ads').where('userId','==',user.uid).get()
+.then(function(adSnap){
+  adSnap.docs.forEach(function(adDoc){
+    adDoc.ref.update({sellerVerified: true});
+  });
+});
           firebase.firestore().collection('payments').add({
             userId: user.uid,
-            userName: getUser()?getUser().name:'',
-            userPhone: getUser()?getUser().phone:'',
-            userEmail: user.email,
             amount: 1000,
             type: 'verified_badge',
-            status: 'pending',
             ref: res.transaction_id,
             createdAt: new Date().toISOString()
           });
-          // Notify admin on WhatsApp
-          var u2 = getUser();
-          var waMsg = "🔔 *NEW VERIFICATION REQUEST - CampusDeal*\n\n"
-            +"*Name:* "+(u2?u2.name:'Unknown')+"\n"
-            +"*Phone:* "+(u2?u2.phone:'')+"\n"
-            +"*Email:* "+user.email+"\n"
-            +"*Payment Ref:* "+res.transaction_id+"\n\n"
-            +"Go to Admin → Verifications to Approve/Reject!";
-          window.open('https://wa.me/2348033873918?text='+encodeURIComponent(waMsg));
           document.getElementById('vStep1').style.display = 'none';
           document.getElementById('vStep2').style.display = 'block';
-        }).catch(function(){
+          document.getElementById('verifyBanner').style.display = 'none';
+                }).catch(function(){
           document.getElementById('vStep1').style.display = 'none';
           document.getElementById('vStep2').style.display = 'block';
         });
