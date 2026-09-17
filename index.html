@@ -3147,14 +3147,14 @@ function showAdminTab(tab, tabEl){
         return {name:d.name||"Unknown", wa:d.phone||"", email:d.email||"", uid:d.uid||doc.id};
       });
       // Update stat card
-      var sn2 = document.getElementById("statUsersNum");
-      if(sn2) sn2.textContent = list.length;
+            var sn2 = document.getElementById("statUsersNum");
+      if(sn2) sn2.textContent = realUsers.length;
       if(!list.length){
         body.innerHTML = "<div class='emp'><div class='empi'>&#128100;</div><p>No users yet</p></div>";
         return;
       }
-      body.innerHTML = "<h3 style='font-size:15px;font-weight:900;margin-bottom:1rem;color:#fff'>&#128100; Registered Users ("+list.length+")</h3>"
-        + list.map(function(u){
+           body.innerHTML = "<h3 style='font-size:15px;font-weight:900;margin-bottom:1rem;color:#fff'>&#128100; Registered Users ("+realUsers.length+")</h3>"
+        + realUsers.map(function(u){
           return "<div style='background:#0d1a0d;border-radius:10px;padding:12px;margin-bottom:8px;border:1px solid rgba(255,255,255,0.06)'>"
             +"<div style='display:flex;align-items:center;gap:10px'>"
             +"<div style='width:36px;height:36px;border-radius:50%;background:#FFD700;color:#080f08;font-size:15px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0'>"+(u.name?u.name.charAt(0).toUpperCase():"?")+"</div>"
