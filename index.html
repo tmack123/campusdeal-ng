@@ -3358,6 +3358,62 @@ function showUsageTab(body){
     if(el)el.innerHTML="<div style='color:rgba(255,255,255,0.4);font-size:13px;text-align:center'>Could not load stats</div>";
   });
 }
+  function approveVerification(payId, userId, userName, userPhone){
+  if(!db) return;
+  var exp = new Date();
+  exp.setDate(exp.getDate() + 30);
+  db.collection('payments').doc(payId).update({
+    status: 'approved',
+    approvedAt: new Date().toISOString()
+  }).then(function(){
+    db.collection('users').where('uid','==',userId).get().then(function(snap){
+      if(!snap.empty){
+        snap.docs[0].ref.update({
+          isVerified: true,
+          verifiedUntil: exp.toISOString()
+        });
+      }
+    });
+    db.collection('ads').where('userId','==',userId).get().then(function(snap){
+      snap.docs.forEach(function(doc){ doc.ref.update({sellerVerified:true}); });
+    });
+    var msg = "🎉 *CampusDeal Verified Badge Approved!*\n\n"
+      +"Hi "+userName+"! Your verified seller badge has been approved!\n\n"
+      +"✅ Your badge is now active for 30 days\n"
+      +"⭐ You will appear as a Verified Seller\n"
+      +"📈 Expect more buyers to contact you!\n\n"
+      +"Thank you for trusting CampusDeal! 🚀";
+    window.open('https://wa.me/'+userPhone+'?text='+encodeURIComponent(msg));
+    showToast('Verification approved!');
+    showAdminTab('verifications', null);
+  }).catch(function(e){ showToast('Error: '+e.message); });
+}
+
+function rejectVerification(payId, userId, userName, userPhone){
+  if(!db) return;
+  if(!confirm('Reject this verification request?')) return;
+  db.collection('payments').doc(payId).update({
+    status: 'rejected',
+    rejectedAt: new Date().toISOString()
+  }).then(function(){
+    db.collection('users').where('uid','==',userId).get().then(function(snap){
+      if(!snap.empty){
+        snap.docs[0].ref.update({isVerified:false, verifiedUntil:null});
+      }
+    });
+    db.collection('ads').where('userId','==',userId).get().then(function(snap){
+      snap.docs.forEach(function(doc){ doc.ref.update({sellerVerified:false}); });
+    });
+    var msg = "❌ *CampusDeal Verification Update*\n\n"
+      +"Hi "+userName+", your verification request was not approved.\n\n"
+      +"This may be due to incomplete identity verification.\n\n"
+      +"Please contact us to resolve this:\n"
+      +"📞 wa.me/2348033873918";
+    window.open('https://wa.me/'+userPhone+'?text='+encodeURIComponent(msg));
+    showToast('Verification rejected!');
+    showAdminTab('verifications', null);
+  }).catch(function(e){ showToast('Error: '+e.message); });
+}
 function markDelivered(id){
   if(!db) return;
   db.collection('orders').doc(id).update({
