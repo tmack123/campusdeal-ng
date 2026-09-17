@@ -3284,8 +3284,8 @@ function showAdminTab(tab, tabEl){
             +"<button onclick=\"rejectVerification('"+doc.id+"','"+d.userId+"','"+( d.userName||'')+"','"+( d.userPhone||'')+"')\" style='flex:1;background:rgba(255,68,68,0.1);color:#ff4444;border:1px solid rgba(255,68,68,0.3);padding:8px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer'>❌ Reject</button>"
             +"</div>":"")
             +"</div>";
-                }).join('');
-    }).catch(function(e){
+            }).join('');
+            }).catch(function(e){
       body.innerHTML = "<div class='emp'>Error: "+e.message+"</div>";
     });
   } else if(tab === "announce"){
