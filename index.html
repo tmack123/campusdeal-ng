@@ -3086,18 +3086,12 @@ function loadAdminDashboard(){
   // Load users count separately
   db.collection("users").get().then(function(snap){
     // Filter out test accounts
-    v    var seenEmails = {};
     var realUsers = snap.docs.filter(function(doc){
       var d = doc.data();
       var name = (d.name||'').toLowerCase();
       var email = (d.email||'').toLowerCase();
-      if(!email) return false;
-      if(seenEmails[email]) return false;
-      seenEmails[email] = true;
-      return !name.includes('test') &&
+      return !name.includes('test') && 
              !email.includes('test') &&
-             !email.includes('tma@') &&
-             !email.includes('est123') &&
              !name.includes('hehe') &&
              !name.includes('behe') &&
              d.name && d.name.length > 1;
