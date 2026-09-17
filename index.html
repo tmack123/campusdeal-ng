@@ -3285,9 +3285,10 @@ function showAdminTab(tab, tabEl){
             +"</div>":"")
             +"</div>";
         }).join('');
-    }).catch(function(e){
+        }).catch(function(e){
       body.innerHTML = "<div class='emp'>Error: "+e.message+"</div>";
     });
+  } else if(tab === "announce"){
     body.innerHTML = "<h3 style='font-size:15px;font-weight:900;margin-bottom:1rem;color:#fff'>📢 Send Announcement</h3>"
       +"<div style='background:rgba(255,255,255,0.04);border-radius:12px;padding:1.2rem;border:1px solid rgba(255,255,255,0.08)'>"
       +"<div style='margin-bottom:12px'><label style='font-size:12px;font-weight:700;display:block;margin-bottom:4px;color:rgba(255,255,255,0.6)'>Message</label>"
