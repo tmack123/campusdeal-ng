@@ -3255,7 +3255,39 @@ function showAdminTab(tab, tabEl){
   } else if(tab === "usage"){
     body.innerHTML = "<div style='text-align:center;padding:1rem'><div class='spin'></div></div>";
     showUsageTab(body);
-    } else if(tab === "announce"){
+      } else if(tab === "verifications"){
+    body.innerHTML = "<div style='text-align:center;padding:1rem'><div class='spin'></div></div>";
+    if(!db){ waitForFirebaseAndLoad(); return; }
+    db.collection('payments').where('type','==','verified_badge').orderBy('createdAt','desc').get().then(function(snap){
+      if(snap.empty){
+        body.innerHTML = "<div class='emp'><div class='empi'>&#11088;</div><p>No verification requests yet!</p></div>";
+        return;
+      }
+      body.innerHTML = "<h3 style='font-size:15px;font-weight:900;margin-bottom:1rem;color:#fff'>&#11088; Verification Requests ("+snap.size+")</h3>"
+        +snap.docs.map(function(doc){
+          var d = doc.data();
+          var statusColor = d.status==='approved'?'#22c55e':d.status==='rejected'?'#ff4444':'#FFD700';
+          var statusText = d.status==='approved'?'APPROVED':d.status==='rejected'?'REJECTED':'PENDING';
+          return "<div style='background:#0d1a0d;border-radius:12px;padding:14px;margin-bottom:12px;border:1px solid rgba(255,215,0,0.12)'>"
+            +"<div style='display:flex;align-items:center;justify-content:space-between;margin-bottom:10px'>"
+            +"<div style='font-size:14px;font-weight:800;color:#fff'>"+( d.userName||'Unknown')+"</div>"
+            +"<div style='background:"+statusColor+";color:#000;font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px'>"+statusText+"</div>"
+            +"</div>"
+            +"<div style='font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px'>📧 "+(d.userEmail||'')+"</div>"
+            +"<div style='font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px'>📱 "+(d.userPhone||'')+"</div>"
+            +"<div style='font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px'>💰 N"+Number(d.amount||0).toLocaleString()+"</div>"
+            +"<div style='font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px'>🔖 Ref: "+(d.ref||'')+"</div>"
+            +"<div style='font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:10px'>📅 "+(d.createdAt?new Date(d.createdAt).toLocaleString():'')+"</div>"
+            +(d.status==='pending'?"<div style='display:flex;gap:8px'>"
+            +"<button onclick=\"approveVerification('"+doc.id+"','"+d.userId+"','"+( d.userName||'')+"','"+( d.userPhone||'')+"')\" style='flex:1;background:rgba(34,197,94,0.1);color:#22c55e;border:1px solid rgba(34,197,94,0.3);padding:8px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer'>✅ Approve</button>"
+            +"<button onclick=\"window.open('https://wa.me/"+(d.userPhone||'')+"')\" style='background:rgba(37,211,102,0.1);color:#25D366;border:1px solid rgba(37,211,102,0.3);padding:8px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer'>💬 WhatsApp</button>"
+            +"<button onclick=\"rejectVerification('"+doc.id+"','"+d.userId+"','"+( d.userName||'')+"','"+( d.userPhone||'')+"')\" style='flex:1;background:rgba(255,68,68,0.1);color:#ff4444;border:1px solid rgba(255,68,68,0.3);padding:8px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer'>❌ Reject</button>"
+            +"</div>":"")
+            +"</div>";
+        }).join('');
+    }).catch(function(e){
+      body.innerHTML = "<div class='emp'>Error: "+e.message+"</div>";
+    });
     body.innerHTML = "<h3 style='font-size:15px;font-weight:900;margin-bottom:1rem;color:#fff'>📢 Send Announcement</h3>"
       +"<div style='background:rgba(255,255,255,0.04);border-radius:12px;padding:1.2rem;border:1px solid rgba(255,255,255,0.08)'>"
       +"<div style='margin-bottom:12px'><label style='font-size:12px;font-weight:700;display:block;margin-bottom:4px;color:rgba(255,255,255,0.6)'>Message</label>"
@@ -3333,7 +3365,78 @@ function showUsageTab(body){
     if(el)el.innerHTML="<div style='color:rgba(255,255,255,0.4);font-size:13px;text-align:center'>Could not load stats</div>";
   });
 }
-function markDelivered(id){
+function approveVerification(payId, userId, userName, userPhone){
+  if(!db) return;
+  var exp = new Date();
+  exp.setDate(exp.getDate() + 30);
+  // Update payment status
+  db.collection('payments').doc(payId).update({
+    status: 'approved',
+    approvedAt: new Date().toISOString()
+  }).then(function(){
+    // Update user as verified
+    db.collection('users').where('uid','==',userId).get().then(function(snap){
+      if(!snap.empty){
+        snap.docs[0].ref.update({
+          isVerified: true,
+          verifiedUntil: exp.toISOString()
+        });
+      }
+    });
+    // Update all user ads
+    db.collection('ads').where('userId','==',userId).get().then(function(snap){
+      snap.docs.forEach(function(doc){
+        doc.ref.update({sellerVerified: true});
+      });
+    });
+    // WhatsApp seller
+    var msg = "🎉 *CampusDeal Verified Badge Approved!*\n\n"
+      +"Hi "+userName+"! Your verified seller badge has been approved!\n\n"
+      +"✅ Your badge is now active for 30 days\n"
+      +"⭐ You will appear as a Verified Seller\n"
+      +"📈 Expect more buyers to contact you!\n\n"
+      +"Thank you for joining CampusDeal! 🚀";
+    window.open('https://wa.me/'+userPhone+'?text='+encodeURIComponent(msg));
+    showToast('Verification approved!','success');
+    showAdminTab('verifications', null);
+  }).catch(function(e){ showToast('Error: '+e.message); });
+}
+
+function rejectVerification(payId, userId, userName, userPhone){
+  if(!db) return;
+  if(!confirm('Reject this verification request?')) return;
+  db.collection('payments').doc(payId).update({
+    status: 'rejected',
+    rejectedAt: new Date().toISOString()
+  }).then(function(){
+    // Remove verified status
+    db.collection('users').where('uid','==',userId).get().then(function(snap){
+      if(!snap.empty){
+        snap.docs[0].ref.update({
+          isVerified: false,
+          verifiedUntil: null
+        });
+      }
+    });
+    // Update all user ads
+    db.collection('ads').where('userId','==',userId).get().then(function(snap){
+      snap.docs.forEach(function(doc){
+        doc.ref.update({sellerVerified: false});
+      });
+    });
+    // WhatsApp seller
+    var msg = "❌ *CampusDeal Verification Update*\n\n"
+      +"Hi "+userName+", your verification request was not approved at this time.\n\n"
+      +"This could be due to:\n"
+      +"• Incomplete identity verification\n"
+      +"• Unable to confirm your identity\n\n"
+      +"Please contact us on WhatsApp to resolve this.\n"
+      +"📞 +2348033873918";
+    window.open('https://wa.me/'+userPhone+'?text='+encodeURIComponent(msg));
+    showToast('Verification rejected!');
+    showAdminTab('verifications', null);
+  }).catch(function(e){ showToast('Error: '+e.message); });
+}
   if(!db) return;
   db.collection('orders').doc(id).update({
     status: 'delivered',
