@@ -3733,25 +3733,31 @@ function startVerifyPayment(){
           isVerified: true,
           verifiedUntil: exp.toISOString(),
           verifyRef: res.transaction_id
-        }).then(function(){
-      // Update all user ads with verified status
-db.collection('ads').where('userId','==',user.uid).get()
-.then(function(adSnap){
-  adSnap.docs.forEach(function(adDoc){
-    adDoc.ref.update({sellerVerified: true});
-  });
-});
+                }).then(function(){
+          // Save as PENDING - not verified yet!
           firebase.firestore().collection('payments').add({
             userId: user.uid,
+            userName: getUser()?getUser().name:'',
+            userPhone: getUser()?getUser().phone:'',
+            userEmail: user.email,
             amount: 1000,
             type: 'verified_badge',
+            status: 'pending',
             ref: res.transaction_id,
             createdAt: new Date().toISOString()
           });
+          // Notify admin on WhatsApp
+          var u2 = getUser();
+          var waMsg = "🔔 *NEW VERIFICATION REQUEST - CampusDeal*\n\n"
+            +"*Name:* "+(u2?u2.name:'Unknown')+"\n"
+            +"*Phone:* "+(u2?u2.phone:'')+"\n"
+            +"*Email:* "+user.email+"\n"
+            +"*Payment Ref:* "+res.transaction_id+"\n\n"
+            +"Go to Admin → Verifications to Approve/Reject!";
+          window.open('https://wa.me/2348033873918?text='+encodeURIComponent(waMsg));
           document.getElementById('vStep1').style.display = 'none';
           document.getElementById('vStep2').style.display = 'block';
-          document.getElementById('verifyBanner').style.display = 'none';
-                }).catch(function(){
+        }).catch(function(){
           document.getElementById('vStep1').style.display = 'none';
           document.getElementById('vStep2').style.display = 'block';
         });
