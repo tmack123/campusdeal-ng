@@ -355,6 +355,8 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
     <div class="hm-item" onclick="closeHamburger();showAnnouncements()">&#128226; Announcements <span id="annBadge" style="display:none;background:#ff4444;color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;margin-left:4px">0</span></div>
 <div class="hm-item" onclick="closeHamburger();showInbox()">&#128140; Inbox <span id="inboxBadge" style="display:none;background:#ff4444;color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;margin-left:4px">0</span></div>
     <div class="hm-item" onclick="closeHamburger();showAbout()">&#8505; About CampusDeal</div>
+<div class="hm-item" onclick="showTerms()">&#128209; Terms of Service</div>
+<div class="hm-item" onclick="showPrivacy()">&#128274; Privacy Policy</div>
     <div style="height:1px;background:rgba(255,255,255,0.06);margin:8px 16px"></div>
     <div id="hmLogout" style="display:none" class="hm-item hm-red" onclick="closeHamburger();doLogout()">&#128682; Logout</div>
 
@@ -2120,7 +2122,67 @@ function clearWishlist(){
     showWishlistPage();
   }
 }
+function showTerms(){
+  closeHamburger();
+  var d=document.createElement('div');
+  d.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:99999;display:flex;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto';
+  d.innerHTML='<div style="background:#0d1a0d;border:1px solid rgba(255,215,0,0.2);border-radius:16px;padding:24px;max-width:360px;width:100%;margin:auto">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">'
+    +'<div style="font-size:18px;font-weight:900;color:#FFD700">&#128209; Terms of Service</div>'
+    +'<button onclick="this.parentElement.parentElement.parentElement.remove()" style="background:rgba(255,255,255,0.08);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:15px;cursor:pointer">&#10005;</button>'
+    +'</div>'
+    +'<div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:16px">Last updated: September 2026</div>'
+    +'<div style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.8">'
+    +'<div style="font-size:14px;font-weight:800;color:#FFD700;margin-bottom:6px">1. Acceptance</div>'
+    +'By using CampusDeal you agree to these terms. If you disagree, please do not use our platform.<br><br>'
+    +'<div style="font-size:14px;font-weight:800;color:#FFD700;margin-bottom:6px">2. User Responsibilities</div>'
+    +'You must post only genuine items. Fake or misleading ads will be removed and your account banned.<br><br>'
+    +'<div style="font-size:14px;font-weight:800;color:#FFD700;margin-bottom:6px">3. Prohibited Items</div>'
+    +'You may not sell illegal items, weapons, drugs, stolen goods or adult content on CampusDeal.<br><br>'
+    +'<div style="font-size:14px;font-weight:800;color:#FFD700;margin-bottom:6px">4. Payments</div>'
+    +'All payments are processed by Flutterwave. CampusDeal does not store your card details.<br><br>'
+    +'<div style="font-size:14px;font-weight:800;color:#FFD700;margin-bottom:6px">5. Verified Badge</div>'
+    +'The verified badge is non-transferable. CampusDeal reserves the right to revoke badges for violations.<br><br>'
+    +'<div style="font-size:14px;font-weight:800;color:#FFD700;margin-bottom:6px">6. Liability</div>'
+    +'CampusDeal is a marketplace only. We are not responsible for transactions between buyers and sellers.<br><br>'
+    +'<div style="font-size:14px;font-weight:800;color:#FFD700;margin-bottom:6px">7. Contact</div>'
+    +'For any issues contact us on WhatsApp: +2348033873918'
+    +'</div>'
+    +'<button onclick="this.parentElement.parentElement.remove()" style="width:100%;background:#FFD700;color:#080f08;border:none;padding:12px;border-radius:8px;font-size:14px;font-weight:800;cursor:pointer;margin-top:16px">I Understand</button>'
+    +'</div>';
+  document.body.appendChild(d);
+}
 
+function showPrivacy(){
+  closeHamburger();
+  var d=document.createElement('div');
+  d.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:99999;display:flex;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto';
+  d.innerHTML='<div style="background:#0d1a0d;border:1px solid rgba(255,215,0,0.2);border-radius:16px;padding:24px;max-width:360px;width:100%;margin:auto">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">'
+    +'<div style="font-size:18px;font-weight:900;color:#FFD700">&#128274; Privacy Policy</div>'
+    +'<button onclick="this.parentElement.parentElement.parentElement.remove()" style="background:rgba(255,255,255,0.08);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:15px;cursor:pointer">&#10005;</button>'
+    +'</div>'
+    +'<div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:16px">Last updated: September 2026</div>'
+    +'<div style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.8">'
+    +'<div style="font-size:14px;font-weight:800;color:#FFD700;margin-bottom:6px">1. Data We Collect</div>'
+    +'We collect your name, email, WhatsApp number and ads you post on CampusDeal.<br><br>'
+    +'<div style="font-size:14px;font-weight:800;color:#FFD700;margin-bottom:6px">2. How We Use It</div>'
+    +'Your data is used to manage your account, display your ads and process payments only.<br><br>'
+    +'<div style="font-size:14px;font-weight:800;color:#FFD700;margin-bottom:6px">3. Data Sharing</div>'
+    +'We never sell your data. Your WhatsApp is only shown to buyers interested in your ads.<br><br>'
+    +'<div style="font-size:14px;font-weight:800;color:#FFD700;margin-bottom:6px">4. Data Storage</div>'
+    +'Your data is securely stored on Google Firebase servers located in the United States.<br><br>'
+    +'<div style="font-size:14px;font-weight:800;color:#FFD700;margin-bottom:6px">5. Your Rights</div>'
+    +'You can delete your account and all your data by contacting us on WhatsApp at any time.<br><br>'
+    +'<div style="font-size:14px;font-weight:800;color:#FFD700;margin-bottom:6px">6. Cookies</div>'
+    +'We use localStorage to save your login session and preferences only.<br><br>'
+    +'<div style="font-size:14px;font-weight:800;color:#FFD700;margin-bottom:6px">7. Contact</div>'
+    +'Privacy concerns? Contact us: +2348033873918'
+    +'</div>'
+    +'<button onclick="this.parentElement.parentElement.remove()" style="width:100%;background:#FFD700;color:#080f08;border:none;padding:12px;border-radius:8px;font-size:14px;font-weight:800;cursor:pointer;margin-top:16px">Got it!</button>'
+    +'</div>';
+  document.body.appendChild(d);
+}
 function showAbout(){
   closeHamburger();
   var d=document.createElement('div');
