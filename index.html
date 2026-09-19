@@ -44,7 +44,7 @@
   }, 3000);
   // Secret admin URL access
   // Admin secret URL - only trigger if not a page refresh
-  if(window.location.search.includes("admin="+atob("c2VjcmV0MjAyNA=="))){
+    if(window.location.search.includes("admin="+btoa("secret2026CD"))){
     // Remove admin param from URL to prevent Chrome refresh issues
     var cleanUrl = window.location.pathname;
     window.history.replaceState({}, document.title, cleanUrl);
@@ -3038,13 +3038,18 @@ function openAdmin(){
     }
     var pwd = prompt("Enter Admin Password:");
     if(pwd === null) return;
-    if(pwd === atob("dHJ5aGFja21l")){
-      isAdmin = true;
-      showPg("admin");
-      waitForFirebaseAndLoad();
-    } else {
-      alert("Wrong password!");
-    }
+        var msgBuffer2 = new TextEncoder().encode(pwd);
+    crypto.subtle.digest("SHA-256", msgBuffer2).then(function(hashBuffer2){
+      var hashArray2 = Array.from(new Uint8Array(hashBuffer2));
+      var hashHex2 = hashArray2.map(function(b){return b.toString(16).padStart(2,"0");}).join("");
+      if(hashHex2 === ADMIN_PWD_HASH){
+        isAdmin = true;
+        showPg("admin");
+        waitForFirebaseAndLoad();
+      } else {
+        alert("Wrong password!");
+      }
+    });
   }, 400);
 }
 
@@ -3118,8 +3123,8 @@ async function checkAdminPwd(){
     if(hashHex === ADMIN_PWD_HASH) correct = true;
   }catch(e){}
   
-  // Fallback check for older browsers
-  if(!correct && pwd === atob("dHJ5aGFja21l")) correct = true;
+    // No plain text fallback!
+  if(!correct) correct = false;
 
   if(correct){
     isAdmin = true;
