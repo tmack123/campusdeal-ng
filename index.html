@@ -18,8 +18,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="CampusDeal">
-<link rel="icon" type="image/png" href="https://res.cloudinary.com/fqlyopju/image/upload/v1789841747/Larana_jizis1.png">
-<link rel="apple-touch-icon" href="https://res.cloudinary.com/fqlyopju/image/upload/v1789841747/Larana_jizis1.png">
+<link rel="apple-touch-icon" href="https://ui-avatars.com/api/?name=CD&background=006400&color=FFD700&size=512&font-size=0.4&bold=true&rounded=true">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="description" content="Buy and sell anything on FUNAAB Campus. Post ads FREE! Campus delivery available. Verified sellers. Nigeria's smartest campus marketplace.">
 <meta name="keywords" content="campus marketplace, FUNAAB, buy and sell, student marketplace, Nigeria, campus deals, free ads">
@@ -29,16 +28,13 @@
 <meta property="og:description" content="Nigeria's Smartest Campus Marketplace. Post ads FREE! Campus delivery available.">
 <meta property="og:url" content="https://campusdeal.com.ng">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://res.cloudinary.com/fqlyopju/image/upload/v1789841747/Larana_jizis1.png">
-<meta property="og:image:width" content="512">
-<meta property="og:image:height" content="512">
+<meta property="og:image" content="https://ui-avatars.com/api/?name=CD&background=006400&color=FFD700&size=512">
 <link rel="canonical" href="https://campusdeal.com.ng">
 <meta name="version" content="1789205102">
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script>window.addEventListener("load",function(){trackReferral();
   setTimeout(checkNewNotifications, 4000);
-     checkSessionTimeout();                                             
   // Check verified status on load
   setTimeout(function(){
     var u = getUser();
@@ -1173,7 +1169,6 @@ function doLogin(){
 var verUntil = snap.empty ? null : (snap.docs[0].data().verifiedUntil||null);
 var isVerifiedNow = isVer && verUntil && new Date(verUntil) > new Date();
 setUser({name:name, phone:phone, email:em, uid:result.user.uid, isVerified:isVerifiedNow});
-          localStorage.setItem('cd_login_time', String(Date.now()));
           closeOv("loginOv");
           refreshNav();
           var iN=document.getElementById("iName");
@@ -1239,7 +1234,7 @@ function doRegister(){
 }
 
 function doRegisterVerified(nm){
-  nm = sanitize(nm || (document.getElementById("lName").value||""));
+  nm = nm || (document.getElementById("lName").value||"").trim();
   var ph=(document.getElementById("rPhone").value||"").trim();
   var em=(document.getElementById("rEmail").value||"").trim();
   var pass=(document.getElementById("rPass").value||"").trim();
@@ -1481,16 +1476,6 @@ function doGoogleLogin(){
       showToast('Google login failed: '+e.message);
     }
   });
-}
-  function checkSessionTimeout(){
-  var loginTime = Number(localStorage.getItem('cd_login_time')||0);
-  if(!loginTime) return;
-  var hoursElapsed = (Date.now() - loginTime) / (1000 * 60 * 60);
-  if(hoursElapsed > 24){
-    removeUser();
-    refreshNav();
-    showToast('Session expired. Please login again.');
-  }
 }
 function doLogout(){
   closeHamburger();
@@ -1907,18 +1892,7 @@ async function postAd(){
   }
   postTimes.push(now);
   localStorage.setItem("cd_post_times", JSON.stringify(postTimes));
-  function sanitize(str){
-  return (str||'').trim()
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;')
-    .replace(/'/g,'&#x27;')
-    .replace(/\//g,'&#x2F;')
-    .replace(/javascript:/gi,'')
-    .replace(/on\w+=/gi,'')
-    .substring(0,500);
-}
-var title=sanitize(document.getElementById("iTitle").value);
+  var title=(document.getElementById("iTitle").value||"").trim();
   var cat=(document.getElementById("iCat").value||"").trim();
   var price=document.getElementById("iPrice").value;
   var cond=document.getElementById("iCond").value;
@@ -1990,7 +1964,7 @@ var title=sanitize(document.getElementById("iTitle").value);
     }
     if(!fbReady||!db)throw new Error("Firebase not ready");
     var adData={
-      title:sanitize(title).substring(0,100),
+      title:(title||"").replace(/</g,"&lt;").replace(/>/g,"&gt;").substring(0,100),
       cat:cat||"others",
       price:Number(price)||0,
       cond:cond||"used",
