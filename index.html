@@ -818,6 +818,14 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
   <input type="text" id="rRef" placeholder="Enter referral code" class="cd-input-style" style="text-transform:uppercase">
 </div>
       <button onclick="doRegister()" style="width:100%;background:linear-gradient(135deg,#FFD700,#FF8C00);color:#080f08;border:none;padding:13px;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit">Create Account →</button>
+      <div style="display:flex;align-items:center;gap:10px;margin:14px 0 10px">
+  <div style="flex:1;height:1px;background:rgba(255,255,255,0.07)"></div>
+  <span style="font-size:10px;color:rgba(255,255,255,0.2)">or sign up with</span>
+  <div style="flex:1;height:1px;background:rgba(255,255,255,0.07)"></div>
+</div>
+<button onclick="doGoogleLogin()" style="width:100%;padding:11px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit">
+  <img src="https://www.google.com/favicon.ico" style="width:16px;height:16px"> Continue with Google
+</button>
       <div style="text-align:center;margin-top:6px;font-size:9px;color:rgba(255,255,255,0.15)">Protected by reCAPTCHA</div>
       <button onclick="closeOv('loginOv')" style="background:none;border:none;font-size:11px;color:rgba(255,255,255,0.2);cursor:pointer;width:100%;text-align:center;margin-top:8px;padding:4px;font-family:inherit">✕ Maybe later</button>
     </div>
