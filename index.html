@@ -2093,6 +2093,7 @@ window.addEventListener("load",function(){
       });
       setTimeout(startAdWatcher, 3000);
 setTimeout(autoExpireAds, 10000);
+setTimeout(checkAutoBackup, 15000);
       // Load from cache first for speed
 var cached = localStorage.getItem('cd_ads_cache');
 var cacheTime = Number(localStorage.getItem('cd_ads_cache_time')||0);
@@ -3116,6 +3117,19 @@ function checkNewNotifications(){
     }
   }).catch(function(){});
 }
+  function checkAutoBackup(){
+  var lastBackup = Number(localStorage.getItem('cd_last_backup_time')||0);
+  var now = Date.now();
+  var sevenDays = 7 * 24 * 60 * 60 * 1000;
+  if(now - lastBackup > sevenDays){
+    // Show reminder to admin
+    var u = getUser();
+    if(u && u.email === 'tmack3031@gmail.com'){
+      showToast('⚠️ Time to backup your data! Go to Admin → Backup');
+      localStorage.setItem('cd_last_backup_time', String(now));
+    }
+  }
+}
   function autoExpireAds(){
   if(!fbReady||!db) return;
   var thirtyDaysAgo = new Date();
@@ -3446,6 +3460,7 @@ function showAdminTab(tab, tabEl){
       +"<h3 style='font-size:14px;font-weight:700;margin-bottom:10px;color:#fff'>Download Backups</h3>"
       +"<button onclick='backupAds()' style='width:100%;background:#FFD700;color:#080f08;border:none;padding:13px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px'>&#11015;&#65039; Download Ads Backup</button>"
       +"<button onclick='backupUsers()' style='width:100%;background:rgba(255,255,255,0.08);color:#fff;border:none;padding:13px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px'>&#11015;&#65039; Download Users Backup</button>"
+      +"<button onclick='autoBackupNow()' style='width:100%;background:linear-gradient(135deg,#FFD700,#FFA500);color:#080f08;border:none;padding:13px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:12px'>⚡ Auto Backup Everything Now</button>"
       +"<button onclick='backupAll()' style='width:100%;background:rgba(255,255,255,0.08);color:#fff;border:none;padding:13px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer'>&#11015;&#65039; Download Full Backup</button>"
       +"</div>"
       +"<div style='background:rgba(255,255,255,0.04);border-radius:12px;padding:1rem;border:1px solid rgba(255,255,255,0.08)'>"
@@ -3769,7 +3784,28 @@ function backupUsers(){
     btn.disabled = false;
   });
 }
-
+function autoBackupNow(){
+  if(!db) return;
+  Promise.all([
+    db.collection('ads').get(),
+    db.collection('users').get(),
+    db.collection('orders').get(),
+    db.collection('payments').get()
+  ]).then(function(results){
+    var data = {
+      backup_date: new Date().toLocaleString(),
+      site: 'campusdeal.com.ng',
+      ads: results[0].docs.map(function(d){ return Object.assign({id:d.id},d.data()); }),
+      users: results[1].docs.map(function(d){ var u=d.data(); return {id:d.id,name:u.name,phone:u.phone,email:u.email}; }),
+      orders: results[2].docs.map(function(d){ return Object.assign({id:d.id},d.data()); }),
+      payments: results[3].docs.map(function(d){ return Object.assign({id:d.id},d.data()); })
+    };
+    var now = new Date().toISOString().split('T')[0];
+    downloadJSON(data, 'campusdeal-auto-backup-'+now+'.json');
+    localStorage.setItem('cd_last_backup_time', String(Date.now()));
+    showToast('✅ Backup downloaded!', 'success');
+  }).catch(function(e){ showToast('Backup error: '+e.message); });
+}
 function backupAll(){
   if(!db){alert("Firebase not ready!");return;}
   var btn = event.target;
