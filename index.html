@@ -774,8 +774,8 @@ button,input,select,textarea{font-family:inherit;-webkit-appearance:none;appeara
         <span style="font-size:10px;color:rgba(255,255,255,0.2)">or continue with</span>
         <div style="flex:1;height:1px;background:rgba(255,255,255,0.07)"></div>
       </div>
-      <button onclick="alert('Google login coming soon!')" style="width:100%;padding:11px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;transition:background 0.2s">
-        <span style="font-size:16px">🔵</span> Continue with Google
+            <button onclick="doGoogleLogin()" style="width:100%;padding:11px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;transition:background 0.2s">
+        <img src="https://www.google.com/favicon.ico" style="width:16px;height:16px"> Continue with Google
       </button>
 
       <button onclick="closeOv('loginOv')" style="background:none;border:none;font-size:11px;color:rgba(255,255,255,0.2);cursor:pointer;width:100%;text-align:center;margin-top:10px;padding:4px;font-family:inherit">✕ Maybe later</button>
@@ -1436,7 +1436,47 @@ function showResetCodeForm(em, docId, code){
 }
 
 
-
+function doGoogleLogin(){
+  if(!auth) { alert('Please wait for app to load!'); return; }
+  var provider = new firebase.auth.GoogleAuthProvider();
+  auth.signInWithPopup(provider)
+  .then(function(result){
+    var user = result.user;
+    // Check if user exists in Firestore
+    db.collection('users').where('uid','==',user.uid).get().then(function(snap){
+      if(snap.empty){
+        // New user — save to Firestore
+        db.collection('users').add({
+          name: user.displayName||'',
+          phone: '',
+          email: user.email||'',
+          uid: user.uid,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        }).then(function(){
+          setUser({name:user.displayName||'',phone:'',email:user.email||'',uid:user.uid});
+          closeOv('loginOv');
+          refreshNav();
+          updateHamburgerUser();
+          alert('Welcome to CampusDeal, '+user.displayName+'! 🎉\n\nPlease update your WhatsApp number in My Account → Profile!');
+        });
+      } else {
+        // Existing user
+        var ud = snap.docs[0].data();
+        var isVerNow = ud.isVerified && ud.verifiedUntil && new Date(ud.verifiedUntil) > new Date();
+        setUser({name:ud.name||user.displayName||'',phone:ud.phone||'',email:user.email||'',uid:user.uid,isVerified:isVerNow});
+        closeOv('loginOv');
+        refreshNav();
+        updateHamburgerUser();
+        checkNewNotifications();
+      }
+    });
+  })
+  .catch(function(e){
+    if(e.code !== 'auth/popup-closed-by-user'){
+      showToast('Google login failed: '+e.message);
+    }
+  });
+}
 function doLogout(){
   closeHamburger();
   removeUser();
