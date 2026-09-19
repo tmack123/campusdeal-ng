@@ -38,6 +38,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script>window.addEventListener("load",function(){trackReferral();
   setTimeout(checkNewNotifications, 4000);
+     checkSessionTimeout();                                             
   // Check verified status on load
   setTimeout(function(){
     var u = getUser();
@@ -1172,6 +1173,7 @@ function doLogin(){
 var verUntil = snap.empty ? null : (snap.docs[0].data().verifiedUntil||null);
 var isVerifiedNow = isVer && verUntil && new Date(verUntil) > new Date();
 setUser({name:name, phone:phone, email:em, uid:result.user.uid, isVerified:isVerifiedNow});
+          localStorage.setItem('cd_login_time', String(Date.now()));
           closeOv("loginOv");
           refreshNav();
           var iN=document.getElementById("iName");
@@ -1479,6 +1481,16 @@ function doGoogleLogin(){
       showToast('Google login failed: '+e.message);
     }
   });
+}
+  function checkSessionTimeout(){
+  var loginTime = Number(localStorage.getItem('cd_login_time')||0);
+  if(!loginTime) return;
+  var hoursElapsed = (Date.now() - loginTime) / (1000 * 60 * 60);
+  if(hoursElapsed > 24){
+    removeUser();
+    refreshNav();
+    showToast('Session expired. Please login again.');
+  }
 }
 function doLogout(){
   closeHamburger();
