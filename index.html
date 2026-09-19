@@ -1997,6 +1997,7 @@ window.addEventListener("load",function(){
         }
       });
       setTimeout(startAdWatcher, 3000);
+setTimeout(autoExpireAds, 10000);
       // Load from cache first for speed
 var cached = localStorage.getItem('cd_ads_cache');
 var cacheTime = Number(localStorage.getItem('cd_ads_cache_time')||0);
@@ -3018,6 +3019,19 @@ function checkNewNotifications(){
       badge.style.display = snap.size > 0 ? 'inline' : 'none';
       badge.textContent = snap.size;
     }
+  }).catch(function(){});
+}
+  function autoExpireAds(){
+  if(!fbReady||!db) return;
+  var thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  db.collection('ads').where('createdAt','<',thirtyDaysAgo).get()
+  .then(function(snap){
+    if(snap.empty) return;
+    console.log('Expiring '+snap.size+' old ads...');
+    snap.docs.forEach(function(doc){
+      doc.ref.delete();
+    });
   }).catch(function(){});
 }
 function contactAdmin(){var u=getUser();var msg=u?"Hi CampusDeal Admin! My name is "+u.name+" and I need help.":"Hi CampusDeal Admin! I need help.";window.open("https://wa.me/2348033873918?text="+encodeURIComponent(msg));}
