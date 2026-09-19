@@ -1995,13 +1995,31 @@ window.addEventListener("load",function(){
         }
       });
       setTimeout(startAdWatcher, 3000);
-      db.collection("ads").orderBy("createdAt","desc").onSnapshot(function(snap){
-        var fbAds=snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
-        allAds=fbAds;
-        renderAds();
-        var el=document.getElementById("totalAds");
-        if(el)el.textContent=allAds.length+"+";
-      },function(err){console.log("Firestore:",err.message);});
+      // Load from cache first for speed
+var cached = localStorage.getItem('cd_ads_cache');
+var cacheTime = Number(localStorage.getItem('cd_ads_cache_time')||0);
+var now = Date.now();
+if(cached && (now - cacheTime) < 300000){ // 5 min cache
+  try{
+    allAds = JSON.parse(cached);
+    renderAds();
+    var el=document.getElementById("totalAds");
+    if(el)el.textContent=allAds.length+"+";
+  }catch(e){}
+}
+// Always fetch fresh from Firebase
+db.collection("ads").orderBy("createdAt","desc").get().then(function(snap){
+  var fbAds=snap.docs.map(function(d){return Object.assign({id:d.id},d.data());});
+  allAds=fbAds;
+  // Save to cache
+  try{
+    localStorage.setItem('cd_ads_cache', JSON.stringify(fbAds));
+    localStorage.setItem('cd_ads_cache_time', String(Date.now()));
+  }catch(e){}
+  renderAds();
+  var el=document.getElementById("totalAds");
+  if(el)el.textContent=allAds.length+"+";
+}).catch(function(err){console.log("Firestore:",err.message);});
     }catch(e){console.log("Firebase:",e.message);}
   },500);
 });
