@@ -1723,7 +1723,7 @@ function openDetail(id){
   var dc=document.getElementById("detChips");if(dc)dc.innerHTML="<span class='dchp'>"+item.loc+"</span><span class='dchp'>"+(item.cond==="new"?"Brand New":"Used")+"</span><span class='dchp'>"+(item.time||"Recently")+"</span>";
   var dd=document.getElementById("detDesc");if(dd)dd.textContent=item.desc||"";
   var da=document.getElementById("detAv");if(da)da.textContent=item.seller.charAt(0).toUpperCase();
-  var ds=document.getElementById("detSeller");if(ds)ds.textContent=item.seller;
+  var ds=document.getElementById("detSeller");if(ds){ds.textContent=item.seller;ds.style.cursor='pointer';ds.onclick=function(){showSellerProfile(item.seller,item.wa);};}
   var dv=document.getElementById("detVerified");
   if(dv){
     if(item.sellerVerified){
@@ -1740,7 +1740,40 @@ function openDetail(id){
   var dw=document.getElementById("detWa");if(dw)dw.onclick=function(){chatSeller(item.wa,item.title,item.price);};
   openOv("detOv");
 }
-
+function showSellerProfile(sellerName, sellerWa){
+  var sellerAds = allAds.filter(function(a){ return a.wa === sellerWa; });
+  var d = document.createElement('div');
+  d.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:99999;display:flex;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto';
+  var isVerified = sellerAds.length > 0 && sellerAds[0].sellerVerified;
+  d.innerHTML = '<div style="background:#0d1a0d;border:1px solid rgba(255,215,0,0.2);border-radius:16px;padding:24px;max-width:380px;width:100%;margin:auto">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">'
+    +'<div style="font-size:18px;font-weight:900;color:#FFD700">&#128100; Seller Profile</div>'
+    +'<button onclick="this.parentElement.parentElement.parentElement.remove()" style="background:rgba(255,255,255,0.08);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:15px;cursor:pointer">&#10005;</button>'
+    +'</div>'
+    // Seller info
+    +'<div style="background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.15);border-radius:12px;padding:14px;margin-bottom:16px;text-align:center">'
+    +'<div style="width:60px;height:60px;border-radius:50%;background:#FFD700;color:#080f08;font-size:24px;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 10px">'+sellerName.charAt(0).toUpperCase()+'</div>'
+    +'<div style="font-size:16px;font-weight:900;color:#fff;margin-bottom:4px">'+sellerName+(isVerified?' <span style="background:linear-gradient(135deg,#FFD700,#FFA500);color:#000;font-size:10px;font-weight:800;padding:2px 8px;border-radius:10px">&#11088; Verified</span>':'')+'</div>'
+    +'<div style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:12px">'+sellerAds.length+' active ad'+(sellerAds.length!==1?'s':'')+'</div>'
+    +'<button onclick="chatSeller(\''+sellerWa+'\',\'Hi\',0)" style="background:#25D366;color:#fff;border:none;padding:8px 20px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer">&#128153; WhatsApp Seller</button>'
+    +'</div>'
+    // Seller ads
+    +'<div style="font-size:13px;font-weight:800;color:#FFD700;margin-bottom:10px">Ads by '+sellerName+'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'
+    +sellerAds.map(function(item){
+      var em = EMOS[item.cat]||'📦';
+      return '<div style="background:rgba(255,255,255,0.04);border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,0.07);cursor:pointer" onclick="this.closest(\'[style*=z-index:99999]\').remove();openDetail(\''+item.id+'\')">'
+        +(item.img?'<img src="'+item.img+'" style="width:100%;height:80px;object-fit:cover">':'<div style="width:100%;height:80px;display:flex;align-items:center;justify-content:center;font-size:30px;background:rgba(255,255,255,0.03)">'+em+'</div>')
+        +'<div style="padding:8px">'
+        +'<div style="font-size:13px;font-weight:900;color:#FFD700">N'+Number(item.price).toLocaleString()+'</div>'
+        +'<div style="font-size:11px;color:rgba(255,255,255,0.6);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+item.title+'</div>'
+        +'</div></div>';
+    }).join('')
+    +'</div>'
+    +'<button onclick="this.parentElement.parentElement.remove()" style="width:100%;background:#FFD700;color:#080f08;border:none;padding:12px;border-radius:8px;font-size:14px;font-weight:800;cursor:pointer;margin-top:16px">Close</button>'
+    +'</div>';
+  document.body.appendChild(d);
+}
 function reportAd(){
   if(!currentItem){return;}
   var u=getUser();
