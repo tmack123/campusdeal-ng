@@ -1237,7 +1237,7 @@ function doRegister(){
 }
 
 function doRegisterVerified(nm){
-  nm = nm || (document.getElementById("lName").value||"").trim();
+  nm = sanitize(nm || (document.getElementById("lName").value||""));
   var ph=(document.getElementById("rPhone").value||"").trim();
   var em=(document.getElementById("rEmail").value||"").trim();
   var pass=(document.getElementById("rPass").value||"").trim();
@@ -1895,7 +1895,18 @@ async function postAd(){
   }
   postTimes.push(now);
   localStorage.setItem("cd_post_times", JSON.stringify(postTimes));
-  var title=(document.getElementById("iTitle").value||"").trim();
+  function sanitize(str){
+  return (str||'').trim()
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#x27;')
+    .replace(/\//g,'&#x2F;')
+    .replace(/javascript:/gi,'')
+    .replace(/on\w+=/gi,'')
+    .substring(0,500);
+}
+var title=sanitize(document.getElementById("iTitle").value);
   var cat=(document.getElementById("iCat").value||"").trim();
   var price=document.getElementById("iPrice").value;
   var cond=document.getElementById("iCond").value;
@@ -1967,7 +1978,7 @@ async function postAd(){
     }
     if(!fbReady||!db)throw new Error("Firebase not ready");
     var adData={
-      title:(title||"").replace(/</g,"&lt;").replace(/>/g,"&gt;").substring(0,100),
+      title:sanitize(title).substring(0,100),
       cat:cat||"others",
       price:Number(price)||0,
       cond:cond||"used",
