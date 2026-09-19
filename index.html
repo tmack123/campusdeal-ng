@@ -3139,55 +3139,12 @@ var isAdmin = false;
 
 function openAdmin(){
   closeHamburger();
-  // Check IP first
-  fetch('https://api.ipify.org?format=json')
-  .then(function(r){ return r.json(); })
-  .then(function(data){
-    var ip = data.ip;
-    var allowedIPs = ['154.113.222.186','102.91.92.126'];
-    setTimeout(function(){
-      if(isAdmin){
-        showPg("admin");
-        waitForFirebaseAndLoad();
-        return;
-      }
-      var pwd = prompt("Enter Admin Password:");
-      if(pwd === null) return;
-      var msgBuffer2 = new TextEncoder().encode(pwd);
-      crypto.subtle.digest("SHA-256", msgBuffer2).then(function(hashBuffer2){
-        var hashArray2 = Array.from(new Uint8Array(hashBuffer2));
-        var hashHex2 = hashArray2.map(function(b){return b.toString(16).padStart(2,"0");}).join("");
-        if(hashHex2 === ADMIN_PWD_HASH){
-          isAdmin = true;
-          showPg("admin");
-          waitForFirebaseAndLoad();
-        } else {
-          alert("Wrong password!");
-        }
-      });
-    }, 400);
-  })
-  .catch(function(){
-    // If IP check fails just use password
-    setTimeout(function(){
-      if(isAdmin){ showPg("admin"); waitForFirebaseAndLoad(); return; }
-      var pwd = prompt("Enter Admin Password:");
-      if(pwd === null) return;
-      var msgBuffer2 = new TextEncoder().encode(pwd);
-      crypto.subtle.digest("SHA-256", msgBuffer2).then(function(hashBuffer2){
-        var hashArray2 = Array.from(new Uint8Array(hashBuffer2));
-        var hashHex2 = hashArray2.map(function(b){return b.toString(16).padStart(2,"0");}).join("");
-        if(hashHex2 === ADMIN_PWD_HASH){
-          isAdmin = true;
-          showPg("admin");
-          waitForFirebaseAndLoad();
-        } else {
-          alert("Wrong password!");
-        }
-      });
-    }, 400);
-  });
-}
+  setTimeout(function(){
+    if(isAdmin){
+      showPg("admin");
+      waitForFirebaseAndLoad();
+      return;
+    }
     var pwd = prompt("Enter Admin Password:");
     if(pwd === null) return;
         var msgBuffer2 = new TextEncoder().encode(pwd);
