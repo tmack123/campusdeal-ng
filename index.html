@@ -3161,24 +3161,17 @@ function openAdmin(){
     }
     var pwd = prompt("Enter Admin Password:");
     if(pwd === null) return;
-    fetch('https://api.ipify.org?format=json')
-    .then(function(r){return r.json();})
-    .then(function(d){
-      var ok=['154.113.222.186','102.91.92.126'].includes(d.ip);
-      if(!ok){alert('Access denied!');return;}
-      var msgBuffer2=new TextEncoder().encode(pwd);
-      crypto.subtle.digest('SHA-256',msgBuffer2).then(function(hb){
-        var hx=Array.from(new Uint8Array(hb)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
-        if(hx===ADMIN_PWD_HASH){isAdmin=true;showPg('admin');waitForFirebaseAndLoad();}
-        else{alert('Wrong password!');}
-      });
-    }).catch(function(){
-      var msgBuffer2=new TextEncoder().encode(pwd);
-      crypto.subtle.digest('SHA-256',msgBuffer2).then(function(hb){
-        var hx=Array.from(new Uint8Array(hb)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
-        if(hx===ADMIN_PWD_HASH){isAdmin=true;showPg('admin');waitForFirebaseAndLoad();}
-        else{alert('Wrong password!');}
-      });
+    var msgBuffer2 = new TextEncoder().encode(pwd);
+    crypto.subtle.digest("SHA-256", msgBuffer2).then(function(hashBuffer2){
+      var hashArray2 = Array.from(new Uint8Array(hashBuffer2));
+      var hashHex2 = hashArray2.map(function(b){return b.toString(16).padStart(2,"0");}).join("");
+      if(hashHex2 === ADMIN_PWD_HASH){
+        isAdmin = true;
+        showPg("admin");
+        waitForFirebaseAndLoad();
+      } else {
+        alert("Wrong password!");
+      }
     });
     crypto.subtle.digest("SHA-256", msgBuffer2).then(function(hashBuffer2){
       var hashArray2 = Array.from(new Uint8Array(hashBuffer2));
