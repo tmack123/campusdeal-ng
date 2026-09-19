@@ -1723,7 +1723,7 @@ function openDetail(id){
   var dc=document.getElementById("detChips");if(dc)dc.innerHTML="<span class='dchp'>"+item.loc+"</span><span class='dchp'>"+(item.cond==="new"?"Brand New":"Used")+"</span><span class='dchp'>"+(item.time||"Recently")+"</span>";
   var dd=document.getElementById("detDesc");if(dd)dd.textContent=item.desc||"";
   var da=document.getElementById("detAv");if(da)da.textContent=item.seller.charAt(0).toUpperCase();
-  var ds=document.getElementById("detSeller");if(ds){ds.textContent=item.seller;ds.style.cursor='pointer';ds.onclick=function(){showSellerProfile(item.seller,item.wa);};}
+  var ds=document.getElementById("detSeller");if(ds){ds.innerHTML=item.seller+' <span style="font-size:10px;background:rgba(255,215,0,0.1);color:#FFD700;border:1px solid rgba(255,215,0,0.3);padding:2px 8px;border-radius:10px;cursor:pointer">View Profile</span>';ds.style.cursor='pointer';ds.onclick=function(){showSellerProfile(item.seller,item.wa);};}
   var dv=document.getElementById("detVerified");
   if(dv){
     if(item.sellerVerified){
